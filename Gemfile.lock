@@ -233,6 +233,7 @@ DEPENDENCIES
   httparty
   importmap-rails
   jbuilder
+  nokogiri
   pg
   puma (~> 5.0)
   rack-cors
