@@ -17,10 +17,9 @@ class HomeController < ApplicationController
         parsed_page = Nokogiri::HTML(unparsed_page)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = "NOT NULL RESPONSE #{parsed_page}"
+        @check = "NOT NULL RESPONSE #{CGI.escape(params[:search_url].to_s)}"
 
-        for r in result_divs do
-
+        result_divs.each { |r|
           div = {
             "href" => r.css("a")[0].attributes["href"].value.strip.to_s,
             "image_src" => r.css("img")[0].attributes["src"].value.strip.to_s,
@@ -28,9 +27,8 @@ class HomeController < ApplicationController
             "size" => r.css("strong.video-item-info-size").text.strip.to_s,
             "title" => r.css("h2.video-item-title").text.strip.to_s
           }
-
           @divs << div
-        end
+        }
       end
     end
 
