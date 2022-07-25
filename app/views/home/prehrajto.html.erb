@@ -1,0 +1,91 @@
+<div class="py-5 my-auto text-center w-75 mx-auto">
+  <%=image_tag("film-icon.png", alt: "Example Image", width:"72", height:"57", class:"mb-3")%>
+
+  <div class="input-group mb-3 d-flex justify-content-center">
+    <input id="prehrajto_search" style="border: none; max-width: 400px" type="text" class="form-control" placeholder="<%= t(:search_input) %>" aria-label="<%= t(:search_input) %>" aria-describedby="prehrajto_search_button">
+<!--    <button id="prehrajto_search_button" class="btn btn-outline-light" type="button"><%#= t(:search) %></button>-->
+    <button id="prehrajto_search_button" class="btn btn-outline-light" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+  </div>
+
+  <ul id="prehrajto_ul" class="list-group mb-4"></ul>
+
+  <div class="container d-flex justify-content-center">
+    <div class="row row-cols-1 row-cols-lg-2">
+
+      <% if @divs && !params[:movie_url] %>
+        <% @divs.each do |div| %>
+            <div class="col mb-3">
+              <div class="card mx-auto" style="width: 18rem; border: none">
+                <img class="card-img-top" src="<%= div[:image_src] %>" alt="Card image cap">
+                <div class="card-body">
+                  <a href="<%= "/?movie_url=#{div[:href]}" %>"  class="card-title text-dark h5 text-decoration-none"><%= div[:title] %></a>
+                  <p class="card-text text-dark text-muted"><%= "#{div[:duration]} | #{div[:size]}" %></p>
+                </div>
+              </div>
+            </div>
+          <%end %>
+      <%end %>
+
+      <% if params[:movie_url] && params[:movie_url].length > 0 %>
+        <div class="container mx-auto d-flex justify-content-center">
+          <video width="600" controls>
+            <source src="<%= @video_src %>" type="video/mp4">
+            <source src="mov_bbb.ogg" type="video/ogg">
+            Your browser does not support HTML video.
+          </video>
+        </div>
+      <%end %>
+
+    </div>
+  </div>
+
+  <% if @search_result %>
+    <%= sanitize @search_result %>
+  <% end %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){
+        $("#prehrajto_search").on("input", function (){
+            let matchvalue = $(this).val();
+            $.ajax({
+                url: "https://prehrajto.cz",
+                accepts: {
+                    text: "application/json"
+                },
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "*",
+                    "Access-Control-Request-Methods": "*"
+                },
+                crossDomain: true,
+                data: { string: matchvalue },
+                type: "get"
+            }).done(function(responseData) {
+                console.log("Done: ", responseData);
+                //response = JSON.parse(responseData.toString());
+
+                const ul = document.getElementById("prehrajto_ul")
+                ul.innerHTML = ""
+                for (let r of responseData)
+                {
+                    let a = document.createElement("a");
+                    a.setAttribute("class", "list-group-item text-start")
+                    a.innerText = r.phrase_data
+                    a.href = `/?search_url=${r.url}`
+
+                    ul.appendChild(a)
+                }
+
+            }).fail(function() {
+                console.log("Failed");
+            });
+        });
+
+        $("#prehrajto_search_button").on("click", function (){
+            let matchvalue = $("#prehrajto_search").val();
+            window.location.replace(`/?search_url=/hledej/${matchvalue}`)
+        });
+
+    });
+</script>

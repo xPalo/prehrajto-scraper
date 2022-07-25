@@ -1,0 +1,11 @@
+sk:
+  flag_icon:
+    en: "us"
+    sk: "sk"
+  en: "Angličtina"
+  sk: "Slovenčina"
+  search: "Hľadať"
+  search_input: "Vyhľadať film"
+  footer:
+    follow: "Sleduj na"
+    or: "alebo na"
