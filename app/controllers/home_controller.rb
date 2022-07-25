@@ -6,7 +6,6 @@ class HomeController < ApplicationController
 
     if params[:search_url] && params[:search_url].length > 0
 
-      @check = "PARAMS[:SEARCH_URL]"
       @divs = Array.new
       params[:search_url] = params[:search_url][8..-1]
       url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
@@ -17,7 +16,7 @@ class HomeController < ApplicationController
         parsed_page = Nokogiri::HTML(unparsed_page)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = "UNPARSED: #{unparsed_page.body.to_s}"
+        @check = unparsed_page.body.to_s
 
         result_divs.each { |r|
           div = {
