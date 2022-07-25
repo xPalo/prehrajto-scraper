@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::Base
   before_action :set_locale
 
+  require "nokogiri"
+  require "httparty"
+
   def set_locale
     if cookies[:lang] && I18n.available_locales.include?(cookies[:lang].to_s.strip.to_sym)
       lang = cookies[:lang].to_s.strip.to_sym

@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-  skip_before_action :verify_authenticity_token, :only => [:prehrajto]
 
   def prehrajto
     require "nokogiri"
