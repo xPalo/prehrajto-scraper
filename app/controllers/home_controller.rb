@@ -6,6 +6,7 @@ class HomeController < ApplicationController
 
     if params[:search_url] && params[:search_url].length > 0
 
+      @check = "PARAMS[:SEARCH_URL]"
       @divs = Array.new
       params[:search_url] = params[:search_url][8..-1]
       url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
