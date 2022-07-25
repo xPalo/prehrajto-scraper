@@ -11,7 +11,7 @@ class HomeController < ApplicationController
 
       unless unparsed_page.body.nil?
 
-        parsed_page = Nokogiri::HTML(unparsed_page.body)
+        parsed_page = Nokogiri::HTML(unparsed_page.gsub("\u0011", ''))
         result_divs = parsed_page.css("section").css("div.column")
 
         @check = unparsed_page.body.to_s
