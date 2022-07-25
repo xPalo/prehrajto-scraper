@@ -17,16 +17,16 @@ class HomeController < ApplicationController
         parsed_page = Nokogiri::HTML(unparsed_page)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = "NOT NULL RESPONSE"
+        @check = "NOT NULL RESPONSE #{parsed_page}"
 
         for r in result_divs do
 
           div = {
-            href: r.css("a")[0].attributes["href"].value.strip,
-            image_src: r.css("img")[0].attributes["src"].value.strip,
-            duration: r.css("strong.video-item-info-time").text.strip,
-            size: r.css("strong.video-item-info-size").text.strip,
-            title: r.css("h2.video-item-title").text.strip
+            "href" => r.css("a")[0].attributes["href"].value.strip.to_s,
+            "image_src" => r.css("img")[0].attributes["src"].value.strip.to_s,
+            "duration" => r.css("strong.video-item-info-time").text.strip.to_s,
+            "size" => r.css("strong.video-item-info-size").text.strip.to_s,
+            "title" => r.css("h2.video-item-title").text.strip.to_s
           }
 
           @divs << div
