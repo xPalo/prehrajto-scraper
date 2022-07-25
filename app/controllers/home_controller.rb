@@ -11,6 +11,8 @@ class HomeController < ApplicationController
       url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
       unparsed_page = HTTParty.get(url)
 
+      @check = "URL: #{url}"
+
       unless unparsed_page.body.nil?
 
         parsed_page = Nokogiri::HTML(unparsed_page)
