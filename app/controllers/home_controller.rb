@@ -17,7 +17,7 @@ class HomeController < ApplicationController
         parsed_page = Nokogiri::HTML(unparsed_page)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = "NOT NULL RESPONSE #{result_divs}"
+        @check = "NOT NULL RESPONSE #{parsed_page}"
 
         result_divs.each { |r|
           div = {
