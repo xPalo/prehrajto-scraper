@@ -2,8 +2,11 @@ en:
   flag_icon:
     en: "us"
     sk: "sk"
+  en: "English"
+  sk: "Slovak"
   search: "Search"
   search_input: "Search for a movie"
   footer:
     follow: "Follow on"
     or: "or"
+  home: "Home"
