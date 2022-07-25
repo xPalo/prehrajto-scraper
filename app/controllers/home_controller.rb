@@ -1,20 +1,31 @@
 class HomeController < ApplicationController
 
   def prehrajto
+    require "uri"
+    require "net/http"
+    require "openssl"
+    require "nokogiri"
+    require "httparty"
 
     if params[:search_url] && params[:search_url].length > 0
 
       @divs = Array.new
       params[:search_url] = params[:search_url][8..-1]
-      url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
-      unparsed_page = HTTParty.get(url)
 
-      unless unparsed_page.body.nil?
+      url = URI("https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}")
 
-        parsed_page = Nokogiri::HTML(unparsed_page.gsub("\u0011", ''))
+      http = Net::HTTP.new(url.host, url.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Get.new(url)
+      response = http.request(request)
+
+      unless response.body.nil?
+
+        parsed_page = Nokogiri::HTML(response.body)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = unparsed_page.body.to_s
+        # @check = response.body.to_s
 
         result_divs.each { |r|
           div = {
@@ -28,6 +39,33 @@ class HomeController < ApplicationController
         }
       end
     end
+
+    # if params[:search_url] && params[:search_url].length > 0
+    #
+    #   @divs = Array.new
+    #   params[:search_url] = params[:search_url][8..-1]
+    #   url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
+    #   unparsed_page = HTTParty.get(url)
+    #
+    #   unless unparsed_page.body.nil?
+    #
+    #     parsed_page = Nokogiri::HTML(unparsed_page.gsub("\u0011", ''))
+    #     result_divs = parsed_page.css("section").css("div.column")
+    #
+    #     @check = unparsed_page.body.to_s
+    #
+    #     result_divs.each { |r|
+    #       div = {
+    #         "href" => r.css("a")[0].attributes["href"].value.strip.to_s,
+    #         "image_src" => r.css("img")[0].attributes["src"].value.strip.to_s,
+    #         "duration" => r.css("strong.video-item-info-time").text.strip.to_s,
+    #         "size" => r.css("strong.video-item-info-size").text.strip.to_s,
+    #         "title" => r.css("h2.video-item-title").text.strip.to_s
+    #       }
+    #       @divs << div
+    #     }
+    #   end
+    # end
 
     if params[:movie_url] && params[:movie_url].length > 0
 
