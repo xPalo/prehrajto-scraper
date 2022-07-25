@@ -16,7 +16,7 @@ module PrehrajtoScraper
     config.time_zone = "Europe/Bratislava"
     config.active_record.default_timezone = :local
     config.active_record.time_zone_aware_attributes = false
-
+    config.encoding = "utf-8"
     config.load_defaults 7.0
     config.i18n.available_locales = [:en, :sk]
     config.i18n.default_locale = :en
