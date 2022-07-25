@@ -1,8 +1,6 @@
 class HomeController < ApplicationController
 
   def prehrajto
-    require "nokogiri"
-    require "httparty"
 
     if params[:search_url] && params[:search_url].length > 0
 
@@ -13,7 +11,7 @@ class HomeController < ApplicationController
 
       unless unparsed_page.body.nil?
 
-        parsed_page = Nokogiri::HTML(unparsed_page)
+        parsed_page = Nokogiri::HTML(unparsed_page.body)
         result_divs = parsed_page.css("section").css("div.column")
 
         @check = unparsed_page.body.to_s
