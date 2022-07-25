@@ -1,13 +1,14 @@
-<div class="py-5 my-auto text-center w-75 mx-auto">
+<div class="py-5 my-0 text-center w-100 m-0">
   <%=image_tag("film-icon.png", alt: "Example Image", width:"72", height:"57", class:"mb-3")%>
 
   <div class="input-group mb-3 d-flex justify-content-center">
     <input id="prehrajto_search" style="border: none; max-width: 400px" type="text" class="form-control" placeholder="<%= t(:search_input) %>" aria-label="<%= t(:search_input) %>" aria-describedby="prehrajto_search_button">
-<!--    <button id="prehrajto_search_button" class="btn btn-outline-light" type="button"><%#= t(:search) %></button>-->
+
+    <ul id="prehrajto_ul" class="list-group mb-4 rounded" style="position: absolute; top: 50px; width: 400px"></ul>
+
     <button id="prehrajto_search_button" class="btn btn-outline-light" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
   </div>
 
-  <ul id="prehrajto_ul" class="list-group mb-4"></ul>
 
   <div class="container d-flex justify-content-center">
     <div class="row row-cols-1 row-cols-lg-2">
@@ -26,7 +27,7 @@
           <%end %>
       <%end %>
 
-      <% if params[:movie_url] && params[:movie_url].length > 0 %>
+      <% if params[:movie_url] && params[:movie_url].length > 0 && @video_src %>
         <div class="container mx-auto d-flex justify-content-center">
           <video width="600" controls>
             <source src="<%= @video_src %>" type="video/mp4">
@@ -39,9 +40,6 @@
     </div>
   </div>
 
-  <% if @search_result %>
-    <%= sanitize @search_result %>
-  <% end %>
 </div>
 
 <script type="text/javascript" charset="utf-8">
@@ -52,11 +50,6 @@
                 url: "https://prehrajto.cz",
                 accepts: {
                     text: "application/json"
-                },
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "*",
-                    "Access-Control-Request-Methods": "*"
                 },
                 crossDomain: true,
                 data: { string: matchvalue },
