@@ -6,6 +6,7 @@ class HomeController < ApplicationController
 
     if params[:search_url] && params[:search_url].length > 0
 
+      @divs = Array.new
       params[:search_url] = params[:search_url][8..-1]
       url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
       unparsed_page = HTTParty.get(url)
@@ -15,7 +16,6 @@ class HomeController < ApplicationController
         parsed_page = Nokogiri::HTML(unparsed_page)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @divs = Array.new
         for r in result_divs do
 
           div = {
