@@ -17,7 +17,7 @@ class HomeController < ApplicationController
         parsed_page = Nokogiri::HTML(unparsed_page)
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = "NOT NULL RESPONSE #{CGI.escape(params[:search_url].to_s)}"
+        @check = "NOT NULL RESPONSE #{result_divs}"
 
         result_divs.each { |r|
           div = {
