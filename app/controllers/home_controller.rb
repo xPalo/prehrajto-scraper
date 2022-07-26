@@ -14,9 +14,11 @@ class HomeController < ApplicationController
         puts "URL = #{url}"
 
         parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
+        parsed_xml = Nokogiri::XML(unparsed_page)
+
         result_divs = parsed_page.css("section").css("div.column")
 
-        #@check = parsed_page.errors
+        @check = parsed_xml
         puts "ERRORS: #{parsed_page.errors}"
 
         result_divs.each { |r|

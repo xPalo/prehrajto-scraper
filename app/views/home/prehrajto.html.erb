@@ -14,7 +14,7 @@
     <div class="row row-cols-1 row-cols-lg-2">
 
       <% if @check && !params[:movie_url] %>
-        <%= sanitize @check %>
+        <%= @check %>
       <% end %>
 
       <% if @divs && !params[:movie_url] %>
