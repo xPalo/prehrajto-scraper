@@ -17,7 +17,7 @@ class HomeController < ApplicationController
         result_divs = parsed_page.css("section").css("div.column")
 
         #@check = parsed_page.errors
-        #puts "ERRORS: #{@check}"
+        puts "ERRORS: #{parsed_page.errors}"
 
         result_divs.each { |r|
           div = {
@@ -37,10 +37,11 @@ class HomeController < ApplicationController
       url = "https://prehrajto.cz/#{params[:movie_url]}"
       unparsed_page = HTTParty.get(url)
 
-      puts "URL = #{url}"
-
       unless unparsed_page.body.nil?
         parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
+
+        puts "ERRORS: #{parsed_page.errors}"
+
         storage_substring = parsed_page.to_s[parsed_page.to_s.index('var sources')..parsed_page.to_s.index('var tracks')]
         @video_src = storage_substring[/#{"\""}(.*?)#{"\""}/m, 1].to_s
       end
