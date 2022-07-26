@@ -7,7 +7,7 @@ class HomeController < ApplicationController
       @divs = Array.new
       params[:search_url] = params[:search_url][8..-1]
       url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
-      unparsed_page = HTTParty.get(url)
+      unparsed_page = HTTParty.post(url)
 
       unless unparsed_page.body.nil?
 
