@@ -13,6 +13,7 @@ module PrehrajtoScraper
       end
     end
 
+    $stdout.sync = true
     config.time_zone = "Europe/Bratislava"
     config.active_record.default_timezone = :local
     config.active_record.time_zone_aware_attributes = false
@@ -21,6 +22,7 @@ module PrehrajtoScraper
     config.i18n.available_locales = [:en, :sk]
     config.i18n.default_locale = :en
     config.i18n.fallbacks = true
+    config.logger = Logger.new(STDOUT)
 
   end
 end
