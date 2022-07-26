@@ -16,6 +16,7 @@ gem "bootsnap", require: false
 gem "httparty"
 gem "nokogiri"
 gem "rack-cors", :require => "rack/cors"
+gem "faraday", "~> 2.3"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
