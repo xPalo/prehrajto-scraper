@@ -13,11 +13,11 @@ class HomeController < ApplicationController
 
         puts "URL = #{url}"
 
-        parsed_page = Nokogiri::HTML(unparsed_page.gsub("\u0011", ''))
+        parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
         result_divs = parsed_page.css("section").css("div.column")
 
         #@check = parsed_page.errors
-        puts "ERRORS: #{@check}"
+        #puts "ERRORS: #{@check}"
 
         result_divs.each { |r|
           div = {
@@ -40,7 +40,7 @@ class HomeController < ApplicationController
       puts "URL = #{url}"
 
       unless unparsed_page.body.nil?
-        parsed_page = Nokogiri::HTML(unparsed_page)
+        parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
         storage_substring = parsed_page.to_s[parsed_page.to_s.index('var sources')..parsed_page.to_s.index('var tracks')]
         @video_src = storage_substring[/#{"\""}(.*?)#{"\""}/m, 1].to_s
       end
