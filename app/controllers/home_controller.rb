@@ -18,7 +18,7 @@ class HomeController < ApplicationController
 
         result_divs = parsed_page.css("section").css("div.column")
 
-        @check = parsed_xml
+        @check = unparsed_page.body
         puts "ERRORS: #{parsed_page.errors}"
 
         result_divs.each { |r|
