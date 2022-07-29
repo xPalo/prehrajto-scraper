@@ -10,3 +10,4 @@ sk:
     follow: "Sleduj na"
     or: "alebo na"
   home: "Domov"
+  no_results: "Nič sme nenašli :("

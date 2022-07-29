@@ -1,7 +1,6 @@
 class HomeController < ApplicationController
 
   def formula
-
   end
 
   def prehrajto
@@ -28,6 +27,10 @@ class HomeController < ApplicationController
           }
           @divs << div
         }
+
+        if @divs.empty?
+          @no_results = true
+        end
       end
     end
 
