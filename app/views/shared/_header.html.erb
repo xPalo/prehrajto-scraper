@@ -1,7 +1,17 @@
 <div>
   <%= link_to 'Prehrajto scraper', root_path, class:"navbar-brand fs-2 my-auto fw-bold float-md-start text-white" %>
   <nav class="nav nav-masthead justify-content-center float-md-end m-0">
-    <%= link_to t(:home), root_path, class:"nav-link fw-bold px-2 #{current_class?(root_path, "light")}" %>
-    <%= link_to "Formula 1", formula_path, class:"nav-link fw-bold px-2 #{current_class?(formula_path, "light")}" %>
+  <%= link_to t(:home), root_path, class:"nav-link fw-bold px-2 #{current_class?(root_path, "light")}" %>
+
+  <% if user_signed_in? %>
+      <%= link_to t(:'header.favourites'), favs_path, class:"nav-link fw-bold px-2 #{current_class?(favs_path, "light")}" %>
+      <div class="m-2 fw-bold" style="opacity: 0.5">|</div>
+      <%= link_to t(:'header.edit_profile'), edit_user_registration_path, class:"nav-link fw-bold px-2" %>
+      <%= button_to t(:'header.log_out'), destroy_user_session_path, method: :delete, class:"btn btn-link nav-link fw-bold px-2 text-danger danger", style:"opacity: 0.9" %>
+  <% else %>
+      <div class="m-2 fw-bold" style="opacity: 0.5">|</div>
+      <%= link_to t(:'header.sign_up'), new_user_registration_path, class:"nav-link fw-bold px-2 #{current_class?(new_user_registration_path, "light")}" %>
+      <%= link_to t(:'header.log_in'), new_user_session_path, class:"nav-link fw-bold px-2 #{current_class?(new_user_session_path, "light")}" %>
+  <% end %>
   </nav>
 </div>

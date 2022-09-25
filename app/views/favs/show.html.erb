@@ -1,0 +1,3 @@
+<%= render "shared/movie", title: @fav.title, link: @fav.link, duration: @fav.duration, size: @fav.size %>
+
+<%= button_to t('fav.delete'), {:controller => :favs, :action => 'destroy', :id => @fav.id }, :method => :delete, class:"btn btn-danger m-3" %>

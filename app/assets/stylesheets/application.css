@@ -210,3 +210,8 @@
 .rating-label {
     margin-block-end: 1rem;
 }
+
+.video-container {
+    outline: none;
+    border: none;
+}

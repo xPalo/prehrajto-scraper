@@ -1,8 +1,5 @@
 class HomeController < ApplicationController
 
-  def formula
-  end
-
   def prehrajto
 
     if params[:search_url] && params[:search_url].length > 0
@@ -42,7 +39,7 @@ class HomeController < ApplicationController
       unless unparsed_page.body.nil?
         parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
         storage_substring = parsed_page.to_s[parsed_page.to_s.index('var sources')..parsed_page.to_s.index('var tracks')]
-        @video_src = storage_substring[/#{"\""}(.*?)#{"\""}/m, 1].to_s
+        @video_src = storage_substring[/#{"\""}(.*?)#{"\""}/m, 1].to_s.strip
       end
     end
   end

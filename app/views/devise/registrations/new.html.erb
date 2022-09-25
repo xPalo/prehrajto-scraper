@@ -1,0 +1,32 @@
+<h1 class="text-center"> <%= t(:'devise.signup') %> </h1>
+
+<div class="form-signin my-4 mx-auto w-75">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="form-group mb-3">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+    </div>
+
+    <hr>
+
+    <div class="form-group mb-3">
+      <%= f.label t(:'devise.password') %>
+      <% if @minimum_password_length %>
+        <em>(<%= "#{@minimum_password_length} #{t(:'devise.minimum_characters')}" %>)</em>
+      <% end %><br />
+      <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+    </div>
+
+    <div class="form-group mb-3">
+      <%= f.label t(:'devise.password_confirmation') %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit t(:'devise.signup_btn'), class:"btn btn-lg btn-light my-auto" %>
+    </div>
+  <% end %>
+
+</div>

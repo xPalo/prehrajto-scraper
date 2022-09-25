@@ -1,0 +1,45 @@
+<h1 class="text-center"><%= t(:'header.edit_profile') %></h1>
+
+<div class="form-signin my-4 mx-auto w-75">
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <div class="form-group mb-3">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+    </div>
+
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% end %>
+
+    <div class="form-group mb-3">
+      <%= f.label t(:'devise.password') %> <i>(<%= t(:'devise.password_leave_blank') %>)</i><br />
+      <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+      <% if @minimum_password_length %>
+        <br />
+        <em><%= "#{@minimum_password_length} #{t(:'devise.minimum_characters')}" %> </em>
+      <% end %>
+    </div>
+
+    <div class="form-group mb-3">
+      <%= f.label t(:'devise.password_confirmation') %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+    </div>
+
+    <div class="form-group mb-3">
+      <%= f.label t(:'devise.current_password') %> <i>(<%= t(:'devise.current_password_confirmation') %>)</i><br />
+      <%= f.password_field :current_password, autocomplete: "current-password", class:"form-control" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit t(:'devise.update_btn'), class:"btn btn-lg btn-light my-4" %>
+    </div>
+  <% end %>
+
+  <div class="d-flex justify-content-center">
+    <%= link_to t(:back), :back, class:"btn btn-dark my-auto mx-2" %>
+    <%= button_to t(:delete), registration_path(resource_name), data: { confirm: "#{t(:delete_confirmatiom)}" }, method: :delete, class:"btn btn-danger my-auto mx-2" %>
+  </div>
+
+</div>

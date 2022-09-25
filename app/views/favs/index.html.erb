@@ -1,0 +1,34 @@
+<h1 class="text-center"><%= t(:'header.favourites') %></h1>
+
+<div id="books" class="text-center mx-auto w-100">
+
+  <% if @favs.length > 0 %>
+    <table class="table text-light table-active">
+      <thead>
+      <tr>
+        <th scope="col"><%= t('fav.title') %></th>
+        <th scope="col"><%= t('fav.duration') %></th>
+        <th scope="col"><%= t('fav.size') %></th>
+        <th scope="col" class="text-light"><p class="mb-0 text-light"></p></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @favs.each do |fav| %>
+        <tr class="text-light">
+          <td><%= link_to "#{fav.title}", fav, class:"text-light text-decoration-none fw-bold" %></td>
+          <td><%= "#{fav.duration}" %></td>
+          <td><%= "#{fav.size}" %></td>
+          <td><%= button_to "❌", {:controller => :favs, :action => 'destroy', :id => fav.id }, :method => :delete, class:"btn btn-link p-0 text-danger text-decoration-none", style:"opacity: 0.8" %></td>
+        </tr>
+      <% end %>
+
+      </tbody>
+    </table>
+  <% else %>
+    <%= t('fav.none') %>
+  <% end %>
+
+  <%#= page_entries_info @books %>
+  <%#= paginate @books, theme: 'bootstrap-5', pagination_class: "my-3 pagination-sm flex-wrap justify-content-center" %>
+
+</div>

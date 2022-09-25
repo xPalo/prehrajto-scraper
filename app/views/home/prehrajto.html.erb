@@ -19,7 +19,7 @@
               <div class="card mx-auto" style="width: 18rem; border: none">
                 <img class="card-img-top" src="<%= div["image_src"] %>" alt="Card image cap">
                 <div class="card-body">
-                  <a href="<%= "?movie_url=#{div["href"]}" %>"  class="card-title text-dark h5 text-decoration-none"><%= div["title"] %></a>
+                  <a href="<%= "?movie_url=#{div["href"]}&movie_title=#{div["title"]}&movie_duration=#{div["duration"]}&movie_size=#{div["size"]}" %>"  class="card-title text-dark h5 text-decoration-none"><%= div["title"] %></a>
                   <p class="card-text text-dark text-muted"><%= "#{div["duration"]} | #{div["size"]}" %></p>
                 </div>
               </div>
@@ -31,18 +31,17 @@
         <%= t(:no_results) %>
       <% end %>
 
-      <% if params[:movie_url] && params[:movie_url].length > 0 && @video_src %>
-        <div class="container mx-auto d-flex justify-content-center">
-          <video width="600" controls>
-            <source src="<%= @video_src %>" type="video/mp4">
-            <source src="mov_bbb.ogg" type="video/ogg">
-            Your browser does not support HTML video.
-          </video>
-        </div>
-      <%end %>
-
     </div>
   </div>
+
+  <% if params[:movie_url] && params[:movie_url].length > 0 && @video_src %>
+    <div>
+      <%= render "shared/movie", title: params[:movie_title], link: @video_src, duration: params[:movie_duration], size: params[:movie_size] %>
+      <% if user_signed_in? %>
+        <%= link_to t(:'fav.new'), new_fav_path(title: params[:movie_title], link: @video_src, duration: params[:movie_duration], size: params[:movie_size], user_id: current_user.id), class:"btn btn-sm btn-outline-light fw-bold px-2 my-3" %>
+    <% end %>
+    </div>
+  <%end %>
 
 </div>
 
