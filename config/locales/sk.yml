@@ -60,3 +60,11 @@ sk:
     delete: "Odstrániť z obľúbených"
     sure: "Si si istý?"
     deleted: "Úspešne odstránené"
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "..."
+  filter: "Filtrovať"

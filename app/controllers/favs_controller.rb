@@ -6,7 +6,7 @@ class FavsController < ApplicationController
   before_action :set_fav, only: [:show, :destroy]
 
   def index
-    @favs = current_user.favs
+    @favs = current_user.favs.order(:title)
   end
 
   def show
