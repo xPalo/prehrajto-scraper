@@ -18,6 +18,8 @@ gem "nokogiri"
 gem "rack-cors", :require => "rack/cors"
 gem "faraday", "~> 2.3"
 gem "devise"
+gem "kaminari"
+gem "bootstrap5-kaminari-views"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

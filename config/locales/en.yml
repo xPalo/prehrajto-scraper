@@ -60,3 +60,12 @@ en:
     delete: "Remove from favourites"
     sure: "Are you sure?"
     deleted: "Deleted successfully"
+  views:
+    pagination:
+      first: "&laquo;"
+      last: "&raquo;"
+      previous: "&lsaquo;"
+      next: "&rsaquo;"
+      truncate: "..."
+  filter: "Filter"
+  have_to_be_signed_in: "You have to be signed in!"

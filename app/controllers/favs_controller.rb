@@ -6,7 +6,11 @@ class FavsController < ApplicationController
   before_action :set_fav, only: [:show, :destroy]
 
   def index
-    @favs = current_user.favs
+    if user_signed_in?
+    @favs = current_user.favs.order(:title)
+    else
+      redirect_to new_user_session_url, notice: t(:'have_to_be_signed_in')
+    end
   end
 
   def show

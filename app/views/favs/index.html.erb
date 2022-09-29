@@ -3,6 +3,8 @@
 <div id="books" class="text-center mx-auto w-100">
 
   <% if @favs.length > 0 %>
+    <%= render "shared/search_form" %>
+
     <table class="table text-light table-active">
       <thead>
       <tr>
@@ -28,7 +30,9 @@
     <%= t('fav.none') %>
   <% end %>
 
-  <%#= page_entries_info @books %>
-  <%#= paginate @books, theme: 'bootstrap-5', pagination_class: "my-3 pagination-sm flex-wrap justify-content-center" %>
+  <%#= page_entries_info @favs %>
+  <%#= paginate @favs, theme: 'bootstrap-5', pagination_class: "my-3 pagination-sm flex-wrap justify-content-center" %>
 
 </div>
+
+<%= render "shared/search_script" %>
