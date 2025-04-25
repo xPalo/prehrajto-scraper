@@ -1,5 +1,4 @@
 class FavsController < ApplicationController
-
   require "uri"
   require "net/http"
 
@@ -7,14 +6,13 @@ class FavsController < ApplicationController
 
   def index
     if user_signed_in?
-    @favs = current_user.favs.order(:title)
+      @favs = current_user.favs.order(:title)
     else
       redirect_to new_user_session_url, notice: t(:'have_to_be_signed_in')
     end
   end
 
   def show
-
   end
 
   def new

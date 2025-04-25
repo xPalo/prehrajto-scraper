@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
       lang = I18n.default_locale
       cookies[:lang] = lang
     end
+
     I18n.locale = lang
   end
 end
