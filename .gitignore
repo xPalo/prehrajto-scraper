@@ -33,3 +33,12 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+# Ignore IDE files
+.idea/
+.editorconfig
+.vscode/
+
+# Ignore DS_Store
+*.DS_Store
+/.env*
+!/.env*.erb
