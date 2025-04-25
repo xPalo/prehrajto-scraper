@@ -37,7 +37,7 @@ class FavsController < ApplicationController
     @fav.destroy
 
     respond_to do |format|
-      format.html { redirect_to favs_url, notice: t(:'notice.book.deleted') }
+      format.html { redirect_to favs_url, notice: t(:'fav.deleted') }
       format.json { head :no_content }
     end
   end

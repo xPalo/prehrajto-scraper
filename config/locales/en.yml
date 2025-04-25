@@ -35,12 +35,6 @@ en:
     minimum_characters: "characters minimum"
     edit: "Edit"
   header:
-    new_book: "Add book"
-    new_author: "Add author"
-    books: "Books"
-    authors: "Authors"
-    my_records: "My records"
-    my_reviews: "My reviews"
     overview: "Overview"
     edit_profile: "Edit profile"
     explore: "Explore"

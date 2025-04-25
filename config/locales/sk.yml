@@ -35,12 +35,6 @@ sk:
     minimum_characters: "znakov minimum"
     edit: "Upraviť"
   header:
-    new_book: "Pridať knihu"
-    new_author: "Pridať autora"
-    books: "Knihy"
-    authors: "Autori"
-    my_records: "Moje záznamy"
-    my_reviews: "Moje recenzie"
     overview: "Prehľad"
     edit_profile: "Upraviť profil"
     explore: "Objavovať"
