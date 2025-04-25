@@ -9,10 +9,8 @@
     <button id="prehrajto_search_button" class="btn btn-outline-light" type="button"><i class="fa-solid fa-magnifying-glass"></i></button>
   </div>
 
-
   <div class="container d-flex mt-5 mx-auto justify-content-center px-5">
     <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 d-flex">
-
       <% if @divs && !params[:movie_url] %>
         <% @divs.each do |div| %>
           <div class="col mb-3">
@@ -52,51 +50,13 @@
       <% end %>
     </div>
   <%end %>
-
 </div>
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){
-        $("#prehrajto_search").on("input", function (){
-            let matchvalue = $(this).val();
-            $.ajax({
-                url: "https://prehrajto.cz",
-                crossDomain: true,
-                headers: {
-                    "Access-Control-Allow-Methods": "GET",
-                    "Access-Control-Allow-Origin": "localhost:3030",
-                    "Access-Control-Allow-Credentials": "true",
-                    "Access-Control-Allow-Headers": "Content-Type"
-                },
-                accepts: {
-                    text: "application/json"
-                },
-                data: { string: matchvalue },
-                type: "get"
-            }).done(function(responseData) {
-                console.log("Done: ", responseData);
-
-                const ul = document.getElementById("prehrajto_ul")
-                ul.innerHTML = ""
-                for (let r of responseData)
-                {
-                    let a = document.createElement("a");
-                    a.setAttribute("class", "list-group-item text-start")
-                    a.innerText = r.phrase_data
-                    a.href = `?search_url=${r.url}`
-
-                    ul.appendChild(a)
-                }
-
-            }).fail(function() {
-                console.log("Failed");
-            });
-        });
-
         $("#prehrajto_search_button").on("click", function (){
             let matchvalue = $("#prehrajto_search").val();
             window.location.replace(`?search_url=/hledej/${matchvalue}`)
         });
-
     });
 </script>

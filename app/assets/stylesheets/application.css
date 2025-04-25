@@ -256,3 +256,30 @@
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     transform: scale(1.05);
 }
+
+body {
+    background-color: #d7c8a3; /* Soft warm beige */
+    color: #2d4d2f; /* Soft warm beige */
+    height: 100vh; /* Ensure full viewport height */
+    display: flex;
+    flex-direction: column; /* Align content vertically */
+    margin: 0;
+}
+
+/* Content container with margin-top */
+.content-container {
+    background-color: #a1b79f; /* White for the content */
+    color: #2d4d2f;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 40px; /* Space at the top */
+    margin-bottom: 40px; /* Space at the top */
+    flex-grow: 1; /* Allow the container to grow and push footer down */
+}
+
+/* Footer stays at the bottom */
+footer {
+    margin-top: auto; /* Push footer to the bottom */
+    color: #2d4d2f;
+}
