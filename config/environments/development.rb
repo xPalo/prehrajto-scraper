@@ -28,5 +28,7 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
   config.active_record.verbose_query_logs = true
   config.assets.quiet = true
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3030 }
+  config.hosts << "localhost"
+  config.hosts << "62.65.160.178"
+  config.action_controller.default_url_options = { host: "62.65.160.178", port: 46580 }
 end

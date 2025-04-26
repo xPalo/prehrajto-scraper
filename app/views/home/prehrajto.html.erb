@@ -54,9 +54,20 @@
 
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){
-        $("#prehrajto_search_button").on("click", function (){
+        function doSearch() {
             let matchvalue = $("#prehrajto_search").val();
-            window.location.replace(`?search_url=/hledej/${matchvalue}`)
+            window.location.replace(`?search_url=/hledej/${matchvalue}`);
+        }
+
+        $("#prehrajto_search_button").on("click", function (){
+            doSearch();
+        });
+
+        $("#prehrajto_search").on("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); // zabránime submitu formulára, ak tam nejaký je
+                doSearch();
+            }
         });
     });
 </script>

@@ -7,7 +7,7 @@ module PrehrajtoScraper
   class Application < Rails::Application
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins "http://localhost:8080", /https*:\/\/.*?prehrajto\.cz/
+        origins "62.65.160.178", "62.65.160.178:46580", "http://localhost:8080", /https*:\/\/.*?prehrajto\.cz/
         resource "*", :headers => :any, :methods => :any
       end
     end
@@ -22,5 +22,7 @@ module PrehrajtoScraper
     config.i18n.available_locales = [:en, :sk]
     config.i18n.default_locale = :sk
     config.i18n.fallbacks = true
+    config.action_controller.forgery_protection_origin_check = false
+    config.autoload_paths += %W(#{config.root}/app/mailers)
   end
 end

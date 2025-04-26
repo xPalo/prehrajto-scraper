@@ -283,3 +283,11 @@ footer {
     margin-top: auto; /* Push footer to the bottom */
     color: #2d4d2f;
 }
+
+.table tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.hover-text-white:hover {
+  color: #ffffff !important;
+}
