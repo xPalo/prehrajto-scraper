@@ -39,7 +39,6 @@ Rails.application.configure do
   ]
   config.active_record.sqlite3_production_warning=false
   config.active_record.dump_schema_after_migration = false
-  # config.action_mailer.default_url_options = { host: 'localhost', port: 3030 }
 end
 
 Rails.application.routes.default_url_options = {
@@ -47,4 +46,3 @@ Rails.application.routes.default_url_options = {
   port: 46580,
   protocol: 'http'
 }
-

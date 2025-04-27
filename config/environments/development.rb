@@ -30,5 +30,5 @@ Rails.application.configure do
   config.assets.quiet = true
   config.hosts << "localhost"
   config.hosts << "62.65.160.178"
-  config.action_controller.default_url_options = { host: "62.65.160.178", port: 46580 }
+  # config.action_controller.default_url_options = { host: "62.65.160.178", port: 46580 }
 end

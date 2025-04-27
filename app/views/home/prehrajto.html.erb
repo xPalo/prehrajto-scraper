@@ -28,7 +28,7 @@
                     size: div[:size],
                     user_id: current_user.id,
                     image_src: div[:image_src]
-                  ), class: "btn btn-sm btn-gradient fw-bold px-4 py-2" %>
+                  ), class: "btn btn-sm btn-favorite px-4 py-2" %>
                 <% end %>
               </div>
             </div>
@@ -46,7 +46,7 @@
     <div>
       <%= render "shared/movie", title: params[:movie_title], link: @video_src, duration: params[:movie_duration], size: params[:movie_size] %>
       <% if user_signed_in? %>
-        <%= link_to t(:'fav.new'), new_fav_path(title: params[:movie_title], link: @video_src, duration: params[:movie_duration], size: params[:movie_size], user_id: current_user.id, image_src: params[:image_src]), class: "btn btn-sm btn-gradient fw-bold px-4 py-2 my-3" %>
+        <%= link_to t(:'fav.new'), new_fav_path(title: params[:movie_title], link: @video_src, duration: params[:movie_duration], size: params[:movie_size], user_id: current_user.id, image_src: params[:image_src]), class: "btn btn-favorite my-3" %>
       <% end %>
     </div>
   <%end %>

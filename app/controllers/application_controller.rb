@@ -2,6 +2,8 @@ require "nokogiri"
 require "httparty"
 
 class ApplicationController < ActionController::Base
+  PRODUCTION_URL = "http://62.65.160.178:46580/"
+
   protect_from_forgery with: :exception
   
   before_action :set_default_url_options
@@ -27,15 +29,15 @@ class ApplicationController < ActionController::Base
   end
   
   def after_sign_in_path_for(resource)
-    "http://62.65.160.178:46580/"
+    Rails.env.production? ? PRODUCTION_URL : super
   end
 
   def after_sign_up_path_for(resource)
-    "http://62.65.160.178:46580/"
+    Rails.env.production? ? PRODUCTION_URL : super
   end
 
   def after_sign_out_path_for(resource)
-    "http://62.65.160.178:46580/"
+    Rails.env.production? ? PRODUCTION_URL : super
   end
 
   private

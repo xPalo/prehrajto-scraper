@@ -216,22 +216,21 @@
     border: none;
 }
 
-/* Vytvárame gradientné tlačidlo s peknými efektmi */
-.btn-gradient {
-    background: linear-gradient(90deg, rgba(255, 123, 67, 1) 0%, rgba(255, 50, 140, 1) 100%);
-    color: white;
-    border: 2px solid transparent;
+.btn-favorite {
+    background: linear-gradient(90deg, rgba(153, 85, 51, 1) 0%, rgba(176, 101, 64, 1) 100%);
+    color: #fff; /* biely text, nech je dobre čitateľný */
     border-radius: 25px;
     text-transform: uppercase;
     font-weight: bold;
-    transition: all 0.3s ease;
+    padding: 10px 20px;
+    transition: all 0.75s ease;
 }
 
-/* Efekt na hover pre tlačidlo */
-.btn-gradient:hover {
-    background: linear-gradient(90deg, rgba(255, 50, 140, 1) 0%, rgba(255, 123, 67, 1) 100%);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    transform: scale(1.05);
+/* Hover efekt */
+.btn-favorite:hover {
+    background: linear-gradient(90deg, rgba(176, 101, 64, 1) 0%, rgba(153, 85, 51, 1) 100%);
+    transform: scale(1.03);
+    color: #fff;
 }
 
 /* Efekt na karty pri hoverovaní */
@@ -241,20 +240,20 @@
 
 /* Tlačidlo na odstránenie - červený gradient s efektom */
 .btn-gradient-danger {
-    background: linear-gradient(90deg, rgba(255, 50, 50, 1) 0%, rgba(255, 0, 0, 1) 100%);
+    background: linear-gradient(90deg, rgba(139, 58, 58, 1) 0%, rgba(182, 92, 80, 1) 100%);
     color: white;
-    border: 2px solid transparent;
     border-radius: 25px;
     text-transform: uppercase;
     font-weight: bold;
-    transition: all 0.3s ease;
+    transition: all 0.75s ease;
+    padding: 10px 20px;
 }
 
 /* Efekt na hover pre tlačidlo na odstránenie */
 .btn-gradient-danger:hover {
-    background: linear-gradient(90deg, rgba(255, 0, 0, 1) 0%, rgba(255, 50, 50, 1) 100%);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    transform: scale(1.05);
+    background: linear-gradient(90deg, rgba(190, 58, 58, 1) 0%, rgba(182, 92, 80, 1) 100%);
+    transform: scale(1.03);
+    color: #fff;
 }
 
 body {
