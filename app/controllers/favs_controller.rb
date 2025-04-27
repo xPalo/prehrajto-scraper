@@ -49,6 +49,6 @@ class FavsController < ApplicationController
   end
 
   def fav_params
-    params.require(:fav).permit(:title, :duration, :size, :user_id, :link)
+    params.require(:fav).permit(:title, :duration, :size, :user_id, :link, :image_src)
   end
 end
