@@ -234,8 +234,54 @@
 }
 
 /* Efekt na karty pri hoverovaní */
+.card {
+    background-color: #f4f0e6; /* jemná krémová */
+    border: 1px solid #e0d8c3; /* jemný prírodný odtieň */
+    border-radius: 16px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.card {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.card.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Obrázok v karte */
+.card-img-top {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    object-fit: cover;
+}
+
+/* Telo karty */
+.card-body {
+    padding: 15px;
+}
+
+/* Názov filmu */
+.card-title {
+    color: #2d4d2f; /* tvoja tmavozelená */
+    font-weight: bold;
+}
+
+/* Popis (duration | size) */
+.card-text {
+    color: #6c757d; /* jemná sivá, trochu naturálna */
+    font-size: 0.9rem;
+    margin-top: 8px;
 }
 
 /* Tlačidlo na odstránenie - červený gradient s efektom */

@@ -13,12 +13,18 @@
     <div class="row row-cols-1 row-cols-lg-2 row-cols-xxl-3 d-flex">
       <% if @divs && !params[:movie_url] %>
         <% @divs.each do |div| %>
-          <div class="col mb-3">
-            <div class="card mx-auto" style="width: 18rem; border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: transform 0.3s;">
-              <img class="card-img-top" src="<%= div[:image_src] %>" alt="Card image cap">
+          <div class="col mb-4">
+            <div class="card mx-auto" style="width: 18rem;">
+
+              <a href="<%= "?movie_url=#{div[:href]}&movie_title=#{div[:title]}&movie_duration=#{div[:duration]}&movie_size=#{div[:size]}" %>">
+                <img class="card-img-top" src="<%= div[:image_src] %>" alt="Card image cap">
+              </a>
+
               <div class="card-body">
-                <a href="<%= "?movie_url=#{div[:href]}&movie_title=#{div[:title]}&movie_duration=#{div[:duration]}&movie_size=#{div[:size]}" %>" class="card-title text-dark h5 text-decoration-none"><%= div[:title] %></a>
-                <p class="card-text text-dark text-muted"><%= "#{div[:duration]} | #{div[:size]}" %></p>
+                <a href="<%= "?movie_url=#{div[:href]}&movie_title=#{div[:title]}&movie_duration=#{div[:duration]}&movie_size=#{div[:size]}" %>" class="card-title text-decoration-none d-block mb-2">
+                  <%= div[:title] %>
+                </a>
+                <p class="card-text"><%= "#{div[:duration]} | #{div[:size]}" %></p>
 
                 <% if user_signed_in? %>
                   <%= link_to t(:'fav.new'), new_fav_path(
@@ -28,12 +34,12 @@
                     size: div[:size],
                     user_id: current_user.id,
                     image_src: div[:image_src]
-                  ), class: "btn btn-sm btn-favorite px-4 py-2" %>
+                  ), class: "btn btn-sm btn-favorite px-4 py-2 mt-3" %>
                 <% end %>
               </div>
             </div>
           </div>
-        <%end %>
+        <% end %>
       <%end %>
 
       <% if @no_results %>
@@ -58,6 +64,13 @@
             let matchvalue = $("#prehrajto_search").val();
             window.location.replace(`?search_url=/hledej/${matchvalue}`);
         }
+
+        $('.card').each(function(index) {
+            var card = $(this);
+            setTimeout(function() {
+                card.addClass('loaded');
+            }, index * 100); // postupné načítanie (voliteľné)
+        });
 
         $("#prehrajto_search_button").on("click", function (){
             doSearch();
