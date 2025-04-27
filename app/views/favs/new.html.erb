@@ -21,7 +21,7 @@
     <div class="form-group mb-3">
       <%= form.hidden_field :duration, value: params["duration"] %>
       <%= form.hidden_field :size, value: params["size"] %>
-      <%= form.hidden_field :link, value: params["link"] %>
+      <%= form.hidden_field :link, value: @video_src %>
       <%= form.hidden_field :image_src, value: params["image_src"] %>
       <%= form.hidden_field :user_id, value: current_user.id %>
     </div>

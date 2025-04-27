@@ -16,6 +16,17 @@ class FavsController < ApplicationController
   end
 
   def new
+    if params[:movie_url] && params[:movie_url].length > 0
+      url = "https://prehrajto.cz/#{params[:movie_url]}"
+      unparsed_page = HTTParty.get(url)
+
+      if unparsed_page.body.present?
+        parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
+        storage_substring = parsed_page.to_s[parsed_page.to_s.index('var sources')..parsed_page.to_s.index('var tracks')]
+        @video_src = storage_substring[/#{"\""}(.*?)#{"\""}/m, 1].to_s.strip
+      end
+    end
+
     @fav = Fav.new
   end
 
