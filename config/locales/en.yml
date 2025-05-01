@@ -75,3 +75,5 @@ en:
     invalid_value: "Invalid sorting parameter"
     submit: "Submit"
     search: "Search"
+  back: "Back"
+  delete: "Delete"
