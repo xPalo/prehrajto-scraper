@@ -1,34 +1,55 @@
-<h1 class="text-center"><%= t(:'header.favourites') %></h1>
+<h1 class="text-center favorites-title"><%= t(:'header.favourites') %></h1>
 
-<div id="favs" class="text-center mx-auto w-100">
-
+<div id="favs" class="favorites-container text-center mx-auto w-100">
   <% if @favs.length > 0 %>
     <%= render "shared/search_form" %>
 
-    <table class="table text-light table-active">
-      <thead>
-      <tr>
-        <th scope="col"><%= t('fav.title') %></th>
-        <th scope="col"><%= t('fav.duration') %></th>
-        <th scope="col"><%= t('fav.size') %></th>
-        <th scope="col" class="text-light"><p class="mb-0 text-light"></p></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @favs.each do |fav| %>
-        <tr class="text-light">
-          <td><%= link_to "#{fav.title}", fav, class:"text-light text-decoration-none fw-bold" %></td>
-          <td><%= "#{fav.duration}" %></td>
-          <td><%= "#{fav.size}" %></td>
-          <td><%= button_to "❌", {:controller => :favs, :action => 'destroy', :id => fav.id }, :method => :delete, class:"btn btn-link p-0 text-danger text-decoration-none", style:"opacity: 0.8" %></td>
-        </tr>
+    <div class="favorites-list row">
+      <% @favs.each_with_index do |fav, index| %>
+        <div class="col-md-4 mb-4">
+          <div class="favorite-card card">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= link_to fav.title, fav, class:"text-dark text-decoration-none fw-bold" %>
+              </h5>
+              <p class="card-text text-muted"><%= "#{fav.duration} | #{fav.size}" %></p>
+              <%= button_to "❌", {:controller => :favs, :action => 'destroy', :id => fav.id }, :method => :delete, class:"btn btn-link p-0 text-danger text-decoration-none" %>
+            </div>
+          </div>
+        </div>
       <% end %>
+    </div>
 
-      </tbody>
-    </table>
   <% else %>
     <%= t('fav.none') %>
   <% end %>
 </div>
 
-<%= render "shared/search_script" %>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        var $cells = $(".favorite-card");
+
+        function normalizeText(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+        }
+
+        $("#search").keyup(function () {
+            var val = normalizeText($.trim(this.value));
+            if (val === "")
+                $cells.parent().show();
+            else {
+                $cells.parent().hide();
+                $cells.filter(function () {
+                    return normalizeText($(this).text()).indexOf(val) !== -1;
+                }).parent().show();
+            }
+        });
+
+        $('.favorite-card').each(function(index) {
+            var card = $(this);
+            setTimeout(function() {
+                card.addClass('loaded');
+            }, index * 150);
+        });
+    });
+</script>

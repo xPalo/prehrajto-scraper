@@ -336,3 +336,32 @@ footer {
 .hover-text-white:hover {
   color: #ffffff !important;
 }
+
+.favorite-card {
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    background-color: #f8f5f0; /* svetlá prírodná farba */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.favorite-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.favorites-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.favorite-card.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.favorite-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
