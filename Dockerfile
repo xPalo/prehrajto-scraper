@@ -7,6 +7,7 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 COPY . .
+RUN bundle exec rake assets:precompile
 RUN chmod +x bin/docker-entrypoint
 
 EXPOSE 8080
