@@ -48,7 +48,7 @@
 
                 <% if user_signed_in? %>
                   <%= link_to t(:'fav.new'), new_fav_path(
-                    title: div[:title],
+                    title: div[:title].gsub('.', ' ').strip,
                     movie_url: div[:href],
                     duration: div[:duration],
                     size: div[:size],
@@ -73,7 +73,14 @@
       <%= render "shared/movie", title: params[:movie_title], link: @video_src, duration: params[:movie_duration], size: params[:movie_size] %>
 
       <% if user_signed_in? %>
-        <%= link_to t(:'fav.new'), new_fav_path(title: params[:movie_title], movie_url: params[:movie_url], duration: params[:movie_duration], size: params[:movie_size], user_id: current_user.id, image_src: params[:image_src]), class: "btn btn-favorite my-3" %>
+        <%= link_to t(:'fav.new'), new_fav_path(
+          title: params[:movie_title].gsub('.', ' ').strip,
+          movie_url: params[:movie_url],
+          duration: params[:movie_duration],
+          size: params[:movie_size],
+          user_id: current_user.id,
+          image_src: params[:image_src]
+        ), class: "btn btn-favorite my-3" %>
       <% end %>
     </div>
   <%end %>

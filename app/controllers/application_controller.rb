@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   
-  before_action :set_default_url_options
+  before_action :set_default_url_options, if: :production?
   before_action :set_locale
 
   rescue_from ActionController::Redirecting::UnsafeRedirectError do
@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
   
   def default_url_options
-    { host: '62.65.160.178', port: 46580 }
+    production? ? { host: '62.65.160.178', port: 46580 } : super
   end
   
   def set_locale
@@ -52,5 +52,9 @@ class ApplicationController < ActionController::Base
       port: port == 80 ? nil : port,
       protocol: protocol
     }
+  end
+
+  def production?
+    Rails.env.production?
   end
 end
