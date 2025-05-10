@@ -43,6 +43,7 @@ sk:
     log_in: "Prihlásiť sa"
     sign_up: "Registrovať sa"
     favourites: "Obľúbené"
+    users: "Používatelia"
   fav:
     title: "Názov"
     duration: "Trvanie"
@@ -77,3 +78,14 @@ sk:
     search: "Vyhľadávanie"
   back: "Späť"
   delete: "Vymazať"
+  created_at: "Vytvorené"
+  updated_at: "Upravené"
+  actions: "Akcie"
+  show: "Zobraziť"
+  user:
+    show: 'Používateľ'
+    index: 'Používatelia'
+    email: 'Email'
+    favs_count: 'Počet obľúbených'
+    is_admin: 'Je admin?'
+    no_favs: 'Používateľ je bez kultúry!'

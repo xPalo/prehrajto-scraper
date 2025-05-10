@@ -1,17 +1,14 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show]
   before_action :authenticate_user!
+  before_action :authorize_user, only: [:index]
 
   def index
-    @users = User.where.not(id: current_user.id).page(params[:page])
-  end
-
-  def show
+    @users = User.includes(:favs).page(params[:page])
   end
 
   private
 
-  def set_user
-    @user = User.where(id: params[:id])
+  def authorize_user
+    redirect_back(fallback_location: root_path) unless current_user.is_admin?
   end
 end

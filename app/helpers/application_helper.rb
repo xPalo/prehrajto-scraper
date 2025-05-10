@@ -1,6 +1,6 @@
 module ApplicationHelper
-  def current_class?(test_path, color="")
-    return "active #{color}" if request.path == test_path
+  def current_class?(path, color="")
+    return "active #{color}" if request.path == path
     " "
   end
 end

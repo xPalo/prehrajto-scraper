@@ -1,15 +1,13 @@
-class FavsController < ApplicationController
-  require "uri"
-  require "net/http"
+require "uri"
+require "net/http"
 
+class FavsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_fav, only: [:show, :destroy]
+  before_action :authorize_user, only: [:show, :destroy]
 
   def index
-    if user_signed_in?
-      @favs = current_user.favs.order(:title)
-    else
-      redirect_to new_user_session_url, notice: t(:'have_to_be_signed_in')
-    end
+    @favs = current_user.favs.order(:title)
   end
 
   def show
@@ -57,6 +55,10 @@ class FavsController < ApplicationController
 
   def set_fav
     @fav = Fav.find(params[:id])
+  end
+
+  def authorize_user
+    redirect_back(fallback_location: root_path) unless current_user.id == @fav.user_id || current_user.is_admin?
   end
 
   def fav_params

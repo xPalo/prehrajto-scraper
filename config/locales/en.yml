@@ -43,6 +43,7 @@ en:
     log_in: "Log in"
     sign_up: "Sign up"
     favourites: "Favourites"
+    users: "Users"
   fav:
     title: "Title"
     duration: "Duration"
@@ -77,3 +78,14 @@ en:
     search: "Search"
   back: "Back"
   delete: "Delete"
+  created_at: "Created at"
+  updated_at: "Updated at"
+  actions: "Actions"
+  show: "Show"
+  user:
+    show: 'User'
+    index: 'Users'
+    email: 'Email'
+    favs_count: 'Favs count'
+    is_admin: 'Is admin?'
+    no_favs: 'This user has no culture!'

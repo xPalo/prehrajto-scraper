@@ -5,6 +5,7 @@
 
   <% if user_signed_in? %>
       <%= link_to t(:'header.favourites'), favs_path, class:"nav-link fw-bold px-2 #{current_class?(favs_path, "light")}" %>
+      <%= link_to t(:'header.users'), users_path, class:"nav-link fw-bold px-2 #{current_class?(users_path, "light")}" if current_user.is_admin? %>
       <div class="m-2 fw-bold" style="opacity: 0.5">|</div>
       <%= link_to t(:'header.edit_profile'), edit_user_registration_path, class:"nav-link fw-bold px-2" %>
       <%= button_to t(:'header.log_out'), destroy_user_session_path, method: :delete, class:"btn btn-link nav-link fw-bold px-2 text-danger danger", style:"opacity: 0.9" %>

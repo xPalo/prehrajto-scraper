@@ -1,0 +1,63 @@
+<h1 class="mb-4"><%= I18n.t('user.index') %></h1>
+
+<ul class="nav nav-tabs mb-3" id="userTabs" role="tablist">
+  <% @users.each_with_index do |user, index| %>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link <%= 'active' if index == 0 %>"
+              id="user-tab-<%= user.id %>"
+              data-bs-toggle="tab"
+              data-bs-target="#user-<%= user.id %>"
+              type="button"
+              role="tab"
+              aria-controls="user-<%= user.id %>"
+              aria-selected="<%= index == 0 %>">
+        <span class="badge bg-dark rounded-circle me-2">
+          <%= user.favs.size %>
+        </span>
+        <%= truncate(user.email.split('@').first, length: 20) %>
+      </button>
+    </li>
+  <% end %>
+</ul>
+
+<div class="tab-content" id="userTabsContent">
+  <% @users.each_with_index do |user, index| %>
+    <div class="tab-pane fade <%= 'show active' if index == 0 %>"
+         id="user-<%= user.id %>"
+         role="tabpanel"
+         aria-labelledby="user-tab-<%= user.id %>">
+
+      <div class="card mb-4 shadow-sm loaded">
+        <div class="card-body">
+          <h5 class="card-title"><%= user.email %></h5>
+          <p class="card-text">
+            <%= I18n.t('user.favs_count') %>: <strong><%= user.favs.size %></strong>
+          </p>
+
+          <% if user.favs.any? %>
+            <div class="table-responsive mt-4">
+              <table class="table table-striped table-sm align-middle">
+                <thead class="table-light">
+                <tr>
+                  <th scope="col"><i class="bi bi-film"></i> <%= I18n.t('fav.title') %></th>
+                  <th scope="col"><i class="bi bi-calendar-plus"></i> <%= I18n.t('created_at') %></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% user.favs.each do |fav| %>
+                  <tr>
+                    <td><%= link_to fav.title, fav_path(fav), class: "text-decoration-none text-dark fw-bold" %></td>
+                    <td><%= fav.created_at.strftime("%d. %m. %Y") %></td>
+                  </tr>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% else %>
+            <p class="text-muted mt-3"><em><%= I18n.t('user.no_favs') %></em></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
