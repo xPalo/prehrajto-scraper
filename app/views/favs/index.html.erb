@@ -5,12 +5,12 @@
     <%= render "shared/search_form" %>
 
     <div class="favorites-list row">
-      <% @favs.each_with_index do |fav, index| %>
+      <% @favs.each do |fav| %>
         <div class="col-md-4 mb-4">
           <div class="favorite-card card">
             <div class="card-body">
               <h5 class="card-title">
-                <%= link_to fav.title, fav, class:"text-dark text-decoration-none fw-bold" %>
+                <%= link_to fav.title, fav, class:"card-title text-decoration-none fw-bold" %>
               </h5>
               <p class="card-text text-muted"><%= "#{fav.duration} | #{fav.size}" %></p>
               <%= button_to "❌", {:controller => :favs, :action => 'destroy', :id => fav.id }, :method => :delete, class:"btn btn-link p-0 text-danger text-decoration-none" %>

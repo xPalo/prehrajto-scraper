@@ -9,6 +9,7 @@ en:
   footer:
     follow: "Follow on"
     or: "or"
+    dark_mode: "Dark mode"
   home: "Home"
   no_results: "We couldn't find anything :("
   devise:

@@ -18,7 +18,7 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
-<body class="d-flex h-100 text-center text-dark">
+<body class="d-flex h-100 text-center text-dark <%= 'dark-mode' if @dark_mode %>">
 <div class="container d-flex w-75 p-3 mx-auto flex-column content-container">
   <header class="mb-auto my-2">
     <%= render "shared/header" %>

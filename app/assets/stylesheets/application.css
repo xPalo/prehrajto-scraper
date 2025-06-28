@@ -243,6 +243,11 @@
     overflow: hidden;
 }
 
+body.dark-mode .card {
+    background-color: #1c1f24;
+    border: 1px solid #1c1f24;
+}
+
 .card {
     opacity: 0;
     transform: translateY(10px);
@@ -275,6 +280,10 @@
 .card-title {
     color: #2d4d2f; /* tvoja tmavozelená */
     font-weight: bold;
+}
+
+body.dark-mode .card-title {
+    color: #f0eada;
 }
 
 /* Popis (duration | size) */
@@ -323,10 +332,21 @@ body {
     flex-grow: 1; /* Allow the container to grow and push footer down */
 }
 
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .content-container {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+}
+
 /* Footer stays at the bottom */
 footer {
     margin-top: auto; /* Push footer to the bottom */
-    color: #2d4d2f;
+    color: #f0eada;
 }
 
 .table tr:hover {
@@ -373,4 +393,44 @@ footer {
 .nav-tabs .nav-link.active {
     color: black;
     font-weight: 500;
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: inherit;
+    cursor: pointer;
+    user-select: none;
+}
+
+.theme-toggle input[type="checkbox"] {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background: #ccc;
+    border-radius: 999px;
+    position: relative;
+    transition: background 0.3s;
+}
+
+.theme-toggle input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.theme-toggle input[type="checkbox"]:checked {
+    background: #4f5b66; /* dark toggle background */
+}
+
+.theme-toggle input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
 }

@@ -1,6 +1,11 @@
 <div class="d-flex justify-content-center align-items-center mb-3">
   <div>
-    <%= t(:'footer.follow') %> <a href="https://github.com/xPalo/prehrajto-scraper" class="text-white">GitHub</a>.
+    <footer>
+      <label class="theme-toggle">
+        <%= t("footer.dark_mode") %>
+        <input type="checkbox" id="theme-toggle-checkbox" <%= 'checked' if @dark_mode %> />
+      </label>
+    </footer>
   </div>
 
   <div class="m-2">|</div>
@@ -21,3 +26,12 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+        $('.theme-toggle').on('click', function () {
+            const isDark = $('body').toggleClass('dark-mode').hasClass('dark-mode');
+            document.cookie = 'theme=' + (isDark ? 'dark' : 'light') + '; path=/';
+        });
+    });
+</script>

@@ -9,6 +9,7 @@ sk:
   footer:
     follow: "Sleduj na"
     or: "alebo na"
+    dark_mode: "Tmavý režim"
   home: "Domov"
   no_results: "Nič sme nenašli :("
   devise:
