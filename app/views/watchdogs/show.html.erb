@@ -1,0 +1,14 @@
+<h1><%= t(:'watchdog.show') %></h1>
+
+<p><strong>From Airport:</strong> <%= @watchdog.from_airport %></p>
+<p><strong>To Airport:</strong> <%= @watchdog.to_airport %></p>
+<p><strong>To Country:</strong> <%= @watchdog.to_country %></p>
+<p><strong>Max Price:</strong> <%= @watchdog.max_price %></p>
+<p><strong>Date Watch From:</strong> <%= @watchdog.date_watch_from %></p>
+<p><strong>Date Watch To:</strong> <%= @watchdog.date_watch_to %></p>
+<p><strong>Departure Time From:</strong> <%= @watchdog.departure_time_from %></p>
+<p><strong>Departure Time To:</strong> <%= @watchdog.departure_time_to %></p>
+<p><strong>Is Active:</strong> <%= @watchdog.is_active? ? 'Yes' : 'No' %></p>
+
+<%= link_to 'Edit', edit_watchdog_path(@watchdog) %> |
+<%= link_to 'Back', watchdogs_path %>

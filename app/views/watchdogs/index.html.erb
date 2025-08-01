@@ -1,0 +1,39 @@
+<h1><%= t(:'watchdog.index') %></h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>From Airport</th>
+    <th>To Airport</th>
+    <th>To Country</th>
+    <th>Max Price</th>
+    <th>Date Watch From</th>
+    <th>Date Watch To</th>
+    <th>Departure Time From</th>
+    <th>Departure Time To</th>
+    <th>Is Active</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @watchdogs.each do |watchdog| %>
+    <tr>
+      <td><%= watchdog.from_airport %></td>
+      <td><%= watchdog.to_airport %></td>
+      <td><%= watchdog.to_country %></td>
+      <td><%= watchdog.max_price %></td>
+      <td><%= watchdog.date_watch_from %></td>
+      <td><%= watchdog.date_watch_to %></td>
+      <td><%= watchdog.departure_time_from %></td>
+      <td><%= watchdog.departure_time_to %></td>
+      <td><%= watchdog.is_active? ? 'Yes' : 'No' %></td>
+      <td><%= link_to 'Show', watchdog %></td>
+      <td><%= link_to 'Edit', edit_watchdog_path(watchdog) %></td>
+      <td><%= link_to 'Destroy', watchdog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'New Watchdog', new_watchdog_path %>

@@ -1,0 +1,25 @@
+<%= form_with(model: watchdog, local: true) do |form| %>
+  <% if watchdog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(watchdog.errors.count, "error") %> prohibited this watchdog from being saved:</h2>
+      <ul>
+        <% watchdog.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div><%= form.label :from_airport %><br><%= form.text_field :from_airport %></div>
+  <div><%= form.label :to_airport %><br><%= form.text_field :to_airport %></div>
+  <div><%= form.label :to_country %><br><%= form.text_field :to_country %></div>
+  <div><%= form.label :max_price %><br><%= form.number_field :max_price %></div>
+  <div><%= form.label :date_watch_from %><br><%= form.date_field :date_watch_from %></div>
+  <div><%= form.label :date_watch_to %><br><%= form.date_field :date_watch_to %></div>
+  <div><%= form.label :departure_time_from %><br><%= form.text_field :departure_time_from %></div>
+  <div><%= form.label :departure_time_to %><br><%= form.text_field :departure_time_to %></div>
+  <div><%= form.label :is_active %><br><%= form.check_box :is_active %></div>
+
+  <%= form.hidden_field :user_id, value: current_user.id %>
+  <%= form.submit %>
+<% end %>
