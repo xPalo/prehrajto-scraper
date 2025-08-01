@@ -1,4 +1,14 @@
 en:
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b %d"
+      long: "%B %d, %Y"
+  time:
+    formats:
+      default: "%H:%M:%S"
+      short: "%H:%M"
+      long: "%B %d, %Y %H:%M"
   flag_icon:
     en: "gb"
     sk: "sk"
@@ -45,6 +55,7 @@ en:
     sign_up: "Sign up"
     favourites: "Favourites"
     users: "Users"
+    watchdogs: "Watchdogs"
   fav:
     title: "Title"
     duration: "Duration"
@@ -90,3 +101,19 @@ en:
     favs_count: 'Favs count'
     is_admin: 'Is admin?'
     no_favs: 'This user has no culture!'
+  watchdog:
+    created: "Watchdog was successfully created"
+    updated: "Watchdog was successfully updated"
+    show: "Watchdog"
+    new: "New watchdog"
+    edit: "Edit watchdog"
+    index: "Watchdogs"
+    from_airport: "From airport"
+    to_airport: "To airport"
+    to_country: "To country"
+    max_price: "Max price"
+    date_watch_from: "Date from"
+    date_watch_to: "Date to"
+    departure_time_from: "Departure time from"
+    departure_time_to: "Departure time to"
+    is_active: "Active?"

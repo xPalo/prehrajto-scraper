@@ -1,4 +1,14 @@
 sk:
+  date:
+    formats:
+      default: "%d.%m.%Y"
+      short: "%d. %b"
+      long: "%d. %B %Y"
+  time:
+    formats:
+      default: "%H:%M:%S"
+      short: "%H:%M"
+      long: "%d. %B %Y %H:%M"
   flag_icon:
     en: "gb"
     sk: "sk"
@@ -45,6 +55,7 @@ sk:
     sign_up: "Registrovať sa"
     favourites: "Obľúbené"
     users: "Používatelia"
+    watchdogs: "Watchdogy"
   fav:
     title: "Názov"
     duration: "Trvanie"
@@ -90,3 +101,19 @@ sk:
     favs_count: 'Počet obľúbených'
     is_admin: 'Je admin?'
     no_favs: 'Používateľ je bez kultúry!'
+  watchdog:
+    created: "Watchdog bol úspešne vytvorený"
+    updated: "Watchdog bol úspešne upravený"
+    show: "Watchdog"
+    new: "Nový watchdog"
+    edit: "Upraviť watchdog"
+    index: "Watchdogy"
+    from_airport: "Z letiska"
+    to_airport: "Na letisko"
+    to_country: "Do krajiny"
+    max_price: "Maximálna cena"
+    date_watch_from: "Dátum od"
+    date_watch_to: "Dátum do"
+    departure_time_from: "Čas odchodu od"
+    departure_time_to: "Čas odchodu do"
+    is_active: "Aktívny?"
