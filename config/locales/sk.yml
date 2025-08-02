@@ -104,6 +104,7 @@ sk:
   watchdog:
     created: "Watchdog bol úspešne vytvorený"
     updated: "Watchdog bol úspešne upravený"
+    deleted: "Watchdog bol úspešne odstránený"
     show: "Watchdog"
     new: "Nový watchdog"
     edit: "Upraviť watchdog"

@@ -104,6 +104,7 @@ en:
   watchdog:
     created: "Watchdog was successfully created"
     updated: "Watchdog was successfully updated"
+    deleted: "Watchdog was successfully deleted"
     show: "Watchdog"
     new: "New watchdog"
     edit: "Edit watchdog"
