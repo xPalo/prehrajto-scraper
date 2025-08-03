@@ -118,3 +118,32 @@ en:
     departure_time_from: "Departure time from"
     departure_time_to: "Departure time to"
     is_active: "Active?"
+    to_airport_placeholder: "For example: VLC"
+    from_airport_placeholder: "For example: VIE"
+    date: "Date:"
+    departure: "Departure:"
+
+  activerecord:
+    attributes:
+      watchdog:
+        from_airport: "From airport"
+        to_airport: "To airport"
+        to_country: "To country"
+        max_price: "Max price"
+        date_watch_from: "Date from"
+        date_watch_to: "Date to"
+        departure_time_from: "Departure time from"
+        departure_time_to: "Departure time to"
+        is_active: "Active?"
+
+    errors:
+      models:
+        watchdog:
+          attributes:
+            from_airport:
+              blank: "is required"
+            date_watch_from:
+              blank: "is required"
+              invalid: "must be before 'Date to'"
+            date_watch_to:
+              blank: "is required"

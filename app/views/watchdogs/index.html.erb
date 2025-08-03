@@ -12,7 +12,9 @@
               </h5>
 
               <p class="card-text mb-1 text-muted">
-                <strong>Dátum:</strong>
+                <strong>
+                  <%= t('watchdog.date') %>
+                </strong>
                 <% if watchdog.date_watch_from == watchdog.date_watch_to %>
                   <%= l(watchdog.date_watch_from) %>
                 <% else %>
@@ -22,13 +24,13 @@
 
               <% if watchdog.max_price.present? %>
                 <p class="card-text mb-1">
-                  <strong>Max cena:</strong> <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %>
+                  <strong><%= t('watchdog.max_price') %></strong> <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %>
                 </p>
               <% end %>
 
               <% if watchdog.departure_time_from.present? || watchdog.departure_time_to.present? %>
                 <p class="card-text mb-1">
-                  <strong>Odlet:</strong>
+                  <strong><%= t('watchdog.departure') %></strong>
                   <%= [watchdog.departure_time_from, watchdog.departure_time_to].compact.join(" – ") %>
                 </p>
               <% end %>
@@ -48,8 +50,13 @@
         </div>
       <% end %>
     </div>
-  <% else %>
-    <p class="text-center text-muted"><%= t('watchdog.none') %></p>
+
+    <div class="col-md-6 col-lg-4 mb-4">
+      <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
+        <div class="display-1">+</div>
+        <div class="h5 mt-2"><%= t('watchdog.new') %></div>
+      <% end %>
+    </div>
   <% end %>
 </div>
 
