@@ -1,6 +1,6 @@
 module ApplicationHelper
-  def current_class?(path, color="")
-    return "active #{color}" if request.path == path
+  def current_class?(paths, color="")
+    return "active #{color}" if Array.wrap(paths).include?(request.path)
     " "
   end
 end

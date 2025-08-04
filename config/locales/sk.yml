@@ -1,4 +1,14 @@
 sk:
+  date:
+    formats:
+      default: "%d.%m.%Y"
+      short: "%d. %b"
+      long: "%d. %B %Y"
+  time:
+    formats:
+      default: "%H:%M:%S"
+      short: "%H:%M"
+      long: "%d. %B %Y %H:%M"
   flag_icon:
     en: "gb"
     sk: "sk"
@@ -45,6 +55,7 @@ sk:
     sign_up: "Registrovať sa"
     favourites: "Obľúbené"
     users: "Používatelia"
+    watchdogs: "Watchdogy"
   fav:
     title: "Názov"
     duration: "Trvanie"
@@ -90,3 +101,48 @@ sk:
     favs_count: 'Počet obľúbených'
     is_admin: 'Je admin?'
     no_favs: 'Používateľ je bez kultúry!'
+  watchdog:
+    created: "Watchdog bol úspešne vytvorený"
+    updated: "Watchdog bol úspešne upravený"
+    deleted: "Watchdog bol úspešne odstránený"
+    show: "Watchdog"
+    new: "Nový watchdog"
+    edit: "Upraviť watchdog"
+    index: "Watchdogy"
+    from_airport: "Z letiska"
+    to_airport: "Na letisko"
+    to_country: "Do krajiny"
+    max_price: "Maximálna cena"
+    date_watch_from: "Dátum od"
+    date_watch_to: "Dátum do"
+    departure_time_from: "Čas odchodu od"
+    departure_time_to: "Čas odchodu do"
+    is_active: "Aktívny?"
+    to_airport_placeholder: "Napríklad: VLC"
+    from_airport_placeholder: "Napríklad: VIE"
+    date: "Dátum:"
+    departure: "Odlet:"
+
+  activerecord:
+    attributes:
+      watchdog:
+        from_airport: "Z letiska"
+        to_airport: "Cieľové letisko"
+        to_country: "Cieľová krajina"
+        max_price: "Maximálna cena"
+        date_watch_from: "Dátum od"
+        date_watch_to: "Dátum do"
+        departure_time_from: "Čas odletu od"
+        departure_time_to: "Čas odletu do"
+        is_active: "Aktívny?"
+    errors:
+      models:
+        watchdog:
+          attributes:
+            from_airport:
+              blank: "musí byť vyplnené"
+            date_watch_from:
+              blank: "musí byť vyplnené"
+              invalid: "musí byť skôr ako 'Dátum do'"
+            date_watch_to:
+              blank: "musí byť vyplnené"

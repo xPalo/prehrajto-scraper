@@ -1,0 +1,79 @@
+<h1 class="text-center mb-4"><%= t(:'header.watchdogs') %></h1>
+
+<div class="container-fluid px-3">
+  <% if @watchdogs.any? %>
+    <div class="row">
+      <% @watchdogs.each do |watchdog| %>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-2">
+                <%= "#{watchdog.from_airport} → #{watchdog.to_airport.presence || watchdog.to_country}" %>
+              </h5>
+
+              <p class="card-text mb-1 text-muted">
+                <strong>
+                  <%= t('watchdog.date') %>
+                </strong>
+                <% if watchdog.date_watch_from == watchdog.date_watch_to %>
+                  <%= l(watchdog.date_watch_from) %>
+                <% else %>
+                  <%= l(watchdog.date_watch_from) %> – <%= l(watchdog.date_watch_to) %>
+                <% end %>
+              </p>
+
+              <% if watchdog.max_price.present? %>
+                <p class="card-text mb-1">
+                  <strong><%= t('watchdog.max_price') %></strong> <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %>
+                </p>
+              <% end %>
+
+              <% if watchdog.departure_time_from.present? || watchdog.departure_time_to.present? %>
+                <p class="card-text mb-1">
+                  <strong><%= t('watchdog.departure') %></strong>
+                  <%= [watchdog.departure_time_from, watchdog.departure_time_to].compact.join(" – ") %>
+                </p>
+              <% end %>
+
+              <p class="mt-auto mb-0">
+                <span class="badge <%= watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
+                  <%= watchdog.is_active? ? "Aktívny" : "Neaktívny" %>
+                </span>
+              </p>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between">
+              <%= link_to "Upraviť", edit_watchdog_path(watchdog), class: "btn btn-sm btn-outline-primary rounded-pill" %>
+              <%= button_to "Zmazať", watchdog_path(watchdog), method: :delete, data: { confirm: "Naozaj zmazať?" }, class: "btn btn-sm btn-outline-danger rounded-pill" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-md-6 col-lg-4 mb-4">
+        <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
+          <div class="display-1">+</div>
+          <div class="h5 mt-2"><%= t('watchdog.new') %></div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="col-md-6 col-lg-4 mb-4">
+      <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
+        <div class="display-1">+</div>
+        <div class="h5 mt-2"><%= t('watchdog.new') %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('.card').each(function(index) {
+            var card = $(this);
+            setTimeout(function() {
+                card.addClass('loaded');
+            }, index * 150);
+        });
+    });
+</script>

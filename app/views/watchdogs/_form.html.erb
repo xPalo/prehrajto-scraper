@@ -1,0 +1,100 @@
+<div class="form-signin my-4 mx-auto w-100 px-3 fw-bold" style="max-width: 600px;">
+  <%= form_with(model: watchdog, local: true, html: { class: "w-100" }) do |form| %>
+    <% if watchdog.errors.any? %>
+      <div class="alert alert-danger">
+        <h5><%= pluralize(watchdog.errors.count, "chyba") %> zabránila uloženiu:</h5>
+        <ul class="mb-0">
+          <% watchdog.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= form.label :from_airport %><span class="text-danger">*</span>
+      <%= form.text_field :from_airport, required: true, class: "form-control", placeholder: "Príklad: VLC" %>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <%= form.label :date_watch_from %><span class="text-danger">*</span>
+        <%= form.date_field :date_watch_from, class: "form-control", required: true %>
+      </div>
+      <div class="col-md-6">
+        <%= form.label :date_watch_to %><span class="text-danger">*</span>
+        <%= form.date_field :date_watch_to, class: "form-control", required: true %>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <%= form.label :departure_time_from %>
+        <%= form.text_field :departure_time_from, class: "form-control", placeholder: "napr. 08:00" %>
+      </div>
+      <div class="col-md-6">
+        <%= form.label :departure_time_to %>
+        <%= form.text_field :departure_time_to, class: "form-control", placeholder: "napr. 18:00" %>
+      </div>
+    </div>
+
+    <div class="mb-3" id="to_airport_wrapper">
+      <%= form.label :to_airport %>
+      <%= form.text_field :to_airport, class: "form-control", id: "to_airport", placeholder: t('watchdog.to_airport_placeholder') %>
+    </div>
+
+    <div class="mb-3" id="to_country_wrapper">
+      <%= form.label :to_country %>
+      <%= form.text_field :to_country, class: "form-control", id: "to_country", placeholder: "Príklad: Austria" %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :max_price %>
+      <%= form.number_field :max_price, class: "form-control", placeholder: "Maximálna cena v €" %>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <div class="form-check form-switch">
+        <%= form.check_box :is_active, class: "form-check-input", role: "switch", id: "watchdog_is_active" %>
+        <%= form.label :is_active, class: "form-check-label ms-2 mb-0", for: "watchdog_is_active" %>
+      </div>
+    </div>
+
+    <%= form.hidden_field :user_id, value: current_user.id %>
+
+    <div class="text-center">
+      <%= form.submit watchdog.new_record? ? "Vytvoriť" : "Uložiť", class: "btn btn-light my-2 rounded-pill px-4" %>
+    </div>
+  <% end %>
+
+  <div class="d-flex justify-content-center gap-2 mt-3">
+    <%= link_to "Späť", :back, class: "btn btn-outline-secondary rounded-pill" %>
+    <% if watchdog.persisted? %>
+      <%= button_to "Zmazať", watchdog_path(watchdog), method: :delete, data: { confirm: "Naozaj zmazať?" }, class: "btn btn-danger rounded-pill" %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        function updateVisibility() {
+            const airportFilled = $("#to_airport").val().trim() !== "";
+            const countryFilled = $("#to_country").val().trim() !== "";
+
+            if (airportFilled) {
+                $("#to_country_wrapper").hide();
+            } else {
+                $("#to_country_wrapper").show();
+            }
+
+            if (countryFilled) {
+                $("#to_airport_wrapper").hide();
+            } else {
+                $("#to_airport_wrapper").show();
+            }
+        }
+
+        updateVisibility();
+        $("#to_airport, #to_country").on("input", updateVisibility);
+    });
+</script>
