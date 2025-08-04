@@ -49,8 +49,15 @@
           </div>
         </div>
       <% end %>
-    </div>
 
+      <div class="col-md-6 col-lg-4 mb-4">
+        <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
+          <div class="display-1">+</div>
+          <div class="h5 mt-2"><%= t('watchdog.new') %></div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
     <div class="col-md-6 col-lg-4 mb-4">
       <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
         <div class="display-1">+</div>

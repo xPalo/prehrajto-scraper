@@ -1,13 +1,7 @@
 class RyanairFlightFetcher
   attr_reader :watchdogs
 
-  def self.process(watchdog)
-    fetch_flights(watchdog)
-  end
-
-  private
-
-  def fetch_flights(watchdog)
+  def self.fetch_flights(watchdog)
     cmd = %w(python3 pyservice/ryanair_fetch.py)
 
     cmd << "--from" << watchdog.from_airport

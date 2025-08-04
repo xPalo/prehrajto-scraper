@@ -12,6 +12,7 @@ parser.add_argument('--to-country', help='Destination country (e.g. Austria)')
 parser.add_argument('--departure-time-from', help='Earliest departure time (YYYY-MM-DD)')
 parser.add_argument('--departure-time-to', help='Latest departure time (YYYY-MM-DD)')
 parser.add_argument('--to-airport', help='Destination airport (e.g. VIE)')
+parser.add_argument('--max-price', type=int, help='Maximum price in EUR')
 
 args = parser.parse_args()
 
@@ -32,6 +33,9 @@ if args.departure_time_to:
 
 if args.to_airport:
     kwargs['destination_airport'] = args.to_airport
+
+if args.max_price is not None:
+    kwargs['max_price'] = args.max_price
 
 api = Ryanair()
 flights = api.get_cheapest_flights(**kwargs)

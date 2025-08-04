@@ -8,15 +8,15 @@ class WatchdogRunnerJob < ApplicationJob
       flights = []
 
       watchdogs.each do |watchdog|
-        watchdogs_to_deactivate << watchdog.id if watchdog.date_to > Time.current.end_of_day
+        watchdogs_to_deactivate << watchdog.id if watchdog.date_watch_to < Date.current
 
-        flights += RyanairFlightFetcher.process(watchdog)
+        flights += RyanairFlightFetcher.fetch_flights(watchdog)
       end
 
       next if flights.blank?
 
       sorted_flights = flights.sort_by { |flight| flight['price'].to_f }
-      RaincheckMailer.email(user_id, sorted_flights).deliver_now
+      RaincheckMailer.watchdog_email(user_id, sorted_flights).deliver_now
     end
 
     Watchdog.where(id: watchdogs_to_deactivate).update_all(is_active: false)
