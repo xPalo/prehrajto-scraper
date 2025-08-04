@@ -24,5 +24,6 @@ module PrehrajtoScraper
     config.i18n.fallbacks = true
     config.action_controller.forgery_protection_origin_check = false
     config.autoload_paths += %W(#{config.root}/app/mailers)
+    config.active_job.queue_adapter = :sidekiq
   end
 end

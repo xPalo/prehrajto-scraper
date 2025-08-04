@@ -56,6 +56,8 @@ Rails.application.configure do
     port: 46580,
     protocol: 'http'
   }
+
+  config.active_job.queue_adapter = :sidekiq
 end
 
 Rails.application.routes.default_url_options = {

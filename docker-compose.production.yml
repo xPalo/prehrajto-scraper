@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - "6379:6379"
+
   db:
     image: postgres:14
     restart: always
@@ -17,12 +23,24 @@ services:
     build: .
     depends_on:
       - db
+      - redis
     volumes:
       - .:/app
     ports:
       - "8080:8080"
     entrypoint: [ "bin/docker-entrypoint" ]
     command: [ "bin/rails", "server", "-b", "0.0.0.0", "-p", "8080", "-e", "production" ]
+    env_file: ".env.production"
+
+  sidekiq:
+    build: .
+    depends_on:
+      - db
+      - backend
+      - redis
+    volumes:
+      - .:/app
+    command: bundle exec sidekiq -C config/sidekiq.yml
     env_file: ".env.production"
 
 volumes:
