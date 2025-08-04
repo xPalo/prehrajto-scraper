@@ -1,6 +1,8 @@
+job_type :runner, "cd :path && bundle exec rails runner -e :environment ':task'"
+
 set :output, "log/cron.log"
 set :environment, ENV["RAILS_ENV"]
 
-every 1.hour do
-  runner "WatchdogRunnerJob.perform_later"
+every 15.minutes do
+  runner "WatchdogRunnerJob.perform_now"
 end

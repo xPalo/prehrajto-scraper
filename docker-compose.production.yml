@@ -22,7 +22,7 @@ services:
     ports:
       - "8080:8080"
     entrypoint: [ "bin/docker-entrypoint" ]
-    command: /bin/sh -c "service cron start && bin/rails server -b 0.0.0.0 -p 8080 -e production"
+    command: [ "bin/rails", "server", "-b", "0.0.0.0", "-p", "8080", "-e", "production" ]
     env_file: ".env.production"
 
 volumes:
