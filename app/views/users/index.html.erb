@@ -57,6 +57,61 @@
             <p class="text-muted mt-3"><em><%= I18n.t('user.no_favs') %></em></p>
           <% end %>
         </div>
+
+        <% if user.watchdogs.any? %>
+          <div class="card mb-4 shadow-sm loaded">
+            <div class="card-body">
+              <h5 class="card-title">Watchdogy</h5>
+
+              <div class="table-responsive mt-3">
+                <table class="table table-striped table-sm align-middle">
+                  <thead class="table-light">
+                  <tr>
+                    <th>Odkiaľ</th>
+                    <th>Kam</th>
+                    <th>Dátumy</th>
+                    <th>Cena max</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% user.watchdogs.each do |watchdog| %>
+                    <tr>
+                      <td><%= watchdog.from_airport %></td>
+                      <td><%= watchdog.to_airport.presence || watchdog.to_country %></td>
+                      <td>
+                        <% if watchdog.date_watch_from == watchdog.date_watch_to %>
+                          <%= l(watchdog.date_watch_from) %>
+                        <% else %>
+                          <%= l(watchdog.date_watch_from) %> – <%= l(watchdog.date_watch_to) %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% if watchdog.max_price.present? %>
+                          <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %>
+                        <% else %>
+                          –
+                        <% end %>
+                      </td>
+                      <td>
+                <span class="badge <%= watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
+                  <%= watchdog.is_active? ? "Aktívny" : "Neaktívny" %>
+                </span>
+                      </td>
+                      <td>
+                        <%= link_to "Zobraziť", watchdog_path(watchdog), class: "btn btn-sm btn-outline-primary" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <p class="text-muted"><em>Žiadne watchdogy</em></p>
+        <% end %>
       </div>
     </div>
   <% end %>

@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :authorize_user, only: [:index]
 
   def index
-    @users = User.includes(:favs).page(params[:page])
+    @users = User.includes(:favs, :watchdogs).page(params[:page])
   end
 
   private
