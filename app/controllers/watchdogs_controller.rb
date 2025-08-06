@@ -3,11 +3,14 @@ require "net/http"
 
 class WatchdogsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_watchdog, only: [:edit, :update, :destroy]
-  before_action :authorize_user, only: [:edit, :update, :destroy]
+  before_action :set_watchdog, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_user, only: [:show, :edit, :update, :destroy]
 
   def index
     @watchdogs = current_user.watchdogs.order(is_active: :desc, id: :asc)
+  end
+
+  def show
   end
 
   def new

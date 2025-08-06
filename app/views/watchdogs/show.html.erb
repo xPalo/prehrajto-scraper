@@ -1,0 +1,112 @@
+<div class="container my-5">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title mb-4">
+        <%= "#{@watchdog.from_airport} → #{@watchdog.to_airport.presence || @watchdog.to_country}" %>
+      </h2>
+
+      <ul class="list-unstyled">
+        <li><strong>Dátum:</strong>
+          <% if @watchdog.date_watch_from == @watchdog.date_watch_to %>
+            <%= l(@watchdog.date_watch_from) %>
+          <% else %>
+            <%= l(@watchdog.date_watch_from) %> – <%= l(@watchdog.date_watch_to) %>
+          <% end %>
+        </li>
+
+        <% if @watchdog.max_price.present? %>
+          <li><strong>Max. cena:</strong> <%= number_to_currency(@watchdog.max_price, unit: "€", precision: 0) %></li>
+        <% end %>
+
+        <% if @watchdog.departure_time_from.present? || @watchdog.departure_time_to.present? %>
+          <li><strong>Odlet:</strong> <%= [@watchdog.departure_time_from, @watchdog.departure_time_to].compact.join(" – ") %></li>
+        <% end %>
+
+        <li>
+          <strong>Status:</strong>
+          <span class="badge <%= @watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
+            <%= @watchdog.is_active? ? "Aktívny" : "Neaktívny" %>
+          </span>
+        </li>
+
+        <% if @watchdog.price_history.present? %>
+          <% min_price = @watchdog.price_history.map { |point| point["y"] }.min %>
+          <li><strong>Najnižšia zaznamenaná cena:</strong> <%= number_to_currency(min_price, unit: "€", precision: 2) %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <% if @watchdog.price_history.present? %>
+    <div class="mt-4">
+      <canvas id="priceChart" width="800" height="400"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script>
+        const ctx = document.getElementById('priceChart').getContext('2d');
+        const data = {
+            datasets: [{
+                label: 'Vývoj ceny',
+                data: <%= @watchdog.price_history.to_json.html_safe %>,
+                parsing: {
+                    xAxisKey: 'x',
+                    yAxisKey: 'y'
+                },
+                borderWidth: 2,
+                borderColor: 'blue',
+                backgroundColor: 'rgba(0,0,255,0.1)',
+                fill: true,
+                tension: 0.3
+            }]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Dátum'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Cena (€)'
+                        },
+                        beginAtZero: false
+                    }
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+    </script>
+  <% else %>
+    <div class="alert alert-info mt-4">Zatiaľ nie sú žiadne zaznamenané ceny.</div>
+  <% end %>
+
+  <div class="mt-4">
+    <%= link_to "Späť", watchdogs_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('.card').each(function(index) {
+            var card = $(this);
+            setTimeout(function() {
+                card.addClass('loaded');
+            }, index * 150);
+        });
+    });
+</script>
