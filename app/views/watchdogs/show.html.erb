@@ -1,0 +1,135 @@
+<div class="container my-5">
+  <div class="card loaded shadow-sm <%= @dark_mode ? 'bg-dark text-white' : '' %>">
+    <div class="card-body">
+      <h2 class="card-title mb-4">
+        <%= "#{@watchdog.from_airport} → #{@watchdog.to_airport.presence || @watchdog.to_country}" %>
+      </h2>
+
+      <ul class="list-unstyled">
+        <li><strong><%= t('watchdog.date') %>:</strong>
+          <% if @watchdog.date_watch_from == @watchdog.date_watch_to %>
+            <%= l(@watchdog.date_watch_from) %>
+          <% else %>
+            <%= l(@watchdog.date_watch_from) %> – <%= l(@watchdog.date_watch_to) %>
+          <% end %>
+        </li>
+
+        <% if @watchdog.max_price.present? %>
+          <li><strong><%= t('watchdog.max_price') %>:</strong> <%= number_to_currency(@watchdog.max_price, unit: "€", precision: 0) %></li>
+        <% end %>
+
+        <% if @watchdog.departure_time_from.present? || @watchdog.departure_time_to.present? %>
+          <li><strong><%= t('watchdog.departure') %>:</strong> <%= [@watchdog.departure_time_from, @watchdog.departure_time_to].compact.join(" – ") %></li>
+        <% end %>
+
+        <li>
+          <strong><%= t('watchdog.status') %>:</strong>
+          <span class="badge <%= @watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
+            <%= @watchdog.is_active? ? t('watchdog.active') : t('watchdog.inactive') %>
+          </span>
+        </li>
+
+        <% if @watchdog.price_history.present? %>
+          <% min_price = @watchdog.price_history.map { |point| point["y"] }.min %>
+          <% sorted_history = @watchdog.price_history.sort_by { |point| point["x"] } %>
+          <li><strong><%= t('watchdog.lowest_recorded_price') %>:</strong> <%= number_to_currency(min_price, unit: "€", precision: 2) %></li>
+          <li><strong><%= t('watchdog.latest_recorded_price') %>:</strong> <%= number_to_currency(sorted_history.last["y"], unit: "€", precision: 2) %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <canvas id="priceChart" width="800" height="400"></canvas>
+  </div>
+
+  <% if @watchdog.can_analyze_price? && @watchdog.price_history.present? %>
+    <script>
+        document.addEventListener("turbo:load", () => {
+            const canvas = document.getElementById('priceChart');
+            if (!canvas) return;
+
+            if (window.chartInstance) {
+                window.chartInstance.destroy();
+            }
+
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, '<%= @dark_mode ? 'rgba(0, 123, 255, 0.4)' : 'rgba(0, 123, 255, 0.3)' %>');
+            gradient.addColorStop(1, '<%= @dark_mode ? 'rgba(0, 123, 255, 0)' : 'rgba(0, 123, 255, 0)' %>');
+
+            const data = {
+                datasets: [{
+                    label: '<%= t('watchdog.price_development') %>',
+                    data: <%= @watchdog.price_history.to_json.html_safe %>,
+                    parsing: {
+                        xAxisKey: 'x',
+                        yAxisKey: 'y'
+                    },
+                    borderWidth: 2,
+                    borderColor: '<%= @dark_mode ? "#4dabf7" : "blue" %>',
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.3
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '<%= @dark_mode ? "#ccc" : "#333" %>'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            title: {
+                                display: true,
+                                text: '<%= t('watchdog.date') %>',
+                                color: '<%= @dark_mode ? "#ccc" : "#333" %>'
+                            },
+                            grid: {
+                                color: '<%= @dark_mode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)" %>'
+                            },
+                            ticks: {
+                                color: '<%= @dark_mode ? "#aaa" : "#000" %>'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '<%= t('watchdog.price') %>',
+                                color: '<%= @dark_mode ? "#ccc" : "#333" %>'
+                            },
+                            beginAtZero: false,
+                            grid: {
+                                color: '<%= @dark_mode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)" %>'
+                            },
+                            ticks: {
+                                color: '<%= @dark_mode ? "#aaa" : "#000" %>'
+                            }
+                        }
+                    }
+                }
+            };
+
+            window.chartInstance = new Chart(ctx, config);
+        });
+    </script>
+  <% else %>
+    <div class="alert alert-info mt-4"><%= t('watchdog.no_data_yet') %></div>
+  <% end %>
+
+  <div class="mt-4">
+    <%= link_to t('back'), watchdogs_path, class: "btn btn-outline-secondary" %>
+  </div>
+</div>

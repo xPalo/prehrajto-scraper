@@ -89,11 +89,14 @@ sk:
     submit: "Zadať"
     search: "Vyhľadávanie"
   back: "Späť"
-  delete: "Vymazať"
   created_at: "Vytvorené"
   updated_at: "Upravené"
   actions: "Akcie"
   show: "Zobraziť"
+  delete: "Odstrániť"
+  delete_confirm: "Naozaj chcete odstrániť?"
+  edit: "Upraviť"
+  save: "Uložiť"
   user:
     show: 'Používateľ'
     index: 'Používatelia'
@@ -122,6 +125,14 @@ sk:
     from_airport_placeholder: "Napríklad: VIE"
     date: "Dátum:"
     departure: "Odlet:"
+    active: "Aktívny"
+    inactive: "Neaktívny"
+    status: "Stav"
+    latest_recorded_price: "Posledná zaznamenaná cena"
+    lowest_recorded_price: "Najnižšia zaznamenaná cena"
+    price_development: "Vývoj ceny"
+    price: "Cena (€)"
+    no_data_yet: "Zatiaľ neexistujú žiadne dáta o cenách."
 
   activerecord:
     attributes:

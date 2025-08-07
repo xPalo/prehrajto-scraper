@@ -13,7 +13,7 @@
 
     <div class="mb-3">
       <%= form.label :from_airport %><span class="text-danger">*</span>
-      <%= form.text_field :from_airport, required: true, class: "form-control", placeholder: "Príklad: VLC" %>
+      <%= form.text_field :from_airport, required: true, class: "form-control", placeholder: "VIE" %>
     </div>
 
     <div class="row mb-3">
@@ -30,27 +30,27 @@
     <div class="row mb-3">
       <div class="col-md-6 mb-3 mb-md-0">
         <%= form.label :departure_time_from %>
-        <%= form.text_field :departure_time_from, class: "form-control", placeholder: "napr. 08:00" %>
+        <%= form.text_field :departure_time_from, class: "form-control", placeholder: "08:00" %>
       </div>
       <div class="col-md-6">
         <%= form.label :departure_time_to %>
-        <%= form.text_field :departure_time_to, class: "form-control", placeholder: "napr. 18:00" %>
+        <%= form.text_field :departure_time_to, class: "form-control", placeholder: "18:00" %>
       </div>
     </div>
 
     <div class="mb-3" id="to_airport_wrapper">
       <%= form.label :to_airport %>
-      <%= form.text_field :to_airport, class: "form-control", id: "to_airport", placeholder: t('watchdog.to_airport_placeholder') %>
+      <%= form.text_field :to_airport, class: "form-control", id: "to_airport", placeholder: "VLC" %>
     </div>
 
     <div class="mb-3" id="to_country_wrapper">
       <%= form.label :to_country %>
-      <%= form.text_field :to_country, class: "form-control", id: "to_country", placeholder: "Príklad: Austria" %>
+      <%= form.text_field :to_country, class: "form-control", id: "to_country", placeholder: "Austria" %>
     </div>
 
     <div class="mb-3">
       <%= form.label :max_price %>
-      <%= form.number_field :max_price, class: "form-control", placeholder: "Maximálna cena v €" %>
+      <%= form.number_field :max_price, class: "form-control", placeholder: "100€" %>
     </div>
 
     <div class="d-flex align-items-center justify-content-between mb-4">
@@ -63,20 +63,20 @@
     <%= form.hidden_field :user_id, value: current_user.id %>
 
     <div class="text-center">
-      <%= form.submit watchdog.new_record? ? "Vytvoriť" : "Uložiť", class: "btn btn-light my-2 rounded-pill px-4" %>
+      <%= form.submit t('save'), class: "btn btn-light my-2 rounded-pill px-4" %>
     </div>
   <% end %>
 
   <div class="d-flex justify-content-center gap-2 mt-3">
-    <%= link_to "Späť", :back, class: "btn btn-outline-secondary rounded-pill" %>
+    <%= link_to t('back'), :back, class: "btn btn-outline-secondary rounded-pill" %>
     <% if watchdog.persisted? %>
-      <%= button_to "Zmazať", watchdog_path(watchdog), method: :delete, data: { confirm: "Naozaj zmazať?" }, class: "btn btn-danger rounded-pill" %>
+      <%= button_to t('delete'), watchdog_path(watchdog), method: :delete, data: { confirm: t('delete_confirm') }, class: "btn btn-danger rounded-pill" %>
     <% end %>
   </div>
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).on("turbo:load", function() {
         function updateVisibility() {
             const airportFilled = $("#to_airport").val().trim() !== "";
             const countryFilled = $("#to_country").val().trim() !== "";

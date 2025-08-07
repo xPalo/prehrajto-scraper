@@ -1,7 +1,7 @@
 class RyanairFlightFetcher
   attr_reader :watchdogs
 
-  def self.fetch_flights(watchdog)
+  def self.fetch_flights(watchdog, skip_price_arg: false)
     cmd = %w(python3 pyservice/ryanair_fetch.py)
 
     cmd << "--from" << watchdog.from_airport
@@ -12,7 +12,7 @@ class RyanairFlightFetcher
     cmd << "--to-airport" << watchdog.to_airport if watchdog.to_airport.present?
     cmd << "--departure-time-from" << watchdog.departure_time_from.strftime("%Y-%m-%d") if watchdog.departure_time_from.present?
     cmd << "--departure-time-to" << watchdog.departure_time_to.strftime("%Y-%m-%d") if watchdog.departure_time_to.present?
-    cmd << "--max-price" << watchdog.max_price.to_s if watchdog.max_price.present?
+    cmd << "--max-price" << watchdog.max_price.to_s if watchdog.max_price.present? && !skip_price_arg
 
     raw_output = `#{cmd.shelljoin}`
 

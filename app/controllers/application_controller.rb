@@ -30,15 +30,15 @@ class ApplicationController < ActionController::Base
   end
   
   def after_sign_in_path_for(resource)
-    Rails.env.production? ? PRODUCTION_URL : super
+    production? ? PRODUCTION_URL : super
   end
 
   def after_sign_up_path_for(resource)
-    Rails.env.production? ? PRODUCTION_URL : super
+    production? ? PRODUCTION_URL : super
   end
 
   def after_sign_out_path_for(resource)
-    Rails.env.production? ? PRODUCTION_URL : super
+    production? ? PRODUCTION_URL : super
   end
 
   def set_theme

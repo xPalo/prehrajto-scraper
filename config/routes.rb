@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   end
 
   resources :favs
-  resources :watchdogs, except: [:show]
+  resources :watchdogs
   resources :users, only: [:index]
 
   root "home#prehrajto"

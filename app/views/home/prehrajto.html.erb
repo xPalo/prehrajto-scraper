@@ -87,7 +87,7 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function(){
+    $(document).on("turbo:load", function() {
         function doSearch() {
             let matchvalue = $("#prehrajto_search").val();
             window.location.replace(`?search_url=/hledej/${matchvalue}`);
@@ -97,7 +97,7 @@
             var card = $(this);
             setTimeout(function() {
                 card.addClass('loaded');
-            }, index * 100); // postupné načítanie (voliteľné)
+            }, index * 100);
         });
 
         $("#prehrajto_search_button").on("click", function (){
@@ -106,7 +106,7 @@
 
         $("#prehrajto_search").on("keydown", function(e) {
             if (e.key === "Enter") {
-                e.preventDefault(); // zabránime submitu formulára, ak tam nejaký je
+                e.preventDefault();
                 doSearch();
             }
         });
