@@ -76,7 +76,7 @@
 </div>
 
 <script>
-    $(document).ready(function () {
+    $(document).on("turbo:load", function() {
         function updateVisibility() {
             const airportFilled = $("#to_airport").val().trim() !== "";
             const countryFilled = $("#to_country").val().trim() !== "";

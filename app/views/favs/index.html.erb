@@ -26,18 +26,18 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-        var $cells = $(".favorite-card");
-
+    $(document).on("turbo:load", function() {
         function normalizeText(str) {
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
         }
 
         $("#search").keyup(function () {
+            var $cells = $('.favorite-card');
             var val = normalizeText($.trim(this.value));
-            if (val === "")
+
+            if (val === "") {
                 $cells.parent().show();
-            else {
+            } else {
                 $cells.parent().hide();
                 $cells.filter(function () {
                     return normalizeText($(this).text()).indexOf(val) !== -1;

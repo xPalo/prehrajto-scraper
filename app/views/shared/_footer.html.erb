@@ -28,7 +28,7 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-    $(document).ready(function () {
+    $(document).on("turbo:load", function() {
         $('.theme-toggle').on('click', function () {
             const isDark = $('body').toggleClass('dark-mode').hasClass('dark-mode');
             document.cookie = 'theme=' + (isDark ? 'dark' : 'light') + '; path=/';
