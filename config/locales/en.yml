@@ -89,11 +89,14 @@ en:
     submit: "Submit"
     search: "Search"
   back: "Back"
-  delete: "Delete"
   created_at: "Created at"
   updated_at: "Updated at"
   actions: "Actions"
   show: "Show"
+  delete: "Delete"
+  delete_confirm: "Are you sure you want to delete?"
+  edit: "Edit"
+  save: "Save"
   user:
     show: 'User'
     index: 'Users'
@@ -122,6 +125,14 @@ en:
     from_airport_placeholder: "For example: VIE"
     date: "Date:"
     departure: "Departure:"
+    active: "Active"
+    inactive: "Inactive"
+    status: "Status"
+    latest_recorded_price: "Latest recorded price"
+    lowest_recorded_price: "Lowest recorded price"
+    price_development: "Price development"
+    price: "Price (€)"
+    no_data_yet: "No available price data yet."
 
   activerecord:
     attributes:
