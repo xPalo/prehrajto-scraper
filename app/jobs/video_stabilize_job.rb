@@ -53,7 +53,7 @@ class VideoStabilizeJob < ApplicationJob
   def run_ffmpeg_pass1(input_path, transform_path)
     system(
       'ffmpeg', '-y', '-i', input_path,
-      '-vf', "vidstabdetect=shakiness=6:accuracy=5:result=#{transform_path}",
+      '-vf', "vidstabdetect=shakiness=8:accuracy=9:result=#{transform_path}",
       '-f', 'null', '-'
     )
   end
@@ -62,8 +62,10 @@ class VideoStabilizeJob < ApplicationJob
     system(
       'ffmpeg', '-y', '-i', input_path,
       '-vf', "vidstabtransform=input=#{transform_path}:smoothing=10:crop=black:zoom=1",
-      '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23',
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
       '-c:a', 'copy',
+      '-map_metadata', '0',
+      '-movflags', 'use_metadata_tags',
       output_path
     )
   end
