@@ -10,6 +10,11 @@ Rails.application.routes.draw do
 
   resources :favs
   resources :watchdogs
+  resources :videos do
+    member do
+      get :download
+    end
+  end
   resources :users, only: [:index]
 
   root "home#prehrajto"

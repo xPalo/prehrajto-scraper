@@ -7,6 +7,8 @@ RUN apt-get update -qq && apt-get install -y \
   python3 python3-pip \
   nodejs \
   redis-tools \
+  ffmpeg \
+  libvidstab-dev \
   && rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./

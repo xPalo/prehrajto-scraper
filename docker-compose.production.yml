@@ -26,6 +26,7 @@ services:
       - redis
     volumes:
       - .:/app
+      - video_storage:/prehrajto-scraper/storage
     ports:
       - "8080:8080"
     entrypoint: [ "bin/docker-entrypoint" ]
@@ -40,8 +41,22 @@ services:
       - redis
     volumes:
       - .:/app
-    command: bundle exec sidekiq -C config/sidekiq.yml
+      - video_storage:/prehrajto-scraper/storage
+    command: bundle exec sidekiq -q default -q mailers -c 5
+    env_file: ".env.production"
+
+  sidekiq_video:
+    build: .
+    depends_on:
+      - db
+      - backend
+      - redis
+    volumes:
+      - .:/app
+      - video_storage:/prehrajto-scraper/storage
+    command: bundle exec sidekiq -q video_processing -c 1
     env_file: ".env.production"
 
 volumes:
   postgres_data:
+  video_storage:
