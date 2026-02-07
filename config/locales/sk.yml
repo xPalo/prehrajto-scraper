@@ -173,6 +173,7 @@ sk:
         video:
           attributes:
             original_video:
+              blank: "musí byť vybrané"
               file_too_large: "je príliš veľké (maximum je %{max_size})"
               invalid_content_type: "musí byť video súbor (MP4, MOV, AVI, WebM, MKV)"
         watchdog:

@@ -1,7 +1,7 @@
 <h1><%= t(:'video.new') %></h1>
 
 <div class="form-signin my-4 mx-auto w-100 px-3 fw-bold" style="max-width: 600px;">
-  <%= form_with(model: @video, local: true, html: { multipart: true }) do |form| %>
+  <%= form_with(model: @video, multipart: true, data: { turbo: false }) do |form| %>
     <% if @video.errors.any? %>
       <div class="alert alert-danger">
         <h5><%= pluralize(@video.errors.count, "error") %></h5>

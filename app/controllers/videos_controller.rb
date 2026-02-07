@@ -19,20 +19,19 @@ class VideosController < ApplicationController
   end
 
   def create
+    uploaded_file = params.dig(:video, :original_video)
+
     @video = Video.new(video_params)
     @video.user = current_user
-    @video.original_filename = params[:video][:original_video]&.original_filename || 'unknown'
-    @video.file_size = params[:video][:original_video]&.size
+    @video.original_filename = uploaded_file.try(:original_filename) || 'unknown'
+    @video.file_size = uploaded_file.try(:size)
 
-    respond_to do |format|
-      if @video.save
-        VideoStabilizeJob.perform_later(@video.id)
-        format.html { redirect_to video_url(@video), notice: t(:'video.created') }
-        format.json { render :show, status: :created, location: @video }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @video.errors, status: :unprocessable_entity }
-      end
+    if @video.save
+      VideoStabilizeJob.perform_later(@video.id)
+      redirect_to video_url(@video), notice: t(:'video.created')
+    else
+      Rails.logger.error("Video create failed: #{@video.errors.full_messages.join(', ')}")
+      render :new, status: :unprocessable_entity
     end
   end
 

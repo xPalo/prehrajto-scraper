@@ -7,13 +7,22 @@ class Video < ApplicationRecord
   enum status: { pending: 0, processing: 1, completed: 2, failed: 3 }
 
   validates :original_filename, presence: true
-  validates :status, presence: true
+  validate :original_video_presence
   validate :acceptable_video
 
   MAX_FILE_SIZE = 500.megabytes
-  ALLOWED_CONTENT_TYPES = %w[video/mp4 video/quicktime video/x-msvideo video/webm video/x-matroska].freeze
+  ALLOWED_CONTENT_TYPES = %w[
+    video/mp4 video/quicktime video/x-msvideo video/webm video/x-matroska
+    video/mpeg video/mp2t video/x-ms-wmv video/3gpp video/x-flv
+  ].freeze
 
   private
+
+  def original_video_presence
+    unless original_video.attached?
+      errors.add(:original_video, :blank)
+    end
+  end
 
   def acceptable_video
     return unless original_video.attached?
