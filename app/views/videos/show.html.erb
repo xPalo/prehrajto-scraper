@@ -19,7 +19,7 @@
           <li><strong><%= t('video.duration') %>:</strong> <%= Time.at(@video.duration).utc.strftime("%H:%M:%S") %></li>
         <% end %>
 
-        <li><strong><%= t('created_at') %>:</strong> <%= l(@video.created_at, format: :long) %></li>
+        <li><strong><%= t('created_at') %>:</strong> <%= @video.created_at.strftime("%-d. %-m. %Y %H:%M") %></li>
 
         <% if @video.failed? && @video.error_message.present? %>
           <li class="text-danger mt-2">

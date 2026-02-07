@@ -48,7 +48,10 @@ class VideosController < ApplicationController
 
   def download
     if @video.completed? && @video.stabilized_video.attached?
-      redirect_to rails_blob_path(@video.stabilized_video, disposition: 'attachment')
+      send_file ActiveStorage::Blob.service.path_for(@video.stabilized_video.key),
+                filename: @video.stabilized_video.filename.to_s,
+                type: @video.stabilized_video.content_type,
+                disposition: 'attachment'
     else
       redirect_back(fallback_location: video_path(@video), alert: t(:'video.not_ready'))
     end
