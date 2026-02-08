@@ -35,11 +35,11 @@
           </div>
 
           <div class="card-footer d-flex justify-content-between align-items-center">
-            <%= link_to t('show'), video_path(video), class: "btn btn-sm btn-outline-primary rounded-pill" %>
+            <%= link_to video_path(video), class: "btn btn-sm btn-outline-primary rounded-pill", title: t('show') do %><i class="fa-solid fa-eye"></i><% end %>
             <% if video.completed? %>
-              <%= link_to t('video.download'), download_video_path(video), class: "btn btn-sm btn-outline-success rounded-pill" %>
+              <%= link_to download_video_path(video), class: "btn btn-sm btn-outline-success rounded-pill", title: t('video.download') do %><i class="fa-solid fa-download"></i><% end %>
             <% end %>
-            <%= button_to t('delete'), video_path(video), method: :delete, data: { confirm: t('delete_confirm') }, class: "btn btn-sm btn-outline-danger rounded-pill" %>
+            <%= button_to video_path(video), method: :delete, data: { confirm: t('delete_confirm') }, class: "btn btn-sm btn-outline-danger rounded-pill", title: t('delete') do %><i class="fa-solid fa-xmark"></i><% end %>
           </div>
         </div>
       </div>
