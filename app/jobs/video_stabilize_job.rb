@@ -49,8 +49,16 @@ class VideoStabilizeJob < ApplicationJob
     duration_out = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "#{input_path}" 2>&1`
     duration = duration_out.strip.to_f if duration_out.strip.match?(/\A[\d.]+\z/)
 
-    creation_out = `ffprobe -v error -show_entries format_tags=creation_time -of default=noprint_wrappers=1:nokey=1 "#{input_path}" 2>&1`
-    creation_time = creation_out.strip.presence
+    creation_time = nil
+    %w[format_tags=creation_time stream_tags=creation_time].each do |entry|
+      out = `ffprobe -v error -show_entries #{entry} -of default=noprint_wrappers=1:nokey=1 "#{input_path}" 2>&1`
+      value = out.strip.lines.first&.strip
+
+      if value.present? && value.match?(/\A\d{4}-\d{2}-\d{2}/)
+        creation_time = value
+        break
+      end
+    end
 
     { duration: duration, creation_time: creation_time }
   end
@@ -75,10 +83,19 @@ class VideoStabilizeJob < ApplicationJob
 
     if creation_time
       cmd.push('-metadata', "creation_time=#{creation_time}")
+      cmd.push('-metadata:s:v:0', "creation_time=#{creation_time}")
+      cmd.push('-metadata:s:a:0', "creation_time=#{creation_time}")
     end
 
     cmd.push(output_path)
-    system(*cmd)
+    return false unless system(*cmd)
+
+    if creation_time
+      original_time = Time.parse(creation_time) rescue nil
+      File.utime(original_time, original_time, output_path) if original_time
+    end
+
+    true
   end
 
   def sanitize_filename(filename)

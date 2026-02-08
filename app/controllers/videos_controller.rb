@@ -48,7 +48,11 @@ class VideosController < ApplicationController
 
   def download
     if @video.completed? && @video.stabilized_video.attached?
-      send_file ActiveStorage::Blob.service.path_for(@video.stabilized_video.key),
+      file_path = ActiveStorage::Blob.service.path_for(@video.stabilized_video.key)
+      file_mtime = File.mtime(file_path)
+      response.headers['Last-Modified'] = file_mtime.httpdate
+
+      send_file file_path,
                 filename: @video.stabilized_video.filename.to_s,
                 type: @video.stabilized_video.content_type,
                 disposition: 'attachment'
