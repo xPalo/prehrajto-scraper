@@ -17,15 +17,15 @@ class VideoStabilizeJob < ApplicationJob
         FileUtils.cp(tempfile.path, input_path)
       end
 
-      duration = extract_duration(input_path)
-      video.update(duration: duration) if duration
+      metadata = extract_metadata(input_path)
+      video.update(duration: metadata[:duration]) if metadata[:duration]
 
       unless run_ffmpeg_pass1(input_path, transform_path)
         video.update(status: :failed, error_message: 'FFmpeg pass 1 (detect) failed')
         return
       end
 
-      unless run_ffmpeg_pass2(input_path, transform_path, output_path)
+      unless run_ffmpeg_pass2(input_path, transform_path, output_path, metadata[:creation_time])
         video.update(status: :failed, error_message: 'FFmpeg pass 2 (transform) failed')
         return
       end
@@ -45,9 +45,14 @@ class VideoStabilizeJob < ApplicationJob
 
   private
 
-  def extract_duration(input_path)
-    output = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "#{input_path}" 2>&1`
-    output.strip.to_f if output.strip.match?(/\A[\d.]+\z/)
+  def extract_metadata(input_path)
+    duration_out = `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "#{input_path}" 2>&1`
+    duration = duration_out.strip.to_f if duration_out.strip.match?(/\A[\d.]+\z/)
+
+    creation_out = `ffprobe -v error -show_entries format_tags=creation_time -of default=noprint_wrappers=1:nokey=1 "#{input_path}" 2>&1`
+    creation_time = creation_out.strip.presence
+
+    { duration: duration, creation_time: creation_time }
   end
 
   def run_ffmpeg_pass1(input_path, transform_path)
@@ -58,16 +63,22 @@ class VideoStabilizeJob < ApplicationJob
     )
   end
 
-  def run_ffmpeg_pass2(input_path, transform_path, output_path)
-    system(
+  def run_ffmpeg_pass2(input_path, transform_path, output_path, creation_time)
+    cmd = [
       'ffmpeg', '-y', '-i', input_path,
       '-vf', "vidstabtransform=input=#{transform_path}:smoothing=10:crop=black:zoom=1",
       '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
       '-c:a', 'copy',
       '-map_metadata', '0',
-      '-movflags', 'use_metadata_tags',
-      output_path
-    )
+      '-movflags', '+use_metadata_tags+faststart'
+    ]
+
+    if creation_time
+      cmd.push('-metadata', "creation_time=#{creation_time}")
+    end
+
+    cmd.push(output_path)
+    system(*cmd)
   end
 
   def sanitize_filename(filename)
