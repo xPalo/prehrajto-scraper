@@ -56,6 +56,7 @@ sk:
     favourites: "Obľúbené"
     users: "Používatelia"
     watchdogs: "Watchdogy"
+    videos: "Videá"
   fav:
     title: "Názov"
     duration: "Trvanie"
@@ -134,6 +135,27 @@ sk:
     price: "Cena (€)"
     no_data_yet: "Zatiaľ neexistujú žiadne dáta o cenách."
 
+  video:
+    index: "Stabilizátor videa"
+    new: "Nahrať video"
+    upload: "Nahrať a stabilizovať"
+    select_file: "Vybrať video súbor"
+    max_file_size: "Maximálna veľkosť súboru: %{size}"
+    created: "Video bolo nahrané! Stabilizácia čoskoro začne."
+    deleted: "Video bolo úspešne odstránené"
+    not_ready: "Stabilizované video ešte nie je pripravené"
+    download: "Stiahnuť stabilizované"
+    file_size: "Veľkosť súboru"
+    duration: "Trvanie"
+    status_label: "Stav"
+    status_pending: "Čakajúce"
+    status_processing: "Spracováva sa"
+    status_completed: "Dokončené"
+    status_failed: "Zlyhané"
+    processing_message: "Vaše video sa stabilizuje. Táto stránka sa automaticky aktualizuje."
+    error: "Chyba"
+    unknown_error: "Vyskytla sa neznáma chyba"
+
   activerecord:
     attributes:
       watchdog:
@@ -148,6 +170,12 @@ sk:
         is_active: "Aktívny?"
     errors:
       models:
+        video:
+          attributes:
+            original_video:
+              blank: "musí byť vybrané"
+              file_too_large: "je príliš veľké (maximum je %{max_size})"
+              invalid_content_type: "musí byť video súbor (MP4, MOV, AVI, WebM, MKV)"
         watchdog:
           attributes:
             from_airport:

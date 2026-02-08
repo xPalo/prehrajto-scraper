@@ -3,4 +3,5 @@ class User < ApplicationRecord
 
   has_many :favs
   has_many :watchdogs
+  has_many :videos, dependent: :destroy
 end
