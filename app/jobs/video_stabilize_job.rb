@@ -66,7 +66,7 @@ class VideoStabilizeJob < ApplicationJob
   def run_ffmpeg_pass2(input_path, transform_path, output_path, creation_time)
     cmd = [
       'ffmpeg', '-y', '-i', input_path,
-      '-vf', "vidstabtransform=input=#{transform_path}:smoothing=10:crop=black:zoom=1",
+      '-vf', "vidstabtransform=input=#{transform_path}:smoothing=20:crop=black:zoom=1",
       '-c:v', 'libx264', '-preset', 'slow', '-crf', '18',
       '-c:a', 'copy',
       '-map_metadata', '0',
