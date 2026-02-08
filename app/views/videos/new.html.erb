@@ -15,7 +15,8 @@
 
     <div class="mb-4">
       <%= form.label :original_video, t('video.select_file'), class: "form-label" %>
-      <%= form.file_field :original_video, accept: "video/*", class: "form-control", required: true %>
+      <%= form.file_field :original_video, accept: "video/*", class: "form-control", required: true, id: "video_file_input" %>
+      <%= form.hidden_field :recorded_at, id: "video_recorded_at" %>
       <div class="form-text"><%= t('video.max_file_size', size: '500MB') %></div>
     </div>
 
@@ -23,6 +24,16 @@
       <%= form.submit t('video.upload'), class: "btn btn-light my-2 rounded-pill px-4" %>
     </div>
   <% end %>
+
+  <script type="text/javascript">
+    document.getElementById('video_file_input').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (file && file.lastModified) {
+        var date = new Date(file.lastModified);
+        document.getElementById('video_recorded_at').value = date.toISOString();
+      }
+    });
+  </script>
 
   <div class="d-flex justify-content-center gap-2 mt-3">
     <%= link_to t('back'), videos_path, class: "btn btn-outline-secondary rounded-pill" %>

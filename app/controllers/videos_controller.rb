@@ -49,8 +49,8 @@ class VideosController < ApplicationController
   def download
     if @video.completed? && @video.stabilized_video.attached?
       file_path = ActiveStorage::Blob.service.path_for(@video.stabilized_video.key)
-      file_mtime = File.mtime(file_path)
-      response.headers['Last-Modified'] = file_mtime.httpdate
+      original_date = @video.recorded_at || File.mtime(file_path)
+      response.headers['Last-Modified'] = original_date.httpdate
 
       send_file file_path,
                 filename: @video.stabilized_video.filename.to_s,
@@ -72,7 +72,7 @@ class VideosController < ApplicationController
   end
 
   def video_params
-    params.require(:video).permit(:original_video)
+    params.require(:video).permit(:original_video, :recorded_at)
   end
 
   def video_status_json(video)

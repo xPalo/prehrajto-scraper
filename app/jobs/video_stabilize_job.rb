@@ -20,12 +20,22 @@ class VideoStabilizeJob < ApplicationJob
       metadata = extract_metadata(input_path)
       video.update(duration: metadata[:duration]) if metadata[:duration]
 
+      # Use ffprobe creation_time, fall back to file date captured at upload
+      creation_time = metadata[:creation_time]
+      creation_time ||= video.recorded_at&.utc&.iso8601
+
+      # Save resolved date back to model if we got it from ffprobe
+      if metadata[:creation_time] && video.recorded_at.nil?
+        resolved = Time.parse(metadata[:creation_time]) rescue nil
+        video.update(recorded_at: resolved) if resolved
+      end
+
       unless run_ffmpeg_pass1(input_path, transform_path)
         video.update(status: :failed, error_message: 'FFmpeg pass 1 (detect) failed')
         return
       end
 
-      unless run_ffmpeg_pass2(input_path, transform_path, output_path, metadata[:creation_time])
+      unless run_ffmpeg_pass2(input_path, transform_path, output_path, creation_time)
         video.update(status: :failed, error_message: 'FFmpeg pass 2 (transform) failed')
         return
       end
