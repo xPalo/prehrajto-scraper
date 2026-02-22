@@ -149,6 +149,7 @@ sk:
     deleted: "Video bolo úspešne odstránené"
     not_ready: "Stabilizované video ešte nie je pripravené"
     download: "Stiahnuť stabilizované"
+    recorded_at: "Natočené"
     file_size: "Veľkosť súboru"
     duration: "Trvanie"
     status_label: "Stav"

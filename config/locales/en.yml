@@ -149,6 +149,7 @@ en:
     deleted: "Video deleted successfully"
     not_ready: "Stabilized video is not ready yet"
     download: "Download Stabilized"
+    recorded_at: "Recorded at"
     file_size: "File size"
     duration: "Duration"
     status_label: "Status"
