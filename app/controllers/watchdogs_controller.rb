@@ -5,6 +5,7 @@ class WatchdogsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_watchdog, only: [:show, :edit, :update, :destroy]
   before_action :authorize_user, only: [:show, :edit, :update, :destroy]
+  before_action :load_airports, only: [:new, :edit, :create, :update]
 
   def index
     @watchdogs = current_user.watchdogs.order(is_active: :desc, id: :asc)
@@ -58,6 +59,10 @@ class WatchdogsController < ApplicationController
 
   def authorize_user
     redirect_back(fallback_location: root_path) unless current_user.id == @watchdog.user_id || current_user.is_admin?
+  end
+
+  def load_airports
+    @airports = RyanairAirportLoader.airports
   end
 
   def watchdog_params

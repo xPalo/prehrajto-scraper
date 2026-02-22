@@ -13,7 +13,7 @@
 
     <div class="mb-3">
       <%= form.label :from_airport %><span class="text-danger">*</span>
-      <%= form.text_field :from_airport, required: true, class: "form-control", placeholder: "VIE" %>
+      <%= form.select :from_airport, @airports, { include_blank: true }, required: true, class: "form-control" %>
     </div>
 
     <div class="row mb-3">
@@ -40,7 +40,7 @@
 
     <div class="mb-3" id="to_airport_wrapper">
       <%= form.label :to_airport %>
-      <%= form.text_field :to_airport, class: "form-control", id: "to_airport", placeholder: "VLC" %>
+      <%= form.select :to_airport, @airports, { include_blank: true }, class: "form-control", id: "to_airport" %>
     </div>
 
     <div class="mb-3" id="to_country_wrapper">
@@ -95,6 +95,7 @@
         }
 
         updateVisibility();
-        $("#to_airport, #to_country").on("input", updateVisibility);
+        $("#to_airport").on("change", updateVisibility);
+        $("#to_country").on("input", updateVisibility);
     });
 </script>
