@@ -144,6 +144,8 @@ sk:
     max_file_size: "Maximálna veľkosť súboru: %{size}"
     created: "Video bolo nahrané! Stabilizácia čoskoro začne."
     created_multiple: "%{count} videí bolo nahraných! Stabilizácia čoskoro začne."
+    uploading: "Nahrávanie"
+    upload_failed: "Nahrávanie zlyhalo. Skúste to znova."
     deleted: "Video bolo úspešne odstránené"
     not_ready: "Stabilizované video ešte nie je pripravené"
     download: "Stiahnuť stabilizované"

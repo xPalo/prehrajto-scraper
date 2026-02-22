@@ -144,6 +144,8 @@ en:
     max_file_size: "Maximum file size: %{size}"
     created: "Video uploaded! Stabilization will begin shortly."
     created_multiple: "%{count} videos uploaded! Stabilization will begin shortly."
+    uploading: "Uploading"
+    upload_failed: "Upload failed. Please try again."
     deleted: "Video deleted successfully"
     not_ready: "Stabilized video is not ready yet"
     download: "Download Stabilized"

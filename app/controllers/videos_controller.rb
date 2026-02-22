@@ -22,7 +22,10 @@ class VideosController < ApplicationController
     recorded_ats = JSON.parse(params[:recorded_ats] || '[]') rescue []
 
     if uploaded_files.empty?
-      redirect_to new_video_path, alert: t(:'video.select_file')
+      respond_to do |format|
+        format.html { redirect_to new_video_path, alert: t(:'video.select_file') }
+        format.json { render json: { errors: [t(:'video.select_file')] }, status: :unprocessable_entity }
+      end
       return
     end
 
@@ -48,16 +51,25 @@ class VideosController < ApplicationController
 
     if videos.any?
       notice = videos.size == 1 ? t(:'video.created') : t(:'video.created_multiple', count: videos.size)
+      redirect_url = videos.size == 1 && errors.empty? ? video_url(videos.first) : videos_url
 
-      if errors.any?
-        redirect_to videos_url, notice: notice, alert: errors.join('; ')
-      elsif videos.size == 1
-        redirect_to video_url(videos.first), notice: notice
-      else
-        redirect_to videos_url, notice: notice
+      respond_to do |format|
+        format.html do
+          if errors.any?
+            redirect_to videos_url, notice: notice, alert: errors.join('; ')
+          elsif videos.size == 1
+            redirect_to video_url(videos.first), notice: notice
+          else
+            redirect_to videos_url, notice: notice
+          end
+        end
+        format.json { render json: { redirect_url: redirect_url, notice: notice, errors: errors } }
       end
     else
-      redirect_to new_video_path, alert: errors.join('; ')
+      respond_to do |format|
+        format.html { redirect_to new_video_path, alert: errors.join('; ') }
+        format.json { render json: { errors: errors }, status: :unprocessable_entity }
+      end
     end
   end
 
