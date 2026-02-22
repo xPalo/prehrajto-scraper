@@ -1,4 +1,5 @@
 sk:
+  app_name: "Adam's toolbox"
   date:
     formats:
       default: "%d.%m.%Y"
@@ -20,7 +21,7 @@ sk:
     follow: "Sleduj na"
     or: "alebo na"
     dark_mode: "Tmavý režim"
-  home: "Domov"
+  home: "Filmy"
   no_results: "Nič sme nenašli :("
   devise:
     login_btn: "Prihlásiť sa"
@@ -53,7 +54,7 @@ sk:
     log_out: "Odhlásiť sa"
     log_in: "Prihlásiť sa"
     sign_up: "Registrovať sa"
-    favourites: "Obľúbené"
+    favourites: "Obľúbené filmy"
     users: "Používatelia"
     watchdogs: "Watchdogy"
     videos: "Videá"
@@ -140,11 +141,16 @@ sk:
     new: "Nahrať video"
     upload: "Nahrať a stabilizovať"
     select_file: "Vybrať video súbor"
+    select_files: "Vybrať video súbory"
     max_file_size: "Maximálna veľkosť súboru: %{size}"
     created: "Video bolo nahrané! Stabilizácia čoskoro začne."
+    created_multiple: "%{count} videí bolo nahraných! Stabilizácia čoskoro začne."
+    uploading: "Nahrávanie"
+    upload_failed: "Nahrávanie zlyhalo. Skúste to znova."
     deleted: "Video bolo úspešne odstránené"
     not_ready: "Stabilizované video ešte nie je pripravené"
     download: "Stiahnuť stabilizované"
+    recorded_at: "Natočené"
     file_size: "Veľkosť súboru"
     duration: "Trvanie"
     status_label: "Stav"

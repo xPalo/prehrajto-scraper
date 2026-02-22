@@ -19,6 +19,10 @@
           <li><strong><%= t('video.duration') %>:</strong> <%= Time.at(@video.duration).utc.strftime("%H:%M:%S") %></li>
         <% end %>
 
+        <% if @video.recorded_at.present? %>
+          <li><strong><%= t('video.recorded_at') %>:</strong> <%= @video.recorded_at.strftime("%-d. %-m. %Y %H:%M") %></li>
+        <% end %>
+
         <li><strong><%= t('created_at') %>:</strong> <%= @video.created_at.strftime("%-d. %-m. %Y %H:%M") %></li>
 
         <% if @video.failed? && @video.error_message.present? %>

@@ -1,4 +1,5 @@
 en:
+  app_name: "Adam's toolbox"
   date:
     formats:
       default: "%Y-%m-%d"
@@ -20,7 +21,7 @@ en:
     follow: "Follow on"
     or: "or"
     dark_mode: "Dark mode"
-  home: "Home"
+  home: "Films"
   no_results: "We couldn't find anything :("
   devise:
     login_btn: "Log in"
@@ -53,7 +54,7 @@ en:
     log_out: "Log out"
     log_in: "Log in"
     sign_up: "Sign up"
-    favourites: "Favourites"
+    favourites: "Favourite films"
     users: "Users"
     watchdogs: "Watchdogs"
     videos: "Videos"
@@ -140,11 +141,16 @@ en:
     new: "Upload Video"
     upload: "Upload & Stabilize"
     select_file: "Select video file"
+    select_files: "Select video files"
     max_file_size: "Maximum file size: %{size}"
     created: "Video uploaded! Stabilization will begin shortly."
+    created_multiple: "%{count} videos uploaded! Stabilization will begin shortly."
+    uploading: "Uploading"
+    upload_failed: "Upload failed. Please try again."
     deleted: "Video deleted successfully"
     not_ready: "Stabilized video is not ready yet"
     download: "Download Stabilized"
+    recorded_at: "Recorded at"
     file_size: "File size"
     duration: "Duration"
     status_label: "Status"

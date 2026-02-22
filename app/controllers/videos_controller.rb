@@ -15,23 +15,61 @@ class VideosController < ApplicationController
   end
 
   def new
-    @video = Video.new
   end
 
   def create
-    uploaded_file = params.dig(:video, :original_video)
+    uploaded_files = Array(params[:original_videos]).reject(&:blank?)
+    recorded_ats = JSON.parse(params[:recorded_ats] || '[]') rescue []
 
-    @video = Video.new(video_params)
-    @video.user = current_user
-    @video.original_filename = uploaded_file.try(:original_filename) || 'unknown'
-    @video.file_size = uploaded_file.try(:size)
+    if uploaded_files.empty?
+      respond_to do |format|
+        format.html { redirect_to new_video_path, alert: t(:'video.select_file') }
+        format.json { render json: { errors: [t(:'video.select_file')] }, status: :unprocessable_entity }
+      end
+      return
+    end
 
-    if @video.save
-      VideoStabilizeJob.perform_later(@video.id)
-      redirect_to video_url(@video), notice: t(:'video.created')
+    videos = []
+    errors = []
+
+    uploaded_files.each_with_index do |file, index|
+      video = Video.new
+      video.user = current_user
+      video.original_video.attach(file)
+      video.original_filename = file.original_filename
+      video.file_size = file.size
+      video.recorded_at = recorded_ats[index]
+
+      if video.save
+        VideoStabilizeJob.perform_later(video.id)
+        videos << video
+      else
+        errors << "#{file.original_filename}: #{video.errors.full_messages.join(', ')}"
+        Rails.logger.error("Video create failed for #{file.original_filename}: #{video.errors.full_messages.join(', ')}")
+      end
+    end
+
+    if videos.any?
+      notice = videos.size == 1 ? t(:'video.created') : t(:'video.created_multiple', count: videos.size)
+      redirect_url = videos.size == 1 && errors.empty? ? video_url(videos.first) : videos_url
+
+      respond_to do |format|
+        format.html do
+          if errors.any?
+            redirect_to videos_url, notice: notice, alert: errors.join('; ')
+          elsif videos.size == 1
+            redirect_to video_url(videos.first), notice: notice
+          else
+            redirect_to videos_url, notice: notice
+          end
+        end
+        format.json { render json: { redirect_url: redirect_url, notice: notice, errors: errors } }
+      end
     else
-      Rails.logger.error("Video create failed: #{@video.errors.full_messages.join(', ')}")
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        format.html { redirect_to new_video_path, alert: errors.join('; ') }
+        format.json { render json: { errors: errors }, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -69,10 +107,6 @@ class VideosController < ApplicationController
 
   def authorize_user
     redirect_back(fallback_location: root_path) unless current_user.id == @video.user_id || current_user.is_admin?
-  end
-
-  def video_params
-    params.require(:video).permit(:original_video, :recorded_at)
   end
 
   def video_status_json(video)

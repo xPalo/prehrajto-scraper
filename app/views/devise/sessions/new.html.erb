@@ -12,6 +12,8 @@
       <%= f.password_field :password, autocomplete: "current-password", class: "form-control w-100" %>
     </div>
 
+    <%= f.hidden_field :remember_me, value: "1" %>
+
     <div class="actions text-center">
       <%= f.submit t(:'devise.login_btn'), class: "btn btn-light rounded-pill" %>
     </div>

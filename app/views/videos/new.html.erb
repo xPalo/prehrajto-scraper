@@ -1,37 +1,106 @@
 <h1><%= t(:'video.new') %></h1>
 
 <div class="form-signin my-4 mx-auto w-100 px-3 fw-bold" style="max-width: 600px;">
-  <%= form_with(model: @video, multipart: true, data: { turbo: false }) do |form| %>
-    <% if @video.errors.any? %>
-      <div class="alert alert-danger">
-        <h5><%= pluralize(@video.errors.count, "error") %></h5>
-        <ul class="mb-0">
-          <% @video.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-    <div class="mb-4">
-      <%= form.label :original_video, t('video.select_file'), class: "form-label" %>
-      <%= form.file_field :original_video, accept: "video/*", class: "form-control", required: true, id: "video_file_input" %>
-      <%= form.hidden_field :recorded_at, id: "video_recorded_at" %>
+  <%= form_with(url: videos_path, multipart: true, data: { turbo: false }, id: 'video-upload-form') do |form| %>
+    <div class="mb-4" id="file-input-container">
+      <%= form.label :original_videos, t('video.select_files'), class: "form-label" %>
+      <%= file_field_tag 'original_videos[]', multiple: true, accept: "video/*", class: "form-control", required: true, id: "video_file_input" %>
+      <%= hidden_field_tag 'recorded_ats', '', id: 'video_recorded_ats' %>
       <div class="form-text"><%= t('video.max_file_size', size: '500MB') %></div>
     </div>
 
+    <div id="upload-progress-container" class="mb-4" style="display: none;">
+      <div id="upload-status" class="mb-2 text-center"></div>
+      <div class="progress" style="height: 24px;">
+        <div id="upload-progress-bar"
+             class="progress-bar progress-bar-striped progress-bar-animated"
+             role="progressbar"
+             style="width: 0%; transition: width 0.2s ease;">
+          0%
+        </div>
+      </div>
+    </div>
+
     <div class="text-center">
-      <%= form.submit t('video.upload'), class: "btn btn-light my-2 rounded-pill px-4" %>
+      <%= form.submit t('video.upload'), class: "btn btn-light my-2 rounded-pill px-4", id: "submit-btn" %>
     </div>
   <% end %>
 
   <script type="text/javascript">
     document.getElementById('video_file_input').addEventListener('change', function(e) {
-      var file = e.target.files[0];
-      if (file && file.lastModified) {
-        var date = new Date(file.lastModified);
-        document.getElementById('video_recorded_at').value = date.toISOString();
+      var files = e.target.files;
+      var dates = [];
+      for (var i = 0; i < files.length; i++) {
+        if (files[i].lastModified) {
+          dates.push(new Date(files[i].lastModified).toISOString());
+        } else {
+          dates.push(null);
+        }
       }
+      document.getElementById('video_recorded_ats').value = JSON.stringify(dates);
+    });
+
+    document.getElementById('video-upload-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var form = this;
+      var formData = new FormData(form);
+      var xhr = new XMLHttpRequest();
+      var progressContainer = document.getElementById('upload-progress-container');
+      var progressBar = document.getElementById('upload-progress-bar');
+      var statusText = document.getElementById('upload-status');
+      var submitBtn = document.getElementById('submit-btn');
+      var fileInput = document.getElementById('video_file_input');
+      var fileCount = fileInput.files.length;
+
+      progressContainer.style.display = 'block';
+      submitBtn.disabled = true;
+      statusText.textContent = '<%= j t("video.uploading") %>' + ' (' + fileCount + ')...';
+
+      xhr.upload.addEventListener('progress', function(e) {
+        if (e.lengthComputable) {
+          var percent = Math.round((e.loaded / e.total) * 100);
+          progressBar.style.width = percent + '%';
+          progressBar.textContent = percent + '%';
+        }
+      });
+
+      xhr.addEventListener('load', function() {
+        var response;
+        try { response = JSON.parse(xhr.responseText); } catch(e) { response = {}; }
+
+        if (xhr.status >= 200 && xhr.status < 300) {
+          progressBar.classList.remove('progress-bar-animated');
+          progressBar.classList.add('bg-success');
+          progressBar.style.width = '100%';
+          progressBar.textContent = '100%';
+          statusText.textContent = response.notice || '<%= j t("video.created") %>';
+
+          setTimeout(function() {
+            window.location.href = response.redirect_url || '<%= videos_path %>';
+          }, 1000);
+        } else {
+          progressBar.classList.remove('progress-bar-animated');
+          progressBar.classList.add('bg-danger');
+          progressBar.style.width = '100%';
+          statusText.textContent = (response.errors || []).join('; ') || '<%= j t("video.upload_failed") %>';
+          submitBtn.disabled = false;
+        }
+      });
+
+      xhr.addEventListener('error', function() {
+        progressBar.classList.remove('progress-bar-animated');
+        progressBar.classList.add('bg-danger');
+        progressBar.style.width = '100%';
+        statusText.textContent = '<%= j t("video.upload_failed") %>';
+        submitBtn.disabled = false;
+      });
+
+      xhr.open('POST', form.action);
+      var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+      xhr.setRequestHeader('Accept', 'application/json');
+      xhr.send(formData);
     });
   </script>
 
