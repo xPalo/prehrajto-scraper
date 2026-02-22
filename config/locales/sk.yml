@@ -1,4 +1,5 @@
 sk:
+  app_name: "Adam's toolbox"
   date:
     formats:
       default: "%d.%m.%Y"
@@ -20,7 +21,7 @@ sk:
     follow: "Sleduj na"
     or: "alebo na"
     dark_mode: "Tmavý režim"
-  home: "Domov"
+  home: "Filmy"
   no_results: "Nič sme nenašli :("
   devise:
     login_btn: "Prihlásiť sa"
@@ -53,7 +54,7 @@ sk:
     log_out: "Odhlásiť sa"
     log_in: "Prihlásiť sa"
     sign_up: "Registrovať sa"
-    favourites: "Obľúbené"
+    favourites: "Obľúbené filmy"
     users: "Používatelia"
     watchdogs: "Watchdogy"
     videos: "Videá"

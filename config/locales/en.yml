@@ -1,4 +1,5 @@
 en:
+  app_name: "Adam's toolbox"
   date:
     formats:
       default: "%Y-%m-%d"
@@ -20,7 +21,7 @@ en:
     follow: "Follow on"
     or: "or"
     dark_mode: "Dark mode"
-  home: "Home"
+  home: "Films"
   no_results: "We couldn't find anything :("
   devise:
     login_btn: "Log in"
@@ -53,7 +54,7 @@ en:
     log_out: "Log out"
     log_in: "Log in"
     sign_up: "Sign up"
-    favourites: "Favourites"
+    favourites: "Favourite films"
     users: "Users"
     watchdogs: "Watchdogs"
     videos: "Videos"
