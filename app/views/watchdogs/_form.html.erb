@@ -13,7 +13,7 @@
 
     <div class="mb-3">
       <%= form.label :from_airport %><span class="text-danger">*</span>
-      <%= form.select :from_airport, @airports, { include_blank: true }, required: true, class: "form-control" %>
+      <%= form.select :from_airport, @airports, { include_blank: true }, required: true, class: "form-control", id: "from_airport" %>
     </div>
 
     <div class="row mb-3">
@@ -77,9 +77,14 @@
 
 <script>
     $(document).on("turbo:load", function() {
+        var tomSelectOptions = { allowEmptyOption: true, plugins: ['clear_button'] };
+
+        new TomSelect('#from_airport', tomSelectOptions);
+        var toAirportSelect = new TomSelect('#to_airport', tomSelectOptions);
+
         function updateVisibility() {
-            const airportFilled = $("#to_airport").val().trim() !== "";
-            const countryFilled = $("#to_country").val().trim() !== "";
+            var airportFilled = toAirportSelect.getValue() !== "";
+            var countryFilled = $("#to_country").val().trim() !== "";
 
             if (airportFilled) {
                 $("#to_country_wrapper").hide();
@@ -95,7 +100,7 @@
         }
 
         updateVisibility();
-        $("#to_airport").on("change", updateVisibility);
+        toAirportSelect.on('change', updateVisibility);
         $("#to_country").on("input", updateVisibility);
     });
 </script>

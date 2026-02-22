@@ -1,16 +1,21 @@
 class RyanairAirportLoader
   CACHE_KEY = "ryanair_airports"
+  API_URL = "https://www.ryanair.com/api/views/locate/5/airports/en/active"
 
   def self.airports
-    Rails.cache.fetch(CACHE_KEY, expires_in: 2.weeks) { load_airports }
+    Rails.cache.fetch(CACHE_KEY, expires_in: 4.weeks) { load_airports }
   end
 
   def self.load_airports
-    raw_output = `python3 pyservice/ryanair_airports.py`
+    response = Net::HTTP.get(URI(API_URL))
+    data = JSON.parse(response)
 
-    JSON.parse(raw_output).map { |a| ["#{a['name']} (#{a['code']})", a['code']] }
-  rescue JSON::ParserError => e
+    data.sort_by { |row| row['name'] }.map do |row|
+      ["#{row['name']}, #{row.dig('country', 'name')} (#{row['code']})", row['code']]
+    end
+  rescue StandardError => e
     Rails.logger.error("Airport loading failed: #{e.message}")
+
     []
   end
 end
