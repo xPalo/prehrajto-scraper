@@ -4,7 +4,7 @@ Sidekiq.configure_server do |config|
   Sidekiq::Cron::Job.load_from_hash!({
     'watchdog_runner' => {
       'class' => 'WatchdogRunnerWorker',
-      'cron'  => '0 * * * *'
+      'cron'  => '*/15 * * * *'
     }
   })
 end
