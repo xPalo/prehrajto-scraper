@@ -3,7 +3,7 @@ require 'uri'
 require 'json'
 
 class WizzairFlightFetcher
-  API_VERSION_DEFAULT = '20.6.0'.freeze
+  API_VERSION_DEFAULT = '28.6.0'.freeze
   BASE_URL = 'https://be.wizzair.com'.freeze
   BROWSER_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' \
                        'AppleWebKit/537.36 (KHTML, like Gecko) ' \
@@ -68,15 +68,19 @@ class WizzairFlightFetcher
 
   def self.normalize(flights)
     flights.filter_map do |f|
-      departure = f['departureDate'] || f['departureDates']&.first
-      price = f.dig('price', 'amount')
-      next if departure.blank? || price.blank?
+      departure = f['departureDates']&.first || f['departureDate']
+      amount = f.dig('price', 'amount')
+      currency = f.dig('price', 'currencyCode')
+      next if departure.blank? || amount.blank? || currency.blank?
+
+      price_eur = CurrencyConverter.to_eur(amount, currency)
+      next if price_eur.nil?
 
       {
         'departure' => departure,
         'flight_number' => [f['carrierCode'], f['flightNumber']].compact.join(' ').strip,
-        'price' => price,
-        'currency' => f.dig('price', 'currencyCode') || 'EUR',
+        'price' => price_eur,
+        'currency' => 'EUR',
         'origin' => f['departureStation'],
         'originFull' => f['departureStation'],
         'destination' => f['arrivalStation'],
