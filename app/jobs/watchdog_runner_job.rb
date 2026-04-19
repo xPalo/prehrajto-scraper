@@ -10,7 +10,11 @@ class WatchdogRunnerJob < ApplicationJob
 
       watchdogs.each do |watchdog|
         watchdogs_to_deactivate << watchdog.id if watchdog.date_watch_to < Date.current
-        fetched_flights = RyanairFlightFetcher.fetch_flights(watchdog, skip_price_arg: true)
+
+        fetched_flights = []
+        fetched_flights += RyanairFlightFetcher.fetch_flights(watchdog)
+        fetched_flights += WizzairFlightFetcher.fetch_flights(watchdog)
+        fetched_flights.sort_by! { |flight| flight['price'].to_f }
 
         if watchdog.can_analyze_price? && fetched_flights.present?
           current_price = fetched_flights.first['price'].to_f.round(2)
