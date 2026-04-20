@@ -125,7 +125,8 @@
     <div class="alert alert-info mt-4"><%= t('watchdog.no_data_yet') %></div>
   <% end %>
 
-  <div class="mt-4">
+  <div class="mt-4 d-flex gap-2">
     <%= link_to t('back'), watchdogs_path, class: "btn btn-outline-secondary" %>
+    <%= link_to t('edit'), edit_watchdog_path(@watchdog), class: "btn btn-outline-primary" %>
   </div>
 </div>
