@@ -18,7 +18,7 @@ class WatchdogRunnerJob < ApplicationJob
         if watchdog.can_analyze_price? && fetched_flights.present?
           lowest_price = fetched_flights.min_by { |flight| flight['price'].to_f }['price'].to_f.round(2)
           last_price = watchdog.price_history.last&.dig('y')&.to_f&.round(2)
-          price_changed = true if last_price.nil? || last_price != lowest_price
+          price_changed = true if last_price.nil? || lowest_price < last_price
 
           keep_from_date = Watchdog::KEEP_PRICE_HISTORY_FOR_MONTHS.months.ago.iso8601
           new_price_point = {
