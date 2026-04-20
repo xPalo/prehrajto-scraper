@@ -43,8 +43,12 @@ class WizzairFlightFetcher
     response = http.request(request)
 
     unless response.is_a?(Net::HTTPSuccess)
-      Rails.logger.error("Wizzair API returned #{response.code} (version=#{version}); body: #{response.body.to_s[0, 200]}")
-      Rails.cache.delete(VERSION_CACHE_KEY) if response.code.to_i == 404
+      if response.code.to_i == 400 && invalid_market?(response.body)
+        Rails.logger.info("Wizzair: no route #{watchdog.from_airport}→#{watchdog.to_airport}")
+      else
+        Rails.logger.error("Wizzair API returned #{response.code} (version=#{version}); body: #{response.body.to_s[0, 200]}")
+        Rails.cache.delete(VERSION_CACHE_KEY) if response.code.to_i == 404
+      end
 
       return []
     end
@@ -80,6 +84,12 @@ class WizzairFlightFetcher
   rescue StandardError => e
     Rails.logger.error("Wizzair version discovery failed: #{e.class}: #{e.message}")
     nil
+  end
+
+  def self.invalid_market?(body)
+    JSON.parse(body.to_s).dig('validationCodes')&.include?('InvalidMarket')
+  rescue JSON::ParserError
+    false
   end
 
   def self.request_headers
