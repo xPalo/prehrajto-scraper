@@ -14,17 +14,17 @@ class WatchdogRunnerJob < ApplicationJob
         fetched_flights = []
         fetched_flights += RyanairFlightFetcher.fetch_flights(watchdog)
         fetched_flights += WizzairFlightFetcher.fetch_flights(watchdog)
-        fetched_flights.sort_by! { |flight| flight['price'].to_f }
+        fetched_flights.select! { |flight| flight['currency'] == 'EUR' }
 
         if watchdog.can_analyze_price? && fetched_flights.present?
-          current_price = fetched_flights.first['price'].to_f.round(2)
+          lowest_price = fetched_flights.min_by { |flight| flight['price'].to_f }['price'].to_f.round(2)
           last_price = watchdog.price_history.last&.dig('y')&.to_f&.round(2)
-          price_changed = true if last_price.nil? || last_price != current_price
+          price_changed = true if last_price.nil? || last_price != lowest_price
 
           keep_from_date = Watchdog::KEEP_PRICE_HISTORY_FOR_MONTHS.months.ago.iso8601
           new_price_point = {
             'x' => Time.current.iso8601,
-            'y' => current_price
+            'y' => lowest_price
           }
 
           watchdog.price_history = (watchdog.price_history + [new_price_point])
