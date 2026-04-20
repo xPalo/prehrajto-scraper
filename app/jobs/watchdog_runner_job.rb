@@ -14,7 +14,6 @@ class WatchdogRunnerJob < ApplicationJob
         fetched_flights = []
         fetched_flights += RyanairFlightFetcher.fetch_flights(watchdog)
         fetched_flights += WizzairFlightFetcher.fetch_flights(watchdog)
-        fetched_flights.select! { |flight| flight['currency'] == 'EUR' }
 
         if watchdog.can_analyze_price? && fetched_flights.present?
           lowest_price = fetched_flights.min_by { |flight| flight['price'].to_f }['price'].to_f.round(2)
