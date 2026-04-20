@@ -18,10 +18,6 @@
           <li><strong><%= t('watchdog.max_price') %>:</strong> <%= number_to_currency(@watchdog.max_price, unit: "€", precision: 0) %></li>
         <% end %>
 
-        <% if @watchdog.departure_time_from.present? || @watchdog.departure_time_to.present? %>
-          <li><strong><%= t('watchdog.departure') %>:</strong> <%= [@watchdog.departure_time_from, @watchdog.departure_time_to].compact.join(" – ") %></li>
-        <% end %>
-
         <li>
           <strong><%= t('watchdog.status') %>:</strong>
           <span class="badge <%= @watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">

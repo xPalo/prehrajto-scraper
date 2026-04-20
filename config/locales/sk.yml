@@ -120,13 +120,10 @@ sk:
     max_price: "Maximálna cena"
     date_watch_from: "Dátum od"
     date_watch_to: "Dátum do"
-    departure_time_from: "Čas odchodu od"
-    departure_time_to: "Čas odchodu do"
     is_active: "Aktívny?"
     to_airport_placeholder: "Napríklad: VLC"
     from_airport_placeholder: "Napríklad: VIE"
     date: "Dátum:"
-    departure: "Odlet:"
     active: "Aktívny"
     inactive: "Neaktívny"
     status: "Stav"
@@ -171,8 +168,6 @@ sk:
         max_price: "Maximálna cena"
         date_watch_from: "Dátum od"
         date_watch_to: "Dátum do"
-        departure_time_from: "Čas odletu od"
-        departure_time_to: "Čas odletu do"
         is_active: "Aktívny?"
     errors:
       models:

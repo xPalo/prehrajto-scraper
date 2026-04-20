@@ -120,13 +120,10 @@ en:
     max_price: "Max price"
     date_watch_from: "Date from"
     date_watch_to: "Date to"
-    departure_time_from: "Departure time from"
-    departure_time_to: "Departure time to"
     is_active: "Active?"
     to_airport_placeholder: "For example: VLC"
     from_airport_placeholder: "For example: VIE"
     date: "Date:"
-    departure: "Departure:"
     active: "Active"
     inactive: "Inactive"
     status: "Status"
@@ -171,8 +168,6 @@ en:
         max_price: "Max price"
         date_watch_from: "Date from"
         date_watch_to: "Date to"
-        departure_time_from: "Departure time from"
-        departure_time_to: "Departure time to"
         is_active: "Active?"
 
     errors:

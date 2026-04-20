@@ -67,6 +67,6 @@ class WatchdogsController < ApplicationController
 
   def watchdog_params
     params.require(:watchdog).permit(:from_airport, :to_airport, :to_country, :max_price, :date_watch_from, :date_watch_to,
-                                     :departure_time_from, :departure_time_to, :user_id, :is_active)
+                                     :user_id, :is_active)
   end
 end

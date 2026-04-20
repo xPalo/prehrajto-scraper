@@ -131,7 +131,7 @@ docker-compose -f docker-compose.production.yml exec backend \
 
 ### Flight watchdog (`WatchdogsController`, `WatchdogRunnerJob`)
 - Každý watchdog má: `from_airport`, voliteľne `to_airport` + `to_country`,
-  `date_watch_from/to`, voliteľne `departure_time_from/to`, `max_price`, `is_active`.
+  `date_watch_from/to`, `max_price`, `is_active`.
 - Cron `*/15 * * * *` cez `sidekiq-cron` spúšťa `WatchdogRunnerWorker`,
   ten enqueuuje `WatchdogRunnerJob`.
 - Letenky sú paralelne načítané cez `RyanairFlightFetcher`

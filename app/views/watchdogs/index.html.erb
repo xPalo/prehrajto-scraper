@@ -28,13 +28,6 @@
                 </p>
               <% end %>
 
-              <% if watchdog.departure_time_from.present? || watchdog.departure_time_to.present? %>
-                <p class="card-text mb-1">
-                  <strong><%= t('watchdog.departure') %></strong>
-                  <%= [watchdog.departure_time_from, watchdog.departure_time_to].compact.join(" – ") %>
-                </p>
-              <% end %>
-
               <p class="mt-auto mb-0">
                 <span class="badge <%= watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
                   <%= watchdog.is_active? ? t('watchdog.active') : t('watchdog.inactive') %>
