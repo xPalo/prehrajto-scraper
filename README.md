@@ -57,8 +57,6 @@ REDIS_URL=redis://redis:6379/0
 SECRET_KEY_BASE=<vygenerovaný_secret>
 GMAIL_USERNAME=<gmail-adresa-pre-notifikácie>
 GMAIL_PASSWORD=<app-password>
-# Voliteľné – override Wizzair API verzie ak pokazia backend:
-# WIZZAIR_API_VERSION=28.6.0
 ```
 
 Vygeneruj nový `SECRET_KEY_BASE`:

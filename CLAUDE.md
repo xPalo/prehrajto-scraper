@@ -58,12 +58,14 @@ silently pile up.
   parses stdout as JSON — if the Python process prints anything non-JSON
   (warning, traceback), the fetch silently returns `[]`. Check Rails logs.
 - `WizzairFlightFetcher` talks to `be.wizzair.com/{version}/Api/search/timetable`.
-  The API version is in `API_VERSION_DEFAULT` and can be overridden with
-  `WIZZAIR_API_VERSION`. **All Wizzair prices are converted to EUR** via
-  `CurrencyConverter.to_eur` before returning — Ryanair prices are assumed
-  already EUR. Keep this invariant when adding providers, otherwise the
-  sort/compare against `max_price` breaks.
-- `CurrencyConverter` caches FX rates for 12 h under `fx_<CCY>_to_eur`. On
+  The API version is discovered from `wizzair.com/en-gb/` (`discover_version`)
+  and cached for 6 h under `wizzair_api_version`; a 404 or 5xx response
+  invalidates the cache so the next call re-discovers. `API_VERSION_DEFAULT`
+  is the fallback only when discovery fails. **All Wizzair prices are
+  converted to EUR** via `CurrencyConverter.to_eur` before returning —
+  Ryanair prices are assumed already EUR. Keep this invariant when adding
+  providers, otherwise the sort/compare against `max_price` breaks.
+- `CurrencyConverter` caches FX rates for 6 h under `fx_<CCY>_to_eur`. On
   any HTTP failure it returns `nil` and the flight is skipped.
 
 ### Video stabilizer

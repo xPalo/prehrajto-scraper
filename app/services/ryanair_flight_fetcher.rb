@@ -17,6 +17,11 @@ class RyanairFlightFetcher
       JSON.parse(raw_output)
     rescue JSON::ParserError => e
       Rails.logger.error("Python script failed: #{e.message}")
+      FetcherAlerter.notify(
+        provider: 'ryanair',
+        error_type: 'python_non_json',
+        message: "#{e.message}; stdout[0,500]=#{raw_output.to_s[0, 500]}"
+      )
 
       []
     end
