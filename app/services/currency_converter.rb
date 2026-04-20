@@ -15,7 +15,7 @@ class CurrencyConverter
   end
 
   def self.eur_rate(currency)
-    Rails.cache.fetch("fx_#{currency}_to_eur", expires_in: 12.hours) do
+    Rails.cache.fetch("fx_#{currency}_to_eur", expires_in: 12.hours, skip_nil: true) do
       uri = URI("#{FX_URL}?base=#{currency}&symbols=EUR")
       response = Net::HTTP.get_response(uri)
 
