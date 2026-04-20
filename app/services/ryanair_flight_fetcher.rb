@@ -10,8 +10,6 @@ class RyanairFlightFetcher
 
     cmd << "--to-country" << watchdog.to_country if watchdog.to_country.present?
     cmd << "--to-airport" << watchdog.to_airport if watchdog.to_airport.present?
-    cmd << "--departure-time-from" << watchdog.departure_time_from.strftime("%Y-%m-%d") if watchdog.departure_time_from.present?
-    cmd << "--departure-time-to" << watchdog.departure_time_to.strftime("%Y-%m-%d") if watchdog.departure_time_to.present?
 
     raw_output = `#{cmd.shelljoin}`
 
