@@ -3,7 +3,7 @@ class RyanairAirportLoader
   API_URL = "https://www.ryanair.com/api/views/locate/5/airports/en/active"
 
   def self.airports
-    Rails.cache.fetch(CACHE_KEY, expires_in: 4.weeks) { load_airports }
+    Rails.cache.fetch(CACHE_KEY, expires_in: 48.hours) { load_airports }
   end
 
   def self.load_airports
