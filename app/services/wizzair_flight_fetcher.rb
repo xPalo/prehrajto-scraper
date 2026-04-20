@@ -3,8 +3,10 @@ require 'uri'
 require 'json'
 
 class WizzairFlightFetcher
-  API_VERSION_DEFAULT = '28.6.0'.freeze
+  API_VERSION_DEFAULT = '28.7.0'.freeze
   BASE_URL = 'https://be.wizzair.com'.freeze
+  HOMEPAGE_URL = 'https://wizzair.com/en-gb/'.freeze
+  VERSION_CACHE_KEY = 'wizzair_api_version'.freeze
   BROWSER_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ' \
                        'AppleWebKit/537.36 (KHTML, like Gecko) ' \
                        'Chrome/122.0.0.0 Safari/537.36'.freeze
@@ -12,7 +14,8 @@ class WizzairFlightFetcher
   def self.fetch_flights(watchdog)
     return [] if watchdog.to_airport.blank?
 
-    uri = URI("#{BASE_URL}/#{api_version}/Api/search/timetable")
+    version = api_version
+    uri = URI("#{BASE_URL}/#{version}/Api/search/timetable")
 
     body = {
       flightList: [
@@ -40,7 +43,8 @@ class WizzairFlightFetcher
     response = http.request(request)
 
     unless response.is_a?(Net::HTTPSuccess)
-      Rails.logger.error("Wizzair API returned #{response.code} (version=#{api_version}); body: #{response.body.to_s[0, 500]}")
+      Rails.logger.error("Wizzair API returned #{response.code} (version=#{version}); body: #{response.body.to_s[0, 200]}")
+      Rails.cache.delete(VERSION_CACHE_KEY) if response.code.to_i == 404
 
       return []
     end
@@ -53,7 +57,29 @@ class WizzairFlightFetcher
   end
 
   def self.api_version
-    ENV.fetch('WIZZAIR_API_VERSION', API_VERSION_DEFAULT)
+    ENV['WIZZAIR_API_VERSION'].presence ||
+      Rails.cache.fetch(VERSION_CACHE_KEY, expires_in: 12.hours, skip_nil: true) { discover_version } ||
+      API_VERSION_DEFAULT
+  end
+
+  def self.discover_version
+    uri = URI(HOMEPAGE_URL)
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.open_timeout = 5
+    http.read_timeout = 15
+
+    request = Net::HTTP::Get.new(uri.request_uri, { 'User-Agent' => BROWSER_USER_AGENT })
+    response = http.request(request)
+
+    return nil unless response.is_a?(Net::HTTPSuccess)
+
+    match = response.body.match(%r{be\.wizzair\.com(?:/|\\u002[fF])(\d+\.\d+\.\d+)(?:/|\\u002[fF])Api})
+    match && match[1]
+  rescue StandardError => e
+    Rails.logger.error("Wizzair version discovery failed: #{e.class}: #{e.message}")
+    nil
   end
 
   def self.request_headers
