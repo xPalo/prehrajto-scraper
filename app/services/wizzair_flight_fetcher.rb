@@ -3,7 +3,7 @@ require 'uri'
 require 'json'
 
 class WizzairFlightFetcher
-  API_VERSION_DEFAULT = '28.6.0'.freeze
+  API_VERSION_DEFAULT = '28.7.0'.freeze
   BASE_URL = 'https://be.wizzair.com'.freeze
   HOMEPAGE_URL = 'https://wizzair.com/en-gb/'.freeze
   VERSION_CACHE_KEY = 'wizzair_api_version'.freeze
