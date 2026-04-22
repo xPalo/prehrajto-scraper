@@ -117,25 +117,56 @@ class WizzairFlightFetcher
   end
 
   def self.discover_version
-    uri = URI(HOMEPAGE_URL)
+    response = fetch_with_redirects(HOMEPAGE_URL)
 
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.open_timeout = 5
-    http.read_timeout = 15
-
-    request = Net::HTTP::Get.new(uri.request_uri, { 'User-Agent' => BROWSER_USER_AGENT })
-    response = http.request(request)
-
-    return nil unless response.is_a?(Net::HTTPSuccess)
+    unless response.is_a?(Net::HTTPSuccess)
+      Rails.logger.error("Wizzair version discovery: homepage returned #{response.code}")
+      FetcherAlerter.notify(
+        provider: 'wizzair',
+        error_type: 'version_discovery_failed',
+        message: "homepage HTTP #{response.code}"
+      )
+      return nil
+    end
 
     match = response.body.match(%r{be\.wizzair\.com(?:/|\\u002[fF])(\d+\.\d+\.\d+)(?:/|\\u002[fF])Api})
-    match && match[1]
+    return match[1] if match
+
+    Rails.logger.error("Wizzair version discovery: API marker not found in homepage body")
+    FetcherAlerter.notify(
+      provider: 'wizzair',
+      error_type: 'version_discovery_failed',
+      message: "API version marker not found in #{HOMEPAGE_URL}"
+    )
+    nil
   rescue StandardError => e
     Rails.logger.error("Wizzair version discovery failed: #{e.class}: #{e.message}")
     FetcherAlerter.notify(provider: 'wizzair', error_type: 'version_discovery_failed', message: "#{e.class}: #{e.message}")
 
     nil
+  end
+
+  def self.fetch_with_redirects(url, limit: 3)
+    uri = URI(url)
+
+    (limit + 1).times do
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = uri.scheme == 'https'
+      http.open_timeout = 5
+      http.read_timeout = 15
+
+      request = Net::HTTP::Get.new(uri.request_uri, { 'User-Agent' => BROWSER_USER_AGENT })
+      response = http.request(request)
+
+      return response unless response.is_a?(Net::HTTPRedirection)
+
+      location = response['location']
+      return response if location.blank?
+
+      uri = URI.join(uri.to_s, location)
+    end
+
+    raise "Too many redirects starting at #{url}"
   end
 
   def self.invalid_market?(body)
