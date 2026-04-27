@@ -55,7 +55,7 @@
 
 <% if @video.pending? || @video.processing? %>
   <script type="text/javascript">
-    $(document).on("turbo:load", function() {
+    $(function() {
       var videoId = <%= @video.id %>;
       var pollInterval = setInterval(function() {
         $.getJSON("/videos/" + videoId + ".json", function(data) {

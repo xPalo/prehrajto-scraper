@@ -1,7 +1,7 @@
 Devise.setup do |config|
   require 'devise/orm/active_record'
 
-  config.navigational_formats = ['*/*', :html, :turbo_stream]
+  config.navigational_formats = ['*/*', :html]
   config.mailer_sender = 'adam.palo222@gmail.com'
   config.case_insensitive_keys = [:email]
   config.strip_whitespace_keys = [:email]

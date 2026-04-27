@@ -41,7 +41,7 @@
 
   <% if @watchdog.can_analyze_price? && @watchdog.price_history.present? %>
     <script>
-        document.addEventListener("turbo:load", () => {
+        document.addEventListener("DOMContentLoaded", () => {
             const canvas = document.getElementById('priceChart');
             if (!canvas) return;
 
