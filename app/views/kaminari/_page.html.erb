@@ -1,0 +1,5 @@
+<% if page.current? %>
+  <span class="current"><%= page.number %></span>
+<% else %>
+  <%= link_to page.number, url, rel: page.rel, remote: remote %>
+<% end %>

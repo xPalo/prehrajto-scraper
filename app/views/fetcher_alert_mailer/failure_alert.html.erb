@@ -1,28 +1,34 @@
-<div style="font-family: sans-serif; padding: 20px;">
-  <h2 style="color: #c0392b;">Flight fetcher failure</h2>
+<h2 style="margin:0 0 8px 0; font-size:22px; font-weight:600; letter-spacing:-0.01em;
+           color:#b00020;">
+  Flight fetcher failure
+</h2>
+<p style="margin:0 0 24px 0; font-size:13px; color:#52525b;">
+  An external provider call failed. Further alerts for this provider and error type
+  are suppressed for 1 hour.
+</p>
 
-  <table style="border-collapse: collapse; background: #f9f9f9; border-radius: 8px; overflow: hidden;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0"
+       style="border-collapse:collapse; font-size:13px; width:100%;">
+  <% [
+    ["Provider", @provider],
+    ["Error type", @error_type],
+    ["Host", @host],
+    ["Time", Time.current.strftime("%Y-%m-%d %H:%M:%S %Z")]
+  ].each do |label, value| %>
     <tr>
-      <td style="padding: 8px 12px; font-weight: bold;">Provider</td>
-      <td style="padding: 8px 12px;"><%= @provider %></td>
+      <td style="padding:8px 12px; border-bottom:1px solid #f0f0f0; width:120px;
+                 font-family: ui-monospace,'SF Mono',Menlo,monospace;
+                 font-size:11px; text-transform:uppercase; letter-spacing:0.1em;
+                 color:#52525b;"><%= label %></td>
+      <td style="padding:8px 12px; border-bottom:1px solid #f0f0f0;
+                 font-family: ui-monospace,'SF Mono',Menlo,monospace;
+                 color:#0a0a0a;"><%= value %></td>
     </tr>
-    <tr>
-      <td style="padding: 8px 12px; font-weight: bold;">Error type</td>
-      <td style="padding: 8px 12px;"><%= @error_type %></td>
-    </tr>
-    <tr>
-      <td style="padding: 8px 12px; font-weight: bold;">Host</td>
-      <td style="padding: 8px 12px;"><%= @host %></td>
-    </tr>
-    <tr>
-      <td style="padding: 8px 12px; font-weight: bold;">Time</td>
-      <td style="padding: 8px 12px;"><%= Time.current.strftime("%Y-%m-%d %H:%M:%S %Z") %></td>
-    </tr>
-  </table>
+  <% end %>
+</table>
 
-  <pre style="background: #f5f5f5; padding: 12px; margin-top: 16px; white-space: pre-wrap; word-break: break-word; border-radius: 4px;"><%= @message %></pre>
-
-  <p style="font-size: 0.9em; color: #7f8c8d; margin-top: 16px;">
-    Further alerts for this provider and error type are suppressed for 1 hour.
-  </p>
-</div>
+<pre style="background:#fafafa; border:1px solid #e5e5e5; border-radius:6px;
+            padding:12px; margin-top:20px; font-size:12px; line-height:1.5;
+            font-family: ui-monospace,'SF Mono',Menlo,monospace;
+            white-space:pre-wrap; word-break:break-word; color:#0a0a0a;
+            max-height:300px; overflow:auto;"><%= @message %></pre>

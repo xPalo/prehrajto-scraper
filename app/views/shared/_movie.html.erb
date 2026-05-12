@@ -1,14 +1,12 @@
-<div>
-  <h2> <%= title %> </h2>
-  <div>
-    <h5 style="opacity: 0.5"> <%= duration %> | <%= size %> </h5>
+<div class="panel p-6 mb-6">
+  <h2 class="text-2xl font-medium tracking-tight mb-2"><%= title %></h2>
+  <div class="text-sm text-text-dim font-mono mb-5">
+    <%= duration %> <span class="text-text-mute mx-1">·</span> <%= size %>
   </div>
-</div>
-
-<div class="container mx-auto d-flex justify-content-center video-container">
-  <video width="600" controls class="video-container">
-    <source src="<%= link %>" type="video/mp4">
-    <source src="mov_bbb.ogg" type="video/ogg">
-    Your browser does not support HTML video.
-  </video>
+  <div class="rounded overflow-hidden bg-black">
+    <video class="w-full block aspect-video" controls preload="metadata">
+      <source src="<%= link %>" type="video/mp4">
+      Your browser does not support HTML video.
+    </video>
+  </div>
 </div>

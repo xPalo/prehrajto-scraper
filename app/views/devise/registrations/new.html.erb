@@ -1,31 +1,37 @@
-<h1 class="text-center"><%= t(:'devise.signup') %></h1>
+<div class="max-w-sm mx-auto py-8">
+  <h1 class="text-3xl font-medium tracking-tight mb-8 text-center">
+    <%= t(:'devise.signup') %>
+  </h1>
 
-<div class="form-signin my-4 mx-auto w-100" style="max-width: 400px;">
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
-    <div class="form-group mb-3">
-      <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control w-100" %>
+    <div class="space-y-5">
+      <div>
+        <%= f.label :email, class: "label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+      </div>
+
+      <div>
+        <%= f.label t(:'devise.password'), class: "label" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "input" %>
+        <% if @minimum_password_length %>
+          <div class="mt-1.5 text-xs text-text-mute font-mono">
+            <%= "#{@minimum_password_length} #{t(:'devise.minimum_characters')}" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label t(:'devise.password_confirmation'), class: "label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input" %>
+      </div>
     </div>
 
-    <hr>
-
-    <div class="form-group mb-3">
-      <%= f.label t(:'devise.password') %>
-      <% if @minimum_password_length %>
-        <em>(<%= "#{@minimum_password_length} #{t(:'devise.minimum_characters')}" %>)</em>
-      <% end %><br />
-      <%= f.password_field :password, autocomplete: "new-password", class: "form-control w-100" %>
-    </div>
-
-    <div class="form-group mb-3">
-      <%= f.label t(:'devise.password_confirmation') %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control w-100" %>
-    </div>
-
-    <div class="actions text-center">
-      <%= f.submit t(:'devise.signup_btn'), class: "btn btn-light rounded-pill" %>
+    <div class="mt-8 flex flex-col gap-3">
+      <%= f.submit t(:'devise.signup_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
+      <%= link_to t(:'devise.already_have_account'), new_user_session_path,
+          class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
     </div>
   <% end %>
 </div>

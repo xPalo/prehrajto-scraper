@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   
   before_action :set_default_url_options, if: :production?
   before_action :set_locale
-  before_action :set_theme
 
   rescue_from ActionController::Redirecting::UnsafeRedirectError do
     redirect_to(root_url, allow_other_host: true)
@@ -39,10 +38,6 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource)
     production? ? PRODUCTION_URL : super
-  end
-
-  def set_theme
-    @dark_mode = cookies[:theme] == "dark"
   end
 
   private

@@ -91,6 +91,7 @@ sk:
     submit: "Zadať"
     search: "Vyhľadávanie"
   back: "Späť"
+  close: "Zavrieť"
   created_at: "Vytvorené"
   updated_at: "Upravené"
   actions: "Akcie"
@@ -98,6 +99,7 @@ sk:
   delete: "Odstrániť"
   delete_confirm: "Naozaj chcete odstrániť?"
   edit: "Upraviť"
+  error: "Chyba"
   save: "Uložiť"
   user:
     show: 'Používateľ'
@@ -132,6 +134,7 @@ sk:
     price_development: "Vývoj ceny"
     price: "Cena (€)"
     no_data_yet: "Zatiaľ neexistujú žiadne dáta o cenách."
+    empty_state: "Zatiaľ nemáš žiadne sledovače letov"
 
   video:
     index: "Stabilizátor videa"
@@ -158,6 +161,7 @@ sk:
     processing_message: "Vaše video sa stabilizuje. Táto stránka sa automaticky aktualizuje."
     error: "Chyba"
     unknown_error: "Vyskytla sa neznáma chyba"
+    empty_state: "Zatiaľ si nenahral žiadne video"
 
   activerecord:
     attributes:

@@ -1,163 +1,122 @@
-<div class="container my-5">
-  <div class="card loaded shadow-sm <%= @dark_mode ? 'bg-dark text-white' : '' %>">
-    <div class="card-body">
-      <h2 class="card-title mb-4">
-        <%= "#{@watchdog.from_airport} → #{@watchdog.to_airport.presence || @watchdog.to_country}" %>
-      </h2>
+<% destination = @watchdog.to_airport.presence || @watchdog.to_country %>
 
-      <ul class="list-unstyled">
-        <li><strong><%= t('watchdog.date') %>:</strong>
-          <% if @watchdog.date_watch_from == @watchdog.date_watch_to %>
-            <%= l(@watchdog.date_watch_from) %>
-          <% else %>
-            <%= l(@watchdog.date_watch_from) %> – <%= l(@watchdog.date_watch_to) %>
-          <% end %>
-        </li>
+<div class="flex items-start justify-between gap-4 mb-8 flex-wrap">
+  <div>
+    <div class="text-xs text-text-mute font-mono uppercase tracking-wider mb-2">
+      <%= t(:'watchdog.show') %>
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-medium tracking-tight font-mono">
+      <%= @watchdog.from_airport %>
+      <span class="text-text-mute mx-2">→</span>
+      <%= destination %>
+    </h1>
+  </div>
+  <span class="<%= @watchdog.is_active? ? 'badge-ok' : 'badge-mute' %> mt-3">
+    <span class="dot <%= @watchdog.is_active? ? 'bg-ok' : 'bg-text-mute' %>"></span>
+    <%= @watchdog.is_active? ? t('watchdog.active') : t('watchdog.inactive') %>
+  </span>
+</div>
 
-        <% if @watchdog.max_price.present? %>
-          <li><strong><%= t('watchdog.max_price') %>:</strong> <%= number_to_currency(@watchdog.max_price, unit: "€", precision: 0) %></li>
-        <% end %>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border rounded overflow-hidden mb-8">
+  <div class="bg-surface p-4">
+    <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+      <%= t('watchdog.date_watch_from') %>
+    </div>
+    <div class="font-mono text-sm sm:text-base text-text">
+      <%= l(@watchdog.date_watch_from) %>
+    </div>
+  </div>
+  <div class="bg-surface p-4">
+    <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+      <%= t('watchdog.date_watch_to') %>
+    </div>
+    <div class="font-mono text-sm sm:text-base text-text">
+      <%= l(@watchdog.date_watch_to) %>
+    </div>
+  </div>
+  <div class="bg-surface p-4">
+    <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+      <%= t('watchdog.max_price') %>
+    </div>
+    <div class="font-mono text-sm sm:text-base text-text">
+      <% if @watchdog.max_price.present? %>
+        <%= number_to_currency(@watchdog.max_price, unit: "€", precision: 0) %>
+      <% else %>
+        <span class="text-text-mute">—</span>
+      <% end %>
+    </div>
+  </div>
+  <div class="bg-surface p-4">
+    <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+      <%= t('watchdog.status') %>
+    </div>
+    <div class="font-mono text-sm sm:text-base">
+      <span class="<%= @watchdog.is_active? ? 'text-accent' : 'text-text-mute' %>">
+        <%= @watchdog.is_active? ? t('watchdog.active') : t('watchdog.inactive') %>
+      </span>
+    </div>
+  </div>
+</div>
 
-        <li>
-          <strong><%= t('watchdog.status') %>:</strong>
-          <span class="badge <%= @watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
-            <%= @watchdog.is_active? ? t('watchdog.active') : t('watchdog.inactive') %>
-          </span>
-        </li>
+<% if @watchdog.can_analyze_price? && @watchdog.price_history.present? %>
+  <% min_price    = @watchdog.price_history.map { |p| p["y"] }.min %>
+  <% max_price    = @watchdog.price_history.map { |p| p["y"] }.max %>
+  <% sorted       = @watchdog.price_history.sort_by { |p| p["x"] } %>
+  <% latest_price = sorted.last["y"] %>
 
-        <% if @watchdog.price_history.present? %>
-          <% min_price = @watchdog.price_history.map { |point| point["y"] }.min %>
-          <% sorted_history = @watchdog.price_history.sort_by { |point| point["x"] } %>
-          <li><strong><%= t('watchdog.lowest_recorded_price') %>:</strong> <%= number_to_currency(min_price, unit: "€", precision: 2) %></li>
-          <li><strong><%= t('watchdog.latest_recorded_price') %>:</strong> <%= number_to_currency(sorted_history.last["y"], unit: "€", precision: 2) %></li>
-        <% end %>
-      </ul>
+  <div class="panel p-5 sm:p-6 mb-6"
+       data-controller="chart"
+       data-chart-data-value="<%= @watchdog.price_history.to_json %>"
+       data-chart-label-value="<%= t('watchdog.price_development') %>"
+       data-chart-x-label-value="<%= t('watchdog.date') %>"
+       data-chart-y-label-value="<%= t('watchdog.price') %>">
+    <div class="eyebrow eyebrow-left mb-5">
+      <span><%= t('watchdog.price_development') %></span>
+    </div>
+    <div class="chart-wrap">
+      <canvas data-chart-target="canvas"></canvas>
     </div>
   </div>
 
-  <% if @watchdog.can_analyze_price? && @watchdog.price_history.present? %>
-    <style>
-        .price-chart-wrap {
-            position: relative;
-            width: 100%;
-            height: clamp(240px, 55vh, 420px);
-        }
-    </style>
-
-    <div class="mt-4 price-chart-wrap">
-      <canvas id="priceChart"></canvas>
+  <div class="grid grid-cols-3 gap-px bg-border rounded overflow-hidden mb-8">
+    <div class="bg-surface p-4">
+      <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+        <%= t('watchdog.lowest_recorded_price') %>
+      </div>
+      <div class="font-mono text-base text-accent">
+        <%= number_to_currency(min_price, unit: "€", precision: 2) %>
+      </div>
     </div>
+    <div class="bg-surface p-4">
+      <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+        <%= t('watchdog.latest_recorded_price') %>
+      </div>
+      <div class="font-mono text-base text-text">
+        <%= number_to_currency(latest_price, unit: "€", precision: 2) %>
+      </div>
+    </div>
+    <div class="bg-surface p-4">
+      <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">
+        max
+      </div>
+      <div class="font-mono text-base text-text-dim">
+        <%= number_to_currency(max_price, unit: "€", precision: 2) %>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <div class="panel p-10 text-center mb-8">
+    <div class="text-text-mute font-mono text-sm"><%= t('watchdog.no_data_yet') %></div>
+  </div>
+<% end %>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const canvas = document.getElementById('priceChart');
-            if (!canvas) return;
-
-            if (window.chartInstance) {
-                window.chartInstance.destroy();
-            }
-
-            const isNarrow = window.matchMedia('(max-width: 575.98px)').matches;
-
-            const areaGradient = (context) => {
-                const { ctx, chartArea } = context.chart;
-                if (!chartArea) return null;
-                const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-                g.addColorStop(0, '<%= @dark_mode ? 'rgba(0, 123, 255, 0.4)' : 'rgba(0, 123, 255, 0.3)' %>');
-                g.addColorStop(1, 'rgba(0, 123, 255, 0)');
-                return g;
-            };
-
-            const data = {
-                datasets: [{
-                    label: '<%= t('watchdog.price_development') %>',
-                    data: <%= @watchdog.price_history.to_json.html_safe %>,
-                    parsing: {
-                        xAxisKey: 'x',
-                        yAxisKey: 'y'
-                    },
-                    borderWidth: 2,
-                    borderColor: '<%= @dark_mode ? "#4dabf7" : "blue" %>',
-                    backgroundColor: areaGradient,
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: isNarrow ? 2 : 3,
-                    pointHoverRadius: isNarrow ? 4 : 5
-                }]
-            };
-
-            const config = {
-                type: 'line',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: !isNarrow,
-                            labels: {
-                                color: '<%= @dark_mode ? "#ccc" : "#333" %>'
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (ctx) => `${ctx.parsed.y.toFixed(2)} €`
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'day'
-                            },
-                            title: {
-                                display: !isNarrow,
-                                text: '<%= t('watchdog.date') %>',
-                                color: '<%= @dark_mode ? "#ccc" : "#333" %>'
-                            },
-                            grid: {
-                                color: '<%= @dark_mode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)" %>'
-                            },
-                            ticks: {
-                                color: '<%= @dark_mode ? "#aaa" : "#000" %>',
-                                maxRotation: 0,
-                                autoSkip: true,
-                                autoSkipPadding: 12,
-                                maxTicksLimit: isNarrow ? 4 : 8,
-                                font: { size: isNarrow ? 10 : 12 }
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: !isNarrow,
-                                text: '<%= t('watchdog.price') %>',
-                                color: '<%= @dark_mode ? "#ccc" : "#333" %>'
-                            },
-                            beginAtZero: false,
-                            grid: {
-                                color: '<%= @dark_mode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)" %>'
-                            },
-                            ticks: {
-                                color: '<%= @dark_mode ? "#aaa" : "#000" %>',
-                                maxTicksLimit: isNarrow ? 5 : 8,
-                                font: { size: isNarrow ? 10 : 12 },
-                                callback: (value) => `${value} €`
-                            }
-                        }
-                    }
-                }
-            };
-
-            window.chartInstance = new Chart(canvas, config);
-        });
-    </script>
-  <% else %>
-    <div class="alert alert-info mt-4"><%= t('watchdog.no_data_yet') %></div>
+<div class="flex items-center gap-2">
+  <%= link_to watchdogs_path, class: "btn-ghost" do %>
+    <%= render "shared/icon", name: "arrow-left", css: "w-4 h-4" %>
+    <%= t(:back) %>
   <% end %>
-
-  <div class="mt-4 d-flex gap-2">
-    <%= link_to t('back'), watchdogs_path, class: "btn btn-outline-secondary" %>
-    <%= link_to t('edit'), edit_watchdog_path(@watchdog), class: "btn btn-outline-primary" %>
-  </div>
+  <%= link_to edit_watchdog_path(@watchdog), class: "btn-ghost" do %>
+    <%= render "shared/icon", name: "settings", css: "w-4 h-4" %>
+    <%= t(:edit) %>
+  <% end %>
 </div>

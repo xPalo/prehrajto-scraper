@@ -5,14 +5,19 @@ WORKDIR /prehrajto-scraper
 RUN apt-get update -qq && apt-get install -y \
   postgresql-client \
   python3 python3-pip \
-  nodejs \
+  nodejs npm \
   redis-tools \
   ffmpeg \
   libvidstab-dev \
   && rm -rf /var/lib/apt/lists/*
 
+RUN npm install -g yarn
+
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
+
+COPY package.json ./
+RUN yarn install
 
 COPY . .
 

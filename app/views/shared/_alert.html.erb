@@ -1,4 +1,12 @@
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong><%= alert %></strong>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="flash flash-alert transition-all" role="alert"
+     data-controller="flash" data-flash-delay-value="9000">
+  <span class="text-danger shrink-0 mt-0.5">
+    <%= render "shared/icon", name: "x", css: "w-4 h-4" %>
+  </span>
+  <div class="flex-1 font-medium"><%= alert %></div>
+  <button type="button" class="text-text-mute hover:text-text transition-colors"
+          data-action="flash#close"
+          aria-label="<%= t(:close, default: 'Close') %>">
+    <%= render "shared/icon", name: "x", css: "w-4 h-4" %>
+  </button>
 </div>

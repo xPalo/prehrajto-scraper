@@ -1,55 +1,69 @@
-<h1 class="text-center favorites-title"><%= t(:'header.favourites') %></h1>
-
-<div id="favs" class="favorites-container text-center mx-auto w-100">
-  <% if @favs.length > 0 %>
-    <%= render "shared/search_form" %>
-
-    <div class="favorites-list row">
-      <% @favs.each do |fav| %>
-        <div class="col-md-4 mb-4">
-          <div class="favorite-card card">
-            <div class="card-body">
-              <h5 class="card-title">
-                <%= link_to fav.title, fav, class:"card-title text-decoration-none fw-bold" %>
-              </h5>
-              <p class="card-text text-muted"><%= "#{fav.duration} | #{fav.size}" %></p>
-              <%= button_to "❌", {:controller => :favs, :action => 'destroy', :id => fav.id }, :method => :delete, class:"btn btn-link p-0 text-danger text-decoration-none" %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    </div>
-
-  <% else %>
-    <%= t('fav.none') %>
-  <% end %>
+<div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+  <div>
+    <h1 class="text-3xl font-medium tracking-tight"><%= t(:'header.favourites') %></h1>
+    <% if @favs.length > 0 %>
+      <p class="text-text-mute font-mono text-xs mt-1 tracking-wider uppercase">
+        <%= pluralize(@favs.length, 'item') %>
+      </p>
+    <% end %>
+  </div>
 </div>
 
-<script type="text/javascript" charset="utf-8">
-    $(function() {
-        function normalizeText(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-        }
+<% if @favs.length > 0 %>
+  <div data-controller="client-filter" class="space-y-6">
+    <div class="relative max-w-md">
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-mute pointer-events-none">
+        <%= render "shared/icon", name: "search", css: "w-4 h-4" %>
+      </span>
+      <input type="text"
+             class="input pl-10"
+             data-client-filter-target="input"
+             data-action="input->client-filter#filter"
+             placeholder="<%= t(:filter) %>">
+    </div>
 
-        $("#search").keyup(function () {
-            var $cells = $('.favorite-card');
-            var val = normalizeText($.trim(this.value));
+    <ul class="panel divide-y divide-border">
+      <% @favs.each do |fav| %>
+        <li class="flex items-center gap-4 p-4 hover:bg-surface-2 transition-colors group"
+            data-client-filter-target="row">
+          <% if fav.image_src.present? %>
+            <%= link_to fav, class: "shrink-0 w-20 sm:w-28 aspect-video rounded overflow-hidden bg-surface-2 block" do %>
+              <img src="<%= fav.image_src %>" alt="" loading="lazy"
+                   class="w-full h-full object-cover">
+            <% end %>
+          <% end %>
 
-            if (val === "") {
-                $cells.parent().show();
-            } else {
-                $cells.parent().hide();
-                $cells.filter(function () {
-                    return normalizeText($(this).text()).indexOf(val) !== -1;
-                }).parent().show();
-            }
-        });
+          <div class="flex-1 min-w-0">
+            <%= link_to fav.title, fav,
+                class: "block text-base font-medium text-text hover:text-accent transition-colors line-clamp-2" %>
+            <div class="text-xs text-text-mute font-mono mt-1">
+              <%= fav.duration %><span class="mx-2 text-text-mute/40">·</span><%= fav.size %>
+            </div>
+          </div>
 
-        $('.favorite-card').each(function(index) {
-            var card = $(this);
-            setTimeout(function() {
-                card.addClass('loaded');
-            }, index * 150);
-        });
-    });
-</script>
+          <%= button_to({ controller: :favs, action: 'destroy', id: fav.id },
+                method: :delete,
+                form: { data: { turbo_confirm: t(:'fav.sure') } },
+                data: { confirm: t(:'fav.sure') },
+                class: "btn-icon shrink-0",
+                title: t(:'fav.delete')) do %>
+            <%= render "shared/icon", name: "trash", css: "w-4 h-4" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <div class="hidden text-center text-sm text-text-mute font-mono py-8"
+         data-client-filter-target="empty">
+      <%= t(:no_results) %>
+    </div>
+  </div>
+<% else %>
+  <div class="panel p-12 text-center">
+    <div class="text-text-mute font-mono text-sm mb-4"><%= t(:'fav.none') %></div>
+    <%= link_to root_path, class: "btn-primary inline-flex" do %>
+      <%= render "shared/icon", name: "search", css: "w-4 h-4" %>
+      <%= t(:home) %>
+    <% end %>
+  </div>
+<% end %>

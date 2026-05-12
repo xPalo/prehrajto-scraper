@@ -1,5 +1,9 @@
-<div class="form-signin m-3">
-  <div class="form-group d-flex justify-content-center my-auto">
-    <input type="text" id="search" name="search" class="form-control w-100" style="max-width: 400px;" placeholder="<%= t(:filter) %>">
-  </div>
+<div class="mb-6"
+     data-controller="client-filter"
+     data-client-filter-target-container=".filterable">
+  <input type="text"
+         class="input"
+         data-client-filter-target="input"
+         data-action="input->client-filter#filter"
+         placeholder="<%= t(:filter) %>">
 </div>

@@ -1,72 +1,80 @@
-<h1 class="text-center mb-4"><%= t(:'header.watchdogs') %></h1>
-
-<div class="container-fluid px-3">
-  <% if @watchdogs.any? %>
-    <div class="row">
-      <% @watchdogs.each do |watchdog| %>
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="card h-100 shadow-sm">
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title mb-2">
-                <%= link_to "#{watchdog.from_airport} → #{watchdog.to_airport.presence || watchdog.to_country}", watchdog_path(watchdog), class: "text-decoration-none" %>
-              </h5>
-
-              <p class="card-text mb-1 text-muted">
-                <strong>
-                  <%= t('watchdog.date') %>
-                </strong>
-                <% if watchdog.date_watch_from == watchdog.date_watch_to %>
-                  <%= l(watchdog.date_watch_from) %>
-                <% else %>
-                  <%= l(watchdog.date_watch_from) %> – <%= l(watchdog.date_watch_to) %>
-                <% end %>
-              </p>
-
-              <% if watchdog.max_price.present? %>
-                <p class="card-text mb-1">
-                  <strong><%= t('watchdog.max_price') %>:</strong> <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %>
-                </p>
-              <% end %>
-
-              <p class="mt-auto mb-0">
-                <span class="badge <%= watchdog.is_active? ? 'bg-success' : 'bg-secondary' %>">
-                  <%= watchdog.is_active? ? t('watchdog.active') : t('watchdog.inactive') %>
-                </span>
-              </p>
-            </div>
-
-            <div class="card-footer d-flex justify-content-between">
-              <%= link_to t('edit'), edit_watchdog_path(watchdog), class: "btn btn-sm btn-outline-primary rounded-pill" %>
-              <%= button_to t('delete'), watchdog_path(watchdog), method: :delete, data: { confirm: t('delete_confirm') }, class: "btn btn-sm btn-outline-danger rounded-pill" %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-
-      <div class="col-md-6 col-lg-4 mb-4">
-        <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
-          <div class="display-1">+</div>
-          <div class="h5 mt-2"><%= t('watchdog.new') %></div>
+<div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+  <div>
+    <h1 class="text-3xl font-medium tracking-tight"><%= t(:'header.watchdogs') %></h1>
+    <% if @watchdogs.any? %>
+      <p class="text-text-mute font-mono text-xs mt-1 tracking-wider uppercase">
+        <% active_count = @watchdogs.count(&:is_active?) %>
+        <span class="inline-flex items-center gap-1.5">
+          <span class="dot bg-accent"></span> <%= active_count %> <%= t(:'watchdog.active').downcase %>
+        </span>
+        <% if (inactive = @watchdogs.size - active_count) > 0 %>
+          <span class="mx-2 text-text-mute/40">·</span>
+          <span class="inline-flex items-center gap-1.5">
+            <span class="dot bg-text-mute"></span> <%= inactive %> <%= t(:'watchdog.inactive').downcase %>
+          </span>
         <% end %>
-      </div>
-    </div>
-  <% else %>
-    <div class="col-md-6 col-lg-4 mb-4">
-      <%= link_to new_watchdog_path, class: "card h-100 shadow-sm d-flex align-items-center justify-content-center text-decoration-none text-muted hover-zoom", style: "min-height: 220px;" do %>
-        <div class="display-1">+</div>
-        <div class="h5 mt-2"><%= t('watchdog.new') %></div>
-      <% end %>
-    </div>
+      </p>
+    <% end %>
+  </div>
+
+  <%= link_to new_watchdog_path, class: "btn-primary" do %>
+    <%= render "shared/icon", name: "plus", css: "w-4 h-4" %>
+    <%= t(:'watchdog.new') %>
   <% end %>
 </div>
 
-<script type="text/javascript" charset="utf-8">
-    $(function() {
-        $('.card').each(function(index) {
-            var card = $(this);
-            setTimeout(function() {
-                card.addClass('loaded');
-            }, index * 150);
-        });
-    });
-</script>
+<% if @watchdogs.any? %>
+  <ul class="panel divide-y divide-border">
+    <% @watchdogs.each do |watchdog| %>
+      <% destination = watchdog.to_airport.presence || watchdog.to_country %>
+      <li class="flex items-center gap-4 p-4 hover:bg-surface-2 transition-colors">
+        <span class="dot <%= watchdog.is_active? ? 'bg-accent' : 'bg-text-mute' %> shrink-0"></span>
+
+        <div class="flex-1 min-w-0">
+          <%= link_to watchdog_path(watchdog),
+              class: "block font-mono text-base font-medium text-text hover:text-accent transition-colors" do %>
+            <%= watchdog.from_airport %>
+            <span class="text-text-mute mx-1">→</span>
+            <%= destination %>
+          <% end %>
+          <div class="text-xs text-text-dim mt-1 font-mono flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span class="inline-flex items-center gap-1.5">
+              <%= render "shared/icon", name: "calendar", css: "w-3 h-3 text-text-mute" %>
+              <% if watchdog.date_watch_from == watchdog.date_watch_to %>
+                <%= l(watchdog.date_watch_from) %>
+              <% else %>
+                <%= l(watchdog.date_watch_from) %> — <%= l(watchdog.date_watch_to) %>
+              <% end %>
+            </span>
+            <% if watchdog.max_price.present? %>
+              <span>≤ <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %></span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1 shrink-0">
+          <%= link_to edit_watchdog_path(watchdog), class: "btn-icon", title: t(:edit) do %>
+            <%= render "shared/icon", name: "settings", css: "w-4 h-4" %>
+          <% end %>
+          <%= button_to watchdog_path(watchdog), method: :delete,
+                form: { data: { turbo_confirm: t(:delete_confirm) } },
+                data: { confirm: t(:delete_confirm) },
+                class: "btn-icon hover:text-danger hover:border-danger/60",
+                title: t(:delete) do %>
+            <%= render "shared/icon", name: "trash", css: "w-4 h-4" %>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="panel p-12 text-center">
+    <div class="text-text-mute font-mono text-sm mb-4">
+      <%= t(:'watchdog.empty_state', default: t(:'watchdog.no_data_yet')) %>
+    </div>
+    <%= link_to new_watchdog_path, class: "btn-primary inline-flex" do %>
+      <%= render "shared/icon", name: "plus", css: "w-4 h-4" %>
+      <%= t(:'watchdog.new') %>
+    <% end %>
+  </div>
+<% end %>

@@ -1,3 +1,21 @@
-<%= render "shared/movie", title: @fav.title, link: @fav.link, duration: @fav.duration, size: @fav.size %>
+<%= render "shared/movie",
+    title: @fav.title,
+    link: @fav.link,
+    duration: @fav.duration,
+    size: @fav.size %>
 
-<%= button_to t('fav.delete'), {:controller => :favs, :action => 'destroy', :id => @fav.id }, :method => :delete, class:"btn btn-danger btn-gradient-danger m-3" if current_user.id == @fav.user_id %>
+<div class="flex items-center gap-2">
+  <%= link_to favs_path, class: "btn-ghost" do %>
+    <%= render "shared/icon", name: "arrow-left", css: "w-4 h-4" %>
+    <%= t(:back) %>
+  <% end %>
+  <% if current_user&.id == @fav.user_id %>
+    <%= button_to({ controller: :favs, action: 'destroy', id: @fav.id },
+          method: :delete,
+          data: { confirm: t(:'fav.sure') },
+          class: "btn-danger") do %>
+      <%= render "shared/icon", name: "trash", css: "w-4 h-4" %>
+      <%= t(:'fav.delete') %>
+    <% end %>
+  <% end %>
+</div>

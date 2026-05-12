@@ -1,0 +1,245 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    background-color: #0A0A0A;
+    color: #FAFAFA;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #C7F36A;
+    color: #0A0A0A;
+  }
+
+  :focus-visible {
+    outline: 2px solid #C7F36A;
+    outline-offset: 2px;
+  }
+
+  input, select, textarea, button {
+    font: inherit;
+  }
+
+  /* native form controls in dark */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) opacity(0.5);
+    cursor: pointer;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(1) opacity(0.9);
+  }
+
+  /* hide native file input "no file chosen" text on Chrome / Safari */
+  input[type="file"]::-webkit-file-upload-button {
+    display: none;
+  }
+  input[type="file"]::file-selector-button {
+    display: none;
+  }
+}
+
+@layer components {
+  /* ─── buttons ─── */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium
+           rounded transition-colors duration-150 select-none whitespace-nowrap;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-accent-ink hover:bg-accent-hi;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent border border-border text-text
+           hover:bg-surface-2 hover:border-border-2;
+  }
+  .btn-danger {
+    @apply btn bg-transparent border border-border text-danger
+           hover:bg-danger/10 hover:border-danger/60;
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-9 h-9 rounded
+           border border-border text-text-dim hover:text-text hover:bg-surface-2
+           hover:border-border-2 transition-colors duration-150;
+  }
+  .btn-link {
+    @apply text-text-dim hover:text-text underline-offset-4 hover:underline transition-colors;
+  }
+
+  /* ─── inputs ─── */
+  .input {
+    @apply block w-full bg-surface-2 border border-border rounded
+           px-3 py-2 text-sm text-text placeholder:text-text-mute
+           focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20
+           transition-colors duration-150;
+  }
+  .input-lg {
+    @apply input text-xl px-4 py-4;
+  }
+  .label {
+    @apply block text-xs uppercase tracking-wider text-text-dim mb-1.5;
+  }
+
+  /* ─── surfaces ─── */
+  .panel {
+    @apply bg-surface border border-border rounded;
+  }
+  .panel-hover {
+    @apply panel hover:border-border-2 transition-colors duration-150;
+  }
+  .panel-inset {
+    @apply bg-surface-2 border border-border rounded;
+  }
+
+  /* ─── list rows (used in prehrajto results, favs, watchdogs, videos) ─── */
+  .row-card {
+    @apply flex items-center gap-4 px-4 py-3 border-b border-border
+           hover:bg-surface-2 transition-colors duration-150;
+  }
+
+  /* ─── badges ─── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm
+           text-[10px] font-mono uppercase tracking-wider;
+  }
+  .badge-ok      { @apply badge bg-ok/10 text-ok; }
+  .badge-warn    { @apply badge bg-warn/10 text-warn; }
+  .badge-danger  { @apply badge bg-danger/10 text-danger; }
+  .badge-mute    { @apply badge bg-surface-2 text-text-dim; }
+  .badge-accent  { @apply badge bg-accent/15 text-accent; }
+
+  /* ─── dot indicator ─── */
+  .dot {
+    @apply inline-block w-1.5 h-1.5 rounded-full;
+  }
+
+  /* ─── section eyebrow ─── */
+  .eyebrow {
+    @apply flex items-center gap-3 text-xs uppercase tracking-[0.2em]
+           text-text-mute font-mono;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    @apply h-px bg-border flex-1;
+  }
+  .eyebrow.eyebrow-left::before { @apply hidden; }
+  .eyebrow.eyebrow-left::after { @apply block; }
+
+  /* ─── nav links ─── */
+  .nav-link {
+    @apply text-sm text-text-dim hover:text-text transition-colors duration-150
+           lowercase tracking-wide relative py-1;
+  }
+  .nav-link.active {
+    @apply text-text;
+  }
+  .nav-link.active::after {
+    content: '';
+    @apply absolute left-0 right-0 -bottom-1 h-px bg-accent;
+  }
+
+  /* ─── flash toast ─── */
+  .flash {
+    @apply panel-inset flex items-start gap-3 px-4 py-3 mb-6 text-sm relative
+           overflow-hidden;
+  }
+  .flash::before {
+    content: '';
+    @apply absolute left-0 top-0 bottom-0 w-0.5;
+  }
+  .flash-notice::before { @apply bg-accent; }
+  .flash-alert::before  { @apply bg-danger; }
+
+  /* ─── tom-select dark override ─── */
+  .ts-wrapper.single .ts-control,
+  .ts-wrapper.multi .ts-control {
+    background: #1A1A1D;
+    border: 1px solid #27272A;
+    color: #FAFAFA;
+    border-radius: 10px;
+    padding: 8px 12px;
+    min-height: 40px;
+    box-shadow: none;
+  }
+  .ts-wrapper.focus .ts-control {
+    border-color: #C7F36A;
+    box-shadow: 0 0 0 2px rgba(199, 243, 106, 0.2);
+  }
+  .ts-wrapper .ts-control input,
+  .ts-wrapper .ts-control input::placeholder {
+    color: #FAFAFA;
+  }
+  .ts-wrapper .ts-control .item {
+    color: #FAFAFA;
+  }
+  .ts-dropdown {
+    background: #111113;
+    border: 1px solid #27272A;
+    color: #FAFAFA;
+    border-radius: 10px;
+    margin-top: 4px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+  .ts-dropdown .option {
+    padding: 8px 12px;
+    color: #FAFAFA;
+  }
+  .ts-dropdown .option.active,
+  .ts-dropdown .active {
+    background: #1A1A1D;
+    color: #C7F36A;
+  }
+  .ts-dropdown .option:hover {
+    background: #1A1A1D;
+  }
+  .ts-dropdown .no-results {
+    color: #52525B;
+    padding: 12px;
+  }
+  .ts-wrapper.plugin-clear_button .clear-button {
+    color: #52525B;
+    opacity: 0.6;
+  }
+  .ts-wrapper.plugin-clear_button .clear-button:hover {
+    color: #FAFAFA;
+    opacity: 1;
+  }
+
+  /* ─── chart canvas wrap ─── */
+  .chart-wrap {
+    @apply relative w-full;
+    height: clamp(260px, 55vh, 460px);
+  }
+
+  /* ─── kaminari pagination ─── */
+  .pagination {
+    @apply flex items-center gap-1 justify-center mt-8 font-mono text-sm;
+  }
+  .pagination a, .pagination span {
+    @apply inline-flex items-center justify-center min-w-9 h-9 px-3 rounded
+           text-text-dim border border-transparent transition-colors;
+  }
+  .pagination a:hover {
+    @apply text-text bg-surface-2 border-border;
+  }
+  .pagination .current {
+    @apply bg-accent text-accent-ink border-accent;
+  }
+  .pagination .first, .pagination .last,
+  .pagination .prev, .pagination .next {
+    @apply text-text-dim;
+  }
+  .pagination .gap {
+    @apply text-text-mute;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+}

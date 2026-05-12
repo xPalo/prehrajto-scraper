@@ -1,95 +1,94 @@
-<div class="form-signin my-4 mx-auto w-100 px-3 fw-bold" style="max-width: 600px;">
-  <%= form_with(model: watchdog, local: true, html: { class: "w-100" }) do |form| %>
+<div class="max-w-xl mx-auto" data-controller="airport-select">
+  <%= form_with(model: watchdog, local: true) do |form| %>
     <% if watchdog.errors.any? %>
-      <div class="alert alert-danger">
-        <h5><%= pluralize(watchdog.errors.count, "chyba") %> zabránila uloženiu:</h5>
-        <ul class="mb-0">
-          <% watchdog.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
+      <div class="flash flash-alert mb-6">
+        <div class="flex-1">
+          <div class="font-medium mb-1">
+            <%= pluralize(watchdog.errors.count, t(:error, default: 'error')) %>:
+          </div>
+          <ul class="text-sm space-y-0.5">
+            <% watchdog.errors.full_messages.each do |message| %>
+              <li>— <%= message %></li>
+            <% end %>
+          </ul>
+        </div>
       </div>
     <% end %>
 
-    <div class="mb-3">
-      <%= form.label :from_airport %><span class="text-danger">*</span>
-      <%= form.select :from_airport, @airports, { include_blank: true }, required: true, class: "form-control", id: "from_airport" %>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-6 mb-3 mb-md-0">
-        <%= form.label :date_watch_from %><span class="text-danger">*</span>
-        <%= form.date_field :date_watch_from, class: "form-control", required: true %>
+    <div class="space-y-5">
+      <div>
+        <%= form.label :from_airport, class: "label" do %>
+          <%= t(:'watchdog.from_airport') %>
+          <span class="text-danger">*</span>
+        <% end %>
+        <%= form.select :from_airport, @airports, { include_blank: true },
+              required: true,
+              id: "from_airport",
+              data: { "airport-select-target": "from" } %>
       </div>
-      <div class="col-md-6">
-        <%= form.label :date_watch_to %><span class="text-danger">*</span>
-        <%= form.date_field :date_watch_to, class: "form-control", required: true %>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <%= form.label :date_watch_from, class: "label" do %>
+            <%= t(:'watchdog.date_watch_from') %>
+            <span class="text-danger">*</span>
+          <% end %>
+          <%= form.date_field :date_watch_from, class: "input font-mono", required: true %>
+        </div>
+        <div>
+          <%= form.label :date_watch_to, class: "label" do %>
+            <%= t(:'watchdog.date_watch_to') %>
+            <span class="text-danger">*</span>
+          <% end %>
+          <%= form.date_field :date_watch_to, class: "input font-mono", required: true %>
+        </div>
       </div>
-    </div>
 
-    <div class="mb-3" id="to_airport_wrapper">
-      <%= form.label :to_airport %>
-      <%= form.select :to_airport, @airports, { include_blank: true }, class: "form-control", id: "to_airport" %>
-    </div>
-
-    <div class="mb-3" id="to_country_wrapper">
-      <%= form.label :to_country %>
-      <%= form.text_field :to_country, class: "form-control", id: "to_country", placeholder: "Austria" %>
-    </div>
-
-    <div class="mb-3">
-      <%= form.label :max_price %>
-      <%= form.number_field :max_price, class: "form-control", placeholder: "100€" %>
-    </div>
-
-    <div class="d-flex align-items-center justify-content-between mb-4">
-      <div class="form-check form-switch">
-        <%= form.check_box :is_active, class: "form-check-input", role: "switch", id: "watchdog_is_active" %>
-        <%= form.label :is_active, class: "form-check-label ms-2 mb-0", for: "watchdog_is_active" %>
+      <div id="to_airport_wrapper" data-airport-select-target="toWrapper">
+        <%= form.label :to_airport, t(:'watchdog.to_airport'), class: "label" %>
+        <%= form.select :to_airport, @airports, { include_blank: true },
+              id: "to_airport",
+              data: { "airport-select-target": "to" } %>
       </div>
+
+      <div id="to_country_wrapper" data-airport-select-target="countryWrapper">
+        <%= form.label :to_country, t(:'watchdog.to_country'), class: "label" %>
+        <%= form.text_field :to_country, class: "input",
+              id: "to_country",
+              placeholder: "Austria",
+              data: { "airport-select-target": "country" } %>
+      </div>
+
+      <div>
+        <%= form.label :max_price, t(:'watchdog.max_price'), class: "label" %>
+        <%= form.number_field :max_price, class: "input font-mono", placeholder: "100" %>
+      </div>
+
+      <label class="flex items-center gap-3 cursor-pointer select-none">
+        <span class="relative inline-block">
+          <%= form.check_box :is_active, class: "peer sr-only" %>
+          <span class="block w-10 h-6 bg-surface-2 border border-border rounded-full transition-colors
+                       peer-checked:bg-accent peer-checked:border-accent"></span>
+          <span class="absolute left-1 top-1 w-4 h-4 bg-text-mute rounded-full transition-transform
+                       peer-checked:translate-x-4 peer-checked:bg-accent-ink"></span>
+        </span>
+        <span class="text-sm text-text"><%= t(:'watchdog.is_active') %></span>
+      </label>
     </div>
 
     <%= form.hidden_field :user_id, value: current_user.id %>
 
-    <div class="text-center">
-      <%= form.submit t('save'), class: "btn btn-light my-2 rounded-pill px-4" %>
+    <div class="mt-8 flex items-center gap-2 flex-wrap">
+      <%= form.submit t('save'), class: "btn-primary cursor-pointer" %>
+      <%= link_to t('back'), :back, class: "btn-ghost" %>
+      <% if watchdog.persisted? %>
+        <span class="flex-1"></span>
+        <%= button_to t('delete'), watchdog_path(watchdog),
+              method: :delete,
+              form: { data: { turbo_confirm: t('delete_confirm') } },
+              data: { confirm: t('delete_confirm') },
+              class: "btn-danger" %>
+      <% end %>
     </div>
   <% end %>
-
-  <div class="d-flex justify-content-center gap-2 mt-3">
-    <%= link_to t('back'), :back, class: "btn btn-outline-secondary rounded-pill" %>
-    <% if watchdog.persisted? %>
-      <%= button_to t('delete'), watchdog_path(watchdog), method: :delete, data: { confirm: t('delete_confirm') }, class: "btn btn-danger rounded-pill" %>
-    <% end %>
-  </div>
 </div>
-
-<script>
-    $(function() {
-        var tomSelectOptions = { allowEmptyOption: true, plugins: ['clear_button'] };
-
-        new TomSelect('#from_airport', tomSelectOptions);
-        var toAirportSelect = new TomSelect('#to_airport', tomSelectOptions);
-
-        function updateVisibility() {
-            var airportFilled = toAirportSelect.getValue() !== "";
-            var countryFilled = $("#to_country").val().trim() !== "";
-
-            if (airportFilled) {
-                $("#to_country_wrapper").hide();
-            } else {
-                $("#to_country_wrapper").show();
-            }
-
-            if (countryFilled) {
-                $("#to_airport_wrapper").hide();
-            } else {
-                $("#to_airport_wrapper").show();
-            }
-        }
-
-        updateVisibility();
-        toAirportSelect.on('change', updateVisibility);
-        $("#to_country").on("input", updateVisibility);
-    });
-</script>

@@ -91,6 +91,7 @@ en:
     submit: "Submit"
     search: "Search"
   back: "Back"
+  close: "Close"
   created_at: "Created at"
   updated_at: "Updated at"
   actions: "Actions"
@@ -98,6 +99,7 @@ en:
   delete: "Delete"
   delete_confirm: "Are you sure you want to delete?"
   edit: "Edit"
+  error: "Error"
   save: "Save"
   user:
     show: 'User'
@@ -132,6 +134,7 @@ en:
     price_development: "Price development"
     price: "Price (€)"
     no_data_yet: "No available price data yet."
+    empty_state: "No watchdogs yet"
 
   video:
     index: "Video Stabilizer"
@@ -158,6 +161,7 @@ en:
     processing_message: "Your video is being stabilized. This page will update automatically."
     error: "Error"
     unknown_error: "An unknown error occurred"
+    empty_state: "No videos yet"
 
   activerecord:
     attributes:

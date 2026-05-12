@@ -1,20 +1,43 @@
-<div>
-  <%= link_to t(:app_name), root_path, class:"navbar-brand fs-2 my-auto fw-bold float-md-start text-white" %>
-  <nav class="nav nav-masthead justify-content-center float-md-end m-0">
-  <%= link_to t(:home), root_path, class:"nav-link fw-bold px-2 #{current_class?(root_path, "light")}" %>
-
-  <% if user_signed_in? %>
-      <%= link_to t(:'header.favourites'), favs_path, class:"nav-link fw-bold px-2 #{current_class?(favs_path, "light")}" %>
-      <%= link_to t(:'header.watchdogs'), watchdogs_path, class:"nav-link fw-bold px-2 #{current_class?(watchdogs_path, "light")}" %>
-      <%= link_to t(:'header.videos'), videos_path, class:"nav-link fw-bold px-2 #{current_class?(videos_path, "light")}" %>
-      <%#= link_to t(:'header.users'), users_path, class:"nav-link fw-bold px-2 #{current_class?(users_path, "light")}" if current_user.is_admin? %>
-      <div class="m-2 fw-bold" style="opacity: 0.5">|</div>
-      <%= link_to t(:'header.edit_profile'), edit_user_registration_path, class:"nav-link fw-bold px-2" %>
-      <%= button_to t(:'header.log_out'), destroy_user_session_path, method: :delete, class:"btn btn-link nav-link fw-bold px-2 text-danger danger", style:"opacity: 0.9" %>
-  <% else %>
-      <div class="m-2 fw-bold" style="opacity: 0.5">|</div>
-      <%= link_to t(:'header.sign_up'), new_user_registration_path, class:"nav-link fw-bold px-2 #{current_class?(new_user_registration_path, "light")}" %>
-      <%= link_to t(:'header.log_in'), new_user_session_path, class:"nav-link fw-bold px-2 #{current_class?(new_user_session_path, "light")}" %>
+<div class="flex items-center justify-between gap-6 flex-wrap">
+  <%= link_to root_path, class: "flex items-center gap-2.5 group" do %>
+    <span class="w-2.5 h-2.5 bg-accent block" aria-hidden="true"></span>
+    <span class="font-mono text-lg text-text group-hover:text-accent transition-colors lowercase tracking-tight">
+      <%= t(:app_name) %><span class="text-accent">.</span>
+    </span>
   <% end %>
+
+  <nav class="flex items-center gap-6 text-sm flex-wrap" aria-label="Primary">
+    <%= link_to t(:home), root_path,
+        class: "nav-link #{current_class?(root_path)}" %>
+
+    <% if user_signed_in? %>
+      <%= link_to t(:'header.favourites'), favs_path,
+          class: "nav-link #{current_class?(favs_path)}" %>
+      <%= link_to t(:'header.watchdogs'), watchdogs_path,
+          class: "nav-link #{current_class?(watchdogs_path)}" %>
+      <%= link_to t(:'header.videos'), videos_path,
+          class: "nav-link #{current_class?(videos_path)}" %>
+    <% end %>
   </nav>
+
+  <div class="flex items-center gap-3 text-sm">
+    <% if user_signed_in? %>
+      <%= link_to edit_user_registration_path,
+          class: "text-text-dim hover:text-text transition-colors flex items-center gap-1.5 lowercase",
+          title: t(:'header.edit_profile') do %>
+        <%= render "shared/icon", name: "user", css: "w-4 h-4" %>
+        <span class="hidden sm:inline"><%= current_user.email.split("@").first %></span>
+      <% end %>
+      <%= button_to destroy_user_session_path, method: :delete,
+          class: "text-text-dim hover:text-danger transition-colors flex items-center gap-1.5 bg-transparent border-0 p-0 cursor-pointer lowercase",
+          title: t(:'header.log_out') do %>
+        <%= render "shared/icon", name: "log-out", css: "w-4 h-4" %>
+      <% end %>
+    <% else %>
+      <%= link_to t(:'header.log_in'), new_user_session_path,
+          class: "nav-link" %>
+      <%= link_to t(:'header.sign_up'), new_user_registration_path,
+          class: "btn-primary" %>
+    <% end %>
+  </div>
 </div>
