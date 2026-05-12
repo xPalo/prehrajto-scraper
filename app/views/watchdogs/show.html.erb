@@ -35,11 +35,19 @@
     </div>
   </div>
 
-  <div class="mt-4">
-    <canvas id="priceChart" width="800" height="400"></canvas>
-  </div>
-
   <% if @watchdog.can_analyze_price? && @watchdog.price_history.present? %>
+    <style>
+        .price-chart-wrap {
+            position: relative;
+            width: 100%;
+            height: clamp(240px, 55vh, 420px);
+        }
+    </style>
+
+    <div class="mt-4 price-chart-wrap">
+      <canvas id="priceChart"></canvas>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const canvas = document.getElementById('priceChart');
@@ -49,10 +57,16 @@
                 window.chartInstance.destroy();
             }
 
-            const ctx = canvas.getContext('2d');
-            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-            gradient.addColorStop(0, '<%= @dark_mode ? 'rgba(0, 123, 255, 0.4)' : 'rgba(0, 123, 255, 0.3)' %>');
-            gradient.addColorStop(1, '<%= @dark_mode ? 'rgba(0, 123, 255, 0)' : 'rgba(0, 123, 255, 0)' %>');
+            const isNarrow = window.matchMedia('(max-width: 575.98px)').matches;
+
+            const areaGradient = (context) => {
+                const { ctx, chartArea } = context.chart;
+                if (!chartArea) return null;
+                const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                g.addColorStop(0, '<%= @dark_mode ? 'rgba(0, 123, 255, 0.4)' : 'rgba(0, 123, 255, 0.3)' %>');
+                g.addColorStop(1, 'rgba(0, 123, 255, 0)');
+                return g;
+            };
 
             const data = {
                 datasets: [{
@@ -64,9 +78,11 @@
                     },
                     borderWidth: 2,
                     borderColor: '<%= @dark_mode ? "#4dabf7" : "blue" %>',
-                    backgroundColor: gradient,
+                    backgroundColor: areaGradient,
                     fill: true,
-                    tension: 0.3
+                    tension: 0.3,
+                    pointRadius: isNarrow ? 2 : 3,
+                    pointHoverRadius: isNarrow ? 4 : 5
                 }]
             };
 
@@ -75,10 +91,17 @@
                 data: data,
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
+                            display: !isNarrow,
                             labels: {
                                 color: '<%= @dark_mode ? "#ccc" : "#333" %>'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.parsed.y.toFixed(2)} €`
                             }
                         }
                     },
@@ -89,7 +112,7 @@
                                 unit: 'day'
                             },
                             title: {
-                                display: true,
+                                display: !isNarrow,
                                 text: '<%= t('watchdog.date') %>',
                                 color: '<%= @dark_mode ? "#ccc" : "#333" %>'
                             },
@@ -97,12 +120,17 @@
                                 color: '<%= @dark_mode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)" %>'
                             },
                             ticks: {
-                                color: '<%= @dark_mode ? "#aaa" : "#000" %>'
+                                color: '<%= @dark_mode ? "#aaa" : "#000" %>',
+                                maxRotation: 0,
+                                autoSkip: true,
+                                autoSkipPadding: 12,
+                                maxTicksLimit: isNarrow ? 4 : 8,
+                                font: { size: isNarrow ? 10 : 12 }
                             }
                         },
                         y: {
                             title: {
-                                display: true,
+                                display: !isNarrow,
                                 text: '<%= t('watchdog.price') %>',
                                 color: '<%= @dark_mode ? "#ccc" : "#333" %>'
                             },
@@ -111,14 +139,17 @@
                                 color: '<%= @dark_mode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)" %>'
                             },
                             ticks: {
-                                color: '<%= @dark_mode ? "#aaa" : "#000" %>'
+                                color: '<%= @dark_mode ? "#aaa" : "#000" %>',
+                                maxTicksLimit: isNarrow ? 5 : 8,
+                                font: { size: isNarrow ? 10 : 12 },
+                                callback: (value) => `${value} €`
                             }
                         }
                     }
                 }
             };
 
-            window.chartInstance = new Chart(ctx, config);
+            window.chartInstance = new Chart(canvas, config);
         });
     </script>
   <% else %>
