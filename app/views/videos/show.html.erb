@@ -26,6 +26,16 @@
     </span>
   </div>
 
+  <% if @video.completed? && @video.stabilized_video.attached? %>
+    <div class="mb-8">
+      <video controls preload="metadata"
+             class="w-full rounded bg-black border border-border"
+             src="<%= stream_video_path(@video) %>">
+        <%= t('video.preview_unavailable') %>
+      </video>
+    </div>
+  <% end %>
+
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border rounded overflow-hidden mb-8">
     <div class="bg-surface p-4">
       <div class="text-[10px] uppercase tracking-wider text-text-mute font-mono mb-1">

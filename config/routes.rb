@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     end
     member do
       get :download
+      get :stream
     end
   end
   resources :users, only: [:index]

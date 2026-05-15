@@ -170,6 +170,7 @@ en:
     error: "Error"
     unknown_error: "An unknown error occurred"
     empty_state: "No videos yet"
+    preview_unavailable: "Your browser does not support playing this video."
 
   activerecord:
     attributes:

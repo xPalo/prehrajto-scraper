@@ -170,6 +170,7 @@ sk:
     error: "Chyba"
     unknown_error: "Vyskytla sa neznáma chyba"
     empty_state: "Zatiaľ si nenahral žiadne video"
+    preview_unavailable: "Váš prehliadač nepodporuje prehrávanie tohto videa."
 
   activerecord:
     attributes:

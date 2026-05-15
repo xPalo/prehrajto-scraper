@@ -1,7 +1,7 @@
 class VideosController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_video, only: [:show, :destroy, :download]
-  before_action :authorize_user, only: [:show, :destroy, :download]
+  before_action :set_video, only: [:show, :destroy, :download, :stream]
+  before_action :authorize_user, only: [:show, :destroy, :download, :stream]
 
   def index
     @videos = current_user.videos.order(created_at: :desc)
@@ -123,6 +123,22 @@ class VideosController < ApplicationController
               filename: attachment.filename.to_s,
               type: attachment.content_type,
               disposition: 'attachment'
+  end
+
+  def stream
+    unless @video.stabilized_video.attached?
+      head :not_found and return
+    end
+
+    attachment = @video.stabilized_video
+    file_path = ActiveStorage::Blob.service.path_for(attachment.key)
+    original_date = @video.recorded_at || File.mtime(file_path)
+    response.headers['Last-Modified'] = original_date.httpdate
+
+    send_file file_path,
+              filename: attachment.filename.to_s,
+              type: attachment.content_type,
+              disposition: 'inline'
   end
 
   private
