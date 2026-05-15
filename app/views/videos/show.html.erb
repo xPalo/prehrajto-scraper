@@ -76,7 +76,7 @@
   <% end %>
 
   <div class="mb-8" data-video-status-target="actions">
-    <% if @video.completed? && @video.stabilized_video.attached? %>
+    <% if @video.completed? && (@video.stabilized_video.attached? || @video.original_video.attached?) %>
       <%= link_to download_video_path(@video), class: "btn-primary" do %>
         <%= render "shared/icon", name: "download", css: "w-4 h-4" %>
         <%= t('video.download') %>

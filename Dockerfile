@@ -22,6 +22,7 @@ RUN yarn install
 COPY . .
 
 RUN pip3 install ryanair-py --break-system-packages
+RUN pip3 install yt-dlp --break-system-packages
 RUN bundle exec rake assets:precompile
 RUN chmod +x bin/docker-entrypoint
 

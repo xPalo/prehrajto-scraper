@@ -1,0 +1,26 @@
+<div class="max-w-xl mx-auto">
+  <h1 class="text-3xl font-medium tracking-tight mb-8 text-center">
+    <%= t(:'video.url_new') %>
+  </h1>
+
+  <%= form_with(url: from_url_videos_path, method: :post, local: true) do |form| %>
+    <div class="panel-inset p-6 mb-5">
+      <%= label_tag :url, t(:'video.url_label'),
+            class: "block text-xs text-text-mute font-mono uppercase tracking-wider mb-2" %>
+      <%= text_field_tag :url, nil,
+            type: :url,
+            required: true,
+            autofocus: true,
+            placeholder: t(:'video.url_placeholder'),
+            class: "input w-full font-mono" %>
+      <p class="text-xs text-text-mute mt-3 font-mono">
+        <%= t(:'video.url_hint', size: '500MB') %>
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2 justify-center">
+      <%= form.submit t(:'video.url_submit'), class: "btn-primary cursor-pointer" %>
+      <%= link_to t(:back), videos_path, class: "btn-ghost" %>
+    </div>
+  <% end %>
+</div>

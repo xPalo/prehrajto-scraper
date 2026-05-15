@@ -8,10 +8,16 @@
     <% end %>
   </div>
 
-  <%= link_to new_video_path, class: "btn-primary" do %>
-    <%= render "shared/icon", name: "plus", css: "w-4 h-4" %>
-    <%= t(:'video.new') %>
-  <% end %>
+  <div class="flex items-center gap-2 flex-wrap">
+    <%= link_to from_url_videos_path, class: "btn-ghost" do %>
+      <%= render "shared/icon", name: "download", css: "w-4 h-4" %>
+      <%= t(:'video.url_new') %>
+    <% end %>
+    <%= link_to new_video_path, class: "btn-primary" do %>
+      <%= render "shared/icon", name: "plus", css: "w-4 h-4" %>
+      <%= t(:'video.new') %>
+    <% end %>
+  </div>
 </div>
 
 <% if @videos.any? %>

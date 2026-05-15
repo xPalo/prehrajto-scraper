@@ -17,6 +17,25 @@ class VideosController < ApplicationController
   def new
   end
 
+  def from_url
+  end
+
+  def create_from_url
+    url = params[:url].to_s.strip
+    uri = URI.parse(url) rescue nil
+    unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+      redirect_to from_url_videos_path, alert: t(:'video.invalid_url') and return
+    end
+
+    video = current_user.videos.new(original_filename: t(:'video.placeholder_filename'))
+    if video.save(validate: false)
+      VideoDownloadJob.perform_later(video.id, url)
+      redirect_to video_url(video), notice: t(:'video.url_enqueued')
+    else
+      redirect_to from_url_videos_path, alert: video.errors.full_messages.join(', ')
+    end
+  end
+
   def create
     uploaded_files = Array(params[:original_videos]).reject(&:blank?)
     recorded_ats = JSON.parse(params[:recorded_ats] || '[]') rescue []
@@ -85,18 +104,25 @@ class VideosController < ApplicationController
   end
 
   def download
-    if @video.completed? && @video.stabilized_video.attached?
-      file_path = ActiveStorage::Blob.service.path_for(@video.stabilized_video.key)
-      original_date = @video.recorded_at || File.mtime(file_path)
-      response.headers['Last-Modified'] = original_date.httpdate
+    attachment =
+      if @video.stabilized_video.attached?
+        @video.stabilized_video
+      elsif @video.completed? && @video.original_video.attached?
+        @video.original_video
+      end
 
-      send_file file_path,
-                filename: @video.stabilized_video.filename.to_s,
-                type: @video.stabilized_video.content_type,
-                disposition: 'attachment'
-    else
-      redirect_back(fallback_location: video_path(@video), alert: t(:'video.not_ready'))
+    unless attachment
+      redirect_back(fallback_location: video_path(@video), alert: t(:'video.not_ready')) and return
     end
+
+    file_path = ActiveStorage::Blob.service.path_for(attachment.key)
+    original_date = @video.recorded_at || File.mtime(file_path)
+    response.headers['Last-Modified'] = original_date.httpdate
+
+    send_file file_path,
+              filename: attachment.filename.to_s,
+              type: attachment.content_type,
+              disposition: 'attachment'
   end
 
   private
@@ -117,7 +143,7 @@ class VideosController < ApplicationController
       original_filename: video.original_filename,
       file_size: video.file_size,
       duration: video.duration,
-      download_url: video.completed? && video.stabilized_video.attached? ? download_video_path(video) : nil
+      download_url: (video.completed? && (video.stabilized_video.attached? || video.original_video.attached?)) ? download_video_path(video) : nil
     }
   end
 end

@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   resources :favs
   resources :watchdogs
   resources :videos do
+    collection do
+      get  :from_url
+      post :from_url, action: :create_from_url
+    end
     member do
       get :download
     end
