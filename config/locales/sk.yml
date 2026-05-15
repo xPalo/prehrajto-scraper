@@ -23,6 +23,10 @@ sk:
     dark_mode: "Tmavý režim"
   home: "Filmy"
   no_results: "Nič sme nenašli :("
+  similar:
+    title: "Podobné filmy"
+    loading: "Načítavam…"
+    none: "Nenašli sme podobné filmy"
   devise:
     login_btn: "Prihlásiť sa"
     login: "Prihlásenie"

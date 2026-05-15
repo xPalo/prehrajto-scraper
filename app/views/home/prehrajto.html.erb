@@ -1,14 +1,3 @@
-<% movie_param = ->(div) {
-     {
-       title: div[:title].to_s.gsub('.', ' ').strip,
-       movie_url: div[:href],
-       movie_title: div[:title],
-       movie_duration: div[:duration],
-       movie_size: div[:size],
-       image_src: div[:image_src]
-     }
-   } %>
-
 <section class="mb-12" data-controller="search">
   <h1 class="text-4xl sm:text-5xl font-medium tracking-tight mb-2 text-balance">
     <%= t(:app_name) %><span class="text-accent">.</span>
@@ -68,45 +57,7 @@
       <% end %>
     </div>
 
-    <ul class="panel divide-y divide-border">
-      <% @divs.each do |div| %>
-        <% movie_query = movie_param.call(div).except(:title) %>
-        <% movie_link = "?#{movie_query.to_query}" %>
-        <li class="flex items-stretch gap-4 p-3 hover:bg-surface-2 transition-colors group">
-          <%= link_to movie_link, class: "shrink-0 w-28 sm:w-36 aspect-video rounded overflow-hidden bg-surface-2 block" do %>
-            <img src="<%= div[:image_src] %>"
-                 alt=""
-                 loading="lazy"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-          <% end %>
-
-          <div class="flex-1 min-w-0 flex flex-col py-1">
-            <%= link_to movie_link, class: "text-base sm:text-lg font-medium text-text hover:text-accent transition-colors line-clamp-2" do %>
-              <%= div[:title] %>
-            <% end %>
-            <div class="text-xs text-text-mute font-mono mt-auto">
-              <%= div[:duration] %><span class="mx-2 text-text-mute/40">·</span><%= div[:size] %>
-            </div>
-          </div>
-
-          <% if user_signed_in? %>
-            <div class="self-center">
-              <%= link_to new_fav_path(
-                    title: div[:title].to_s.gsub('.', ' ').strip,
-                    movie_url: div[:href],
-                    duration: div[:duration],
-                    size: div[:size],
-                    user_id: current_user.id,
-                    image_src: div[:image_src]
-                  ), class: "btn-ghost text-xs hidden sm:inline-flex", title: t(:'fav.new') do %>
-                <%= render "shared/icon", name: "plus", css: "w-3.5 h-3.5" %>
-                <span><%= t(:'fav.add') %></span>
-              <% end %>
-            </div>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
+    <%= render "results_list", divs: @divs %>
   </section>
 <% end %>
 
@@ -143,5 +94,13 @@
         <% end %>
       </div>
     <% end %>
+
+    <div class="mt-10"
+         data-controller="lazy-load"
+         data-lazy-load-src-value="<%= similar_path(title: params[:movie_title], exclude: params[:movie_url]) %>">
+      <div class="text-text-mute font-mono text-sm">
+        <%= t(:'similar.loading') %>
+      </div>
+    </div>
   </section>
 <% end %>

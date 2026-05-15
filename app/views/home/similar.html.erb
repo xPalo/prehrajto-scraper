@@ -1,0 +1,10 @@
+<% if @similar.present? %>
+  <div class="eyebrow eyebrow-left mb-3">
+    <span><%= t(:'similar.title') %></span>
+  </div>
+  <%= render "results_list", divs: @similar %>
+<% else %>
+  <div class="text-text-mute font-mono text-sm">
+    <%= t(:'similar.none') %>
+  </div>
+<% end %>

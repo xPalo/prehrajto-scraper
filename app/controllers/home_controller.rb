@@ -1,29 +1,13 @@
 class HomeController < ApplicationController
+  SIMILAR_LIMIT = 10
+
   def prehrajto
     if params[:search_url] && params[:search_url].length > 0
       params[:search_url] = params[:search_url][8..-1]
-      url = "https://prehrajto.cz/hledej/#{CGI.escape(params[:search_url].to_s)}"
-      unparsed_page = HTTParty.get(url)
+      @divs = PrehrajtoSearcher.search(params[:search_url])
 
-      if unparsed_page.body.present?
-        parsed_page = Nokogiri::HTML(unparsed_page.force_encoding('UTF-8'))
-        result_divs = parsed_page.css('div.video__picture--container')
-
-        @divs = result_divs.map do |r|
-          {
-            href: r.css("a")[0].attributes["href"].value.strip.to_s,
-            title: r.css("a")[0].attributes["title"].value.strip.to_s,
-            image_src: r.css("img")[0].attributes["src"].value.strip.to_s,
-            duration: r.css("div.video__tag--time").text.strip.to_s,
-            size: r.css("div.video__tag--size").text.strip.to_s,
-            size_numeric: filesize_to_mb(r.css("div.video__tag--size").text.strip.to_s),
-            duration_numeric: duration_to_seconds(r.css("div.video__tag--time").text.strip.to_s)
-          }
-        end
-
-        order_divs_by(params[:order]) if params[:order].present?
-        @no_results = true if @divs.blank?
-      end
+      order_divs_by(params[:order]) if params[:order].present?
+      @no_results = true if @divs.blank?
     end
 
     if params[:movie_url] && params[:movie_url].length > 0
@@ -36,6 +20,16 @@ class HomeController < ApplicationController
         @video_src = storage_substring[/#{"\""}(.*?)#{"\""}/m, 1].to_s.strip
       end
     end
+  end
+
+  def similar
+    query = PrehrajtoSearcher.normalize_title(params[:title])
+    results = PrehrajtoSearcher.search(query)
+    exclude = params[:exclude].to_s
+    results = results.reject { |r| r[:href] == exclude } if exclude.present?
+    @similar = results.first(SIMILAR_LIMIT)
+
+    render layout: false
   end
 
   def change_locale
@@ -66,27 +60,6 @@ class HomeController < ApplicationController
         @divs = @divs.sort_by { |div| -div[:duration_numeric] }
     else
       flash[:alert] = t(:'order.invalid_value')
-    end
-  end
-
-  def duration_to_seconds(duration_str)
-    h, m, s = duration_str.split(':').map(&:to_i)
-    h * 3600 + m * 60 + s
-  end
-
-  def filesize_to_mb(filesize_str)
-    number, unit = filesize_str.strip.upcase.split
-    size = number.to_f
-
-    case unit
-      when "GB"
-        (size * 1024).round
-      when "MB"
-        size.round
-      when "KB"
-        (size / 1024).ceil
-      else
-        raise ArgumentError, "Neznáma jednotka: #{unit}"
     end
   end
 end

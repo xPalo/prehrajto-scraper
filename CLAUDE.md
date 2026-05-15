@@ -24,7 +24,17 @@ All three live behind Devise auth (`User.is_admin?` gates `/sidekiq`).
 - Active Storage with the local disk service (`storage/`) — in production
   the `video_storage` volume is mounted into both the `backend` and
   `sidekiq_video` containers so the stabilizer and the Rails process share it
-- Devise, Kaminari (with Bootstrap 5 views), Turbo + Stimulus via importmap
+- Devise, Kaminari (custom Tailwind views in `app/views/kaminari/`)
+- Stimulus via importmap. **Turbo is NOT installed** — there is no
+  `turbo-rails` gem and no `@hotwired/turbo` pin in `config/importmap.rb`.
+  Do not use `turbo_frame_tag`, `turbo_stream`, `data-turbo-*` attributes,
+  or any other Hotwire-Turbo helpers — they will error or silently no-op.
+  For lazy-loaded HTML fragments, use the `lazy_load` Stimulus controller
+  (`app/javascript/controllers/lazy_load_controller.js`): wrap a
+  placeholder in `<div data-controller="lazy-load"
+  data-lazy-load-src-value="/path">…</div>` and the controller fetches
+  the URL on `connect` and swaps the element's `innerHTML`. The endpoint
+  should `render layout: false` and return an HTML fragment.
 - Python helper `pyservice/ryanair_fetch.py` (pip package `ryanair-py`)
 - External HTTP: Wizzair `be.wizzair.com` timetable API,
   Frankfurter FX (`api.frankfurter.dev`), Ryanair airports API
@@ -85,10 +95,20 @@ silently pile up.
 
 ### Prehrajto extraction
 
-`HomeController#prehrajto` and `FavsController#new` both slice the raw HTML
-between `var sources` and `var tracks` and pull the first quoted string.
-If prehrajto.cz changes that markup, both places break together — update
-them together.
+Two distinct prehrajto.cz endpoints get scraped:
+
+- **Search** (`/hledej/<query>`) — lives in `PrehrajtoSearcher.search` and
+  parses `div.video__picture--container` tiles. Results are cached for 1 h
+  under `prehrajto_search:<query>`. `HomeController#prehrajto` and
+  `HomeController#similar` both call into it. The similar-items query is
+  derived from the current movie's title via
+  `PrehrajtoSearcher.normalize_title`, which strips release-tag noise
+  (1080p, x264, BluRay, year, release group, etc.) so a torrent-style
+  title resolves to a meaningful search.
+- **Detail page** — `HomeController#prehrajto` and `FavsController#new`
+  both slice the raw HTML between `var sources` and `var tracks` and pull
+  the first quoted string to get the direct video URL. If prehrajto.cz
+  changes that markup, both places break together — update them together.
 
 ## Conventions that aren't obvious from the code
 

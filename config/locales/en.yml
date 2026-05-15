@@ -23,6 +23,10 @@ en:
     dark_mode: "Dark mode"
   home: "Films"
   no_results: "We couldn't find anything :("
+  similar:
+    title: "Similar movies"
+    loading: "Loading…"
+    none: "No similar movies found"
   devise:
     login_btn: "Log in"
     login: "Login"

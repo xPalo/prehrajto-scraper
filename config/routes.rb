@@ -24,5 +24,6 @@ Rails.application.routes.draw do
 
   root "home#prehrajto"
 
+  get "similar", to: "home#similar", as: :similar
   match "lang/:locale", to: "home#change_locale", as: :change_locale, via: [:get]
 end
