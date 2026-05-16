@@ -23,7 +23,7 @@ class HomeController < ApplicationController
   end
 
   def similar
-    query = PrehrajtoSearcher.normalize_title(params[:title])
+    query = params[:q].presence || PrehrajtoSearcher.normalize_title(params[:title])
     results = PrehrajtoSearcher.search(query)
     exclude = params[:exclude].to_s
     results = results.reject { |r| r[:href] == exclude } if exclude.present?

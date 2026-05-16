@@ -97,7 +97,7 @@
 
     <div class="mt-10"
          data-controller="lazy-load"
-         data-lazy-load-src-value="<%= similar_path(title: params[:movie_title], exclude: params[:movie_url]) %>">
+         data-lazy-load-src-value="<%= similar_path(q: params[:search_url], title: params[:movie_title], exclude: params[:movie_url]) %>">
       <div class="text-text-mute font-mono text-sm">
         <%= t(:'similar.loading') %>
       </div>

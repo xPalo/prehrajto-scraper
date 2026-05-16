@@ -12,6 +12,7 @@
 <ul class="panel divide-y divide-border">
   <% divs.each do |div| %>
     <% movie_query = movie_param.call(div).except(:title) %>
+    <% movie_query[:search_url] = "/hledej/#{params[:search_url]}" if params[:search_url].present? %>
     <% movie_link = "?#{movie_query.to_query}" %>
     <li class="flex items-stretch gap-4 p-3 hover:bg-surface-2 transition-colors group">
       <%= link_to movie_link, class: "shrink-0 w-28 sm:w-36 aspect-video rounded overflow-hidden bg-surface-2 block" do %>
