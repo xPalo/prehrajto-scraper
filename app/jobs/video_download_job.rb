@@ -5,7 +5,9 @@ class VideoDownloadJob < ApplicationJob
     video = Video.find_by(id: video_id)
     return if video.nil? || !video.pending?
 
-    video.processing!
+    # Skip validations: original_video isn't attached until yt-dlp finishes,
+    # but the Video model requires it. `update_columns` writes status directly.
+    video.update_columns(status: Video.statuses[:processing], updated_at: Time.current)
 
     Dir.mktmpdir('video_download') do |tmpdir|
       output_path = File.join(tmpdir, 'video.mp4')
@@ -27,7 +29,7 @@ class VideoDownloadJob < ApplicationJob
       )
 
       unless ok && File.exist?(output_path)
-        video.update(status: :failed, error_message: 'yt-dlp download failed')
+        video.update_columns(status: Video.statuses[:failed], error_message: 'yt-dlp download failed', updated_at: Time.current)
         return
       end
 
@@ -53,7 +55,7 @@ class VideoDownloadJob < ApplicationJob
       video.completed!
     end
   rescue StandardError => e
-    video&.update(status: :failed, error_message: e.message.truncate(500)) if video&.persisted?
+    video&.update_columns(status: Video.statuses[:failed], error_message: e.message.truncate(500), updated_at: Time.current) if video&.persisted?
     Rails.logger.error("VideoDownloadJob failed for video #{video_id}: #{e.message}")
   end
 
