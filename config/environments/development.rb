@@ -22,6 +22,11 @@ Rails.application.configure do
   config.active_storage.service = :local
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_caching = false
+  # Preview outgoing email (e.g. OTP login codes) in the browser instead of
+  # sending it. deliver_later jobs still run through Active Job / Sidekiq.
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default_url_options = { host: "localhost", port: 8080 }
   config.active_support.deprecation = :log
   config.active_support.disallowed_deprecation = :raise
   config.active_support.disallowed_deprecation_warnings = []
