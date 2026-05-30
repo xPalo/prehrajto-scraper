@@ -51,14 +51,6 @@
               data: { "airport-select-target": "to" } %>
       </div>
 
-      <div id="to_country_wrapper" data-airport-select-target="countryWrapper">
-        <%= form.label :to_country, t(:'watchdog.to_country'), class: "label" %>
-        <%= form.text_field :to_country, class: "input",
-              id: "to_country",
-              placeholder: "Austria",
-              data: { "airport-select-target": "country" } %>
-      </div>
-
       <div>
         <%= form.label :max_price, t(:'watchdog.max_price'), class: "label" %>
         <%= form.number_field :max_price, class: "input font-mono", placeholder: "100" %>
