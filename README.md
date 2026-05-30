@@ -17,7 +17,7 @@ Rails 7 aplikácia spájajúca tri hlavné funkcie:
 - PostgreSQL 14
 - Redis 7 + Sidekiq + `sidekiq-cron`
 - Active Storage (disk service, namontovaný volume v produkcii)
-- Devise (autentifikácia + admin flag)
+- Devise (autentifikácia heslom + OTP e-mailom, admin flag)
 - Importmap + Stimulus + Turbo, Bootstrap views pre Kaminari
 - Python 3 (`ryanair-py`) ako externý helper pre Ryanair API
 - `ffmpeg` s `libvidstab` pre stabilizáciu videí
@@ -160,6 +160,29 @@ docker-compose -f docker-compose.production.yml exec backend \
   `videos#download` servíruje stabilizovaný súbor cez `send_file`
   s `Last-Modified` z `recorded_at`.
 
+### Autentifikácia (Devise + OTP)
+Prihlásenie aj registrácia ponúkajú dve záložky: klasické **heslo** a
+**jednorazový kód (OTP)** poslaný e-mailom. Obe sú trojkrokové
+(zadanie e-mailu → e-mail s kódom → overenie kódu).
+
+- **OTP prihlásenie** (`OtpSessionsController`, routes `users/otp[/verify]`):
+  e-mail nájde usera, vygeneruje sa 6-miestny kód cez `User#generate_otp!`
+  (ukladá sa len SHA256 digest do `otp_code_digest` + `otp_sent_at`, plaintext
+  sa nikdy neperzistuje), pošle sa cez `OtpMailer#login_code` a po overení
+  (`User#verify_otp`, platnosť `OTP_VALIDITY = 10 min`, konštantno-časové
+  porovnanie) sa user prihlási.
+- **OTP registrácia** (`OtpRegistrationsController`, routes
+  `users/otp/register[/verify]`): keďže účet ešte neexistuje, „pending"
+  registrácia (e-mail + digest + čas) žije v **session**, nie v DB — žiadna
+  migrácia ani polovičné usery. Po overení sa účet vytvorí s náhodným
+  neuhádnuteľným heslom (Devise `:validatable` heslo vyžaduje); user sa potom
+  prihlasuje cez OTP, alebo si heslo nastaví cez „zabudnuté heslo".
+- **Anti-enumerácia:** krok so zadaním e-mailu odpovedá rovnako bez ohľadu na
+  to, či účet existuje. Pri registrácii zadanej s už existujúcim e-mailom sa
+  ticho pošle **prihlasovací** kód, takže overenie usera jednoducho prihlási.
+- E-maily chodia `deliver_later` (Sidekiq); v development sa otvárajú cez
+  `letter_opener` v prehliadači.
+
 ### Admin
 - `User.is_admin?` odomyká `/sidekiq` mountpoint (`config/routes.rb`).
 
@@ -173,9 +196,10 @@ docker-compose -f docker-compose.production.yml exec backend \
 
 ```
 app/
-├── controllers/   # home, favs, watchdogs, videos, users
+├── controllers/   # home, favs, watchdogs, videos, users,
+│                  # otp_sessions (OTP login), otp_registrations (OTP signup)
 ├── jobs/          # VideoStabilizeJob, WatchdogRunnerJob, WatchdogRunnerWorker
-├── mailers/       # RaincheckMailer
+├── mailers/       # RaincheckMailer, OtpMailer (login_code, registration_code)
 ├── models/        # User (Devise), Fav, Watchdog, Video
 └── services/      # RyanairFlightFetcher, WizzairFlightFetcher,
                    # RyanairAirportLoader, CurrencyConverter

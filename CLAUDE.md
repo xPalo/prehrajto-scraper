@@ -54,6 +54,45 @@ silently pile up.
 
 ## Feature-specific notes
 
+### Authentication (Devise + OTP)
+
+Both the login (`devise/sessions/new`) and signup
+(`devise/registrations/new`) pages are tabbed: legacy **password** + an
+**email one-time code (OTP)** flow. Each OTP flow is three steps (enter
+email → emailed 6-digit code → verify), built on a shared core:
+
+- **OTP primitives live on `User`** (`app/models/user.rb`):
+  `User.generate_otp_code`, `User.otp_digest`, and
+  `User.otp_valid?(digest, sent_at, submitted)` (constant-time
+  `Devise.secure_compare`, `OTP_VALIDITY = 10.minutes`). The instance
+  methods `generate_otp!`/`verify_otp`/`clear_otp!` delegate to these and
+  persist only the **SHA256 digest** (`otp_code_digest` + `otp_sent_at`
+  columns) — the plaintext code is never stored. Reuse these class methods
+  for any new OTP-style flow rather than re-implementing the hashing.
+- **OTP login** (`OtpSessionsController`, routes `users/otp[/verify]`):
+  looks the user up by email, stores `session[:otp_email]` between steps,
+  emails via `OtpMailer#login_code(user_id, code)`, and on success signs in
+  with `remember_me = true`.
+- **OTP registration** (`OtpRegistrationsController`, routes
+  `users/otp/register[/verify]`): the account doesn't exist yet, so the
+  pending OTP lives entirely in the **session**
+  (`reg_otp_email`/`reg_otp_digest`/`reg_otp_sent_at`) — **no DB columns, no
+  migration, no half-created user rows**. On verify it `User.create!`s with a
+  random `Devise.friendly_token(32)` password (since `:validatable` requires
+  one); the user then logs in via OTP or sets a password through the
+  `:recoverable` "forgot password" flow. `OtpMailer#registration_code` takes
+  the **email directly** (no user id yet).
+- **Anti-enumeration:** the email-request step always responds identically
+  (same redirect + neutral flash) whether or not the email exists. In
+  registration, an already-registered email is sent a **login** code instead,
+  so verifying just logs that user in — keep this behavior if you touch the
+  flow; don't add a branch that reveals whether an email is taken.
+- Both flows use `_url` (not `_path`) on redirects so the public reverse-proxy
+  port survives — see `default_url_options` in `ApplicationController`. Mails
+  go out `deliver_later`; dev uses `letter_opener`.
+- **No `:confirmable`.** Verifying the OTP already proves email ownership, so
+  there is no separate email-confirmation step. Don't add one without reason.
+
 ### Watchdogs
 
 - `Watchdog#can_analyze_price?` is the gate for writing to `price_history`
