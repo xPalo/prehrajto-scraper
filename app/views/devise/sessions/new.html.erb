@@ -1,27 +1,64 @@
-<div class="max-w-sm mx-auto py-8">
+<div class="max-w-sm mx-auto py-8" data-controller="tabs">
   <h1 class="text-3xl font-medium tracking-tight mb-8 text-center">
     <%= t(:'devise.login') %>
   </h1>
 
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <div class="space-y-5">
-      <div>
+  <div class="panel-inset p-1 grid grid-cols-2 gap-1 mb-8">
+    <button type="button"
+            data-tabs-target="tab"
+            data-action="tabs#show"
+            data-key="password"
+            class="px-3 py-2 rounded text-sm text-text-dim hover:text-text
+                   transition-colors active text-text bg-surface">
+      <%= t(:'devise.password_tab') %>
+    </button>
+    <button type="button"
+            data-tabs-target="tab"
+            data-action="tabs#show"
+            data-key="otp"
+            class="px-3 py-2 rounded text-sm text-text-dim hover:text-text
+                   transition-colors">
+      <%= t(:'devise.otp_tab') %>
+    </button>
+  </div>
+
+  <%# ─── Password login (legacy) ─── %>
+  <div data-tabs-target="panel" data-key="password">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="space-y-5">
+        <div>
+          <%= f.label :email, class: "label" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+        </div>
+
+        <div>
+          <%= f.label t(:'devise.password'), class: "label" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "input" %>
+        </div>
+      </div>
+
+      <%= f.hidden_field :remember_me, value: "1" %>
+
+      <div class="mt-8 flex flex-col gap-3">
+        <%= f.submit t(:'devise.login_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
+        <%= link_to t(:'devise.dont_have_account_yet'), new_user_registration_path,
+            class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# ─── OTP login (one-time code by e-mail) ─── %>
+  <div data-tabs-target="panel" data-key="otp" class="hidden">
+    <%= form_with url: user_otp_request_path, method: :post do |f| %>
+      <div class="space-y-2">
         <%= f.label :email, class: "label" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+        <%= f.email_field :email, autocomplete: "email", class: "input" %>
+        <p class="text-sm text-text-dim"><%= t(:'devise.otp_email_prompt') %></p>
       </div>
 
-      <div>
-        <%= f.label t(:'devise.password'), class: "label" %>
-        <%= f.password_field :password, autocomplete: "current-password", class: "input" %>
+      <div class="mt-8">
+        <%= f.submit t(:'devise.otp_send_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
       </div>
-    </div>
-
-    <%= f.hidden_field :remember_me, value: "1" %>
-
-    <div class="mt-8 flex flex-col gap-3">
-      <%= f.submit t(:'devise.login_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
-      <%= link_to t(:'devise.dont_have_account_yet'), new_user_registration_path,
-          class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

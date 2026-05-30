@@ -4,6 +4,12 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   devise_for :users
 
+  devise_scope :user do
+    post "users/otp",        to: "otp_sessions#create",  as: :user_otp_request
+    get  "users/otp/verify", to: "otp_sessions#verify",  as: :user_otp_verify
+    post "users/otp/verify", to: "otp_sessions#confirm",  as: :user_otp_confirm
+  end
+
   authenticate :user, ->(user) { user.is_admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end

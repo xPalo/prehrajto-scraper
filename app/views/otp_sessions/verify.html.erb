@@ -1,0 +1,23 @@
+<div class="max-w-sm mx-auto py-8">
+  <h1 class="text-3xl font-medium tracking-tight mb-2 text-center">
+    <%= t(:'devise.login') %>
+  </h1>
+  <p class="text-sm text-text-dim text-center mb-8">
+    <%= t(:'devise.otp_code_prompt', email: @email) %>
+  </p>
+
+  <%= form_with url: user_otp_verify_path, method: :post do |f| %>
+    <div>
+      <%= f.label :otp_code, t(:'devise.otp_code'), class: "label" %>
+      <%= f.text_field :otp_code, autofocus: true, autocomplete: "one-time-code",
+          inputmode: "numeric", pattern: "[0-9]*", maxlength: 6,
+          class: "input text-center tracking-[0.5em] font-mono text-xl" %>
+    </div>
+
+    <div class="mt-8 flex flex-col gap-3">
+      <%= f.submit t(:'devise.otp_verify_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
+      <%= link_to t(:'devise.otp_request_new'), new_user_session_path,
+          class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
+    </div>
+  <% end %>
+</div>
