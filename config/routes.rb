@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     post "users/otp",        to: "otp_sessions#create",  as: :user_otp_request
     get  "users/otp/verify", to: "otp_sessions#verify",  as: :user_otp_verify
     post "users/otp/verify", to: "otp_sessions#confirm",  as: :user_otp_confirm
+
+    post "users/otp/register",        to: "otp_registrations#create",  as: :user_otp_register_request
+    get  "users/otp/register/verify", to: "otp_registrations#verify",  as: :user_otp_register_verify
+    post "users/otp/register/verify", to: "otp_registrations#confirm",  as: :user_otp_register_confirm
   end
 
   authenticate :user, ->(user) { user.is_admin? } do

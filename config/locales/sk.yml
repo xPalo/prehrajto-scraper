@@ -61,6 +61,11 @@ sk:
     otp_sent: "Ak účet s týmto e-mailom existuje, poslali sme naň prihlasovací kód."
     otp_invalid: "Neplatný alebo expirovaný kód."
     otp_signed_in: "Úspešne prihlásený."
+    otp_register_tab: "Jednorazový kód"
+    otp_register_email_prompt: "Pošleme ti na e-mail kód na vytvorenie účtu."
+    otp_register_send_btn: "Poslať kód"
+    otp_register_sent: "Poslali sme ti na e-mail kód."
+    otp_registered: "Účet bol vytvorený — si prihlásený."
   header:
     overview: "Prehľad"
     edit_profile: "Upraviť profil"

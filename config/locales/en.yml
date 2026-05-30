@@ -61,6 +61,11 @@ en:
     otp_sent: "If an account with that email exists, we've sent it a login code."
     otp_invalid: "Invalid or expired code."
     otp_signed_in: "Signed in successfully."
+    otp_register_tab: "One-time code"
+    otp_register_email_prompt: "We'll email you a code to create your account."
+    otp_register_send_btn: "Send code"
+    otp_register_sent: "We've sent a code to your email."
+    otp_registered: "Account created — you're signed in."
   header:
     overview: "Overview"
     edit_profile: "Edit profile"
