@@ -56,9 +56,14 @@ silently pile up.
 
 ### Watchdogs
 
-- `Watchdog#can_analyze_price?` is the gate for writing to `price_history`:
-  it requires `date_watch_from == date_watch_to` **and** a concrete
-  `to_airport`. Open-ended searches never produce a chart-able series.
+- `Watchdog#can_analyze_price?` is the gate for writing to `price_history`
+  (and for sending notification emails): it requires a concrete `to_airport`.
+  Multi-day ranges are allowed — the chart then tracks the cheapest flight in
+  the range over time. Open-ended (country-only) searches have no fixed
+  destination airport, so they never produce a chart-able series or emails.
+- Both flight fetchers query **per day** across
+  `date_watch_from..date_watch_to` (`fetch_for_day`) and concatenate the
+  results, rather than passing the whole range in one call.
 - `price_history` is a JSON array of `{"x" => iso8601, "y" => price}` points,
   sorted ascending, pruned to `KEEP_PRICE_HISTORY_FOR_MONTHS = 3`.
 - Emails only send when `price_changed` is true *and* there's at least one

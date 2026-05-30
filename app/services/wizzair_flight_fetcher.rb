@@ -27,6 +27,13 @@ class WizzairFlightFetcher
     return [] if watchdog.to_airport.blank?
 
     version = api_version
+    (watchdog.date_watch_from..watchdog.date_watch_to).flat_map do |day|
+      fetch_for_day(watchdog, day, version)
+    end
+  end
+
+  def self.fetch_for_day(watchdog, day, version)
+    date = day.strftime('%Y-%m-%d')
     uri = URI("#{BASE_URL}/#{version}/Api/search/timetable")
 
     body = {
@@ -34,8 +41,8 @@ class WizzairFlightFetcher
         {
           departureStation: watchdog.from_airport,
           arrivalStation: watchdog.to_airport,
-          from: watchdog.date_watch_from.strftime('%Y-%m-%d'),
-          to: watchdog.date_watch_to.strftime('%Y-%m-%d')
+          from: date,
+          to: date
         }
       ],
       priceType: 'regular',

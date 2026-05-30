@@ -2,11 +2,18 @@ class RyanairFlightFetcher
   attr_reader :watchdogs
 
   def self.fetch_flights(watchdog)
+    (watchdog.date_watch_from..watchdog.date_watch_to).flat_map do |day|
+      fetch_for_day(watchdog, day)
+    end
+  end
+
+  def self.fetch_for_day(watchdog, day)
+    date = day.strftime("%Y-%m-%d")
     cmd = %w(python3 pyservice/ryanair_fetch.py)
 
     cmd << "--from" << watchdog.from_airport
-    cmd << "--date-from" << watchdog.date_watch_from.strftime("%Y-%m-%d")
-    cmd << "--date-to" << watchdog.date_watch_to.strftime("%Y-%m-%d")
+    cmd << "--date-from" << date
+    cmd << "--date-to" << date
 
     cmd << "--to-country" << watchdog.to_country if watchdog.to_country.present?
     cmd << "--to-airport" << watchdog.to_airport if watchdog.to_airport.present?

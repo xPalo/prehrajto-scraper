@@ -1,5 +1,5 @@
 <div class="max-w-xl mx-auto" data-controller="airport-select">
-  <%= form_with(model: watchdog, local: true) do |form| %>
+  <%= form_with(model: watchdog, local: true, id: "watchdog_form") do |form| %>
     <% if watchdog.errors.any? %>
       <div class="flash flash-alert mb-6">
         <div class="flex-1">
@@ -77,18 +77,17 @@
     </div>
 
     <%= form.hidden_field :user_id, value: current_user.id %>
-
-    <div class="mt-8 flex items-center gap-2 flex-wrap">
-      <%= form.submit t('save'), class: "btn-primary cursor-pointer" %>
-      <%= link_to t('back'), :back, class: "btn-ghost" %>
-      <% if watchdog.persisted? %>
-        <span class="flex-1"></span>
-        <%= button_to t('delete'), watchdog_path(watchdog),
-              method: :delete,
-              form: { data: { turbo_confirm: t('delete_confirm') } },
-              data: { confirm: t('delete_confirm') },
-              class: "btn-danger" %>
-      <% end %>
-    </div>
   <% end %>
+
+  <div class="mt-8 flex items-center gap-2 flex-wrap">
+    <%= submit_tag t('save'), form: "watchdog_form", class: "btn-primary cursor-pointer" %>
+    <%= link_to t('back'), :back, class: "btn-ghost" %>
+    <% if watchdog.persisted? %>
+      <span class="flex-1"></span>
+      <%= button_to t('delete'), watchdog_path(watchdog),
+            method: :delete,
+            data: { confirm: t('delete_confirm') },
+            class: "btn-danger" %>
+    <% end %>
+  </div>
 </div>

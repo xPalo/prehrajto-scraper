@@ -16,6 +16,6 @@ class Watchdog < ApplicationRecord
   end
 
   def can_analyze_price?
-    date_watch_to == date_watch_from && to_airport.present?
+    to_airport.present?
   end
 end
