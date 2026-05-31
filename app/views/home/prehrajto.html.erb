@@ -36,7 +36,7 @@
         <span><%= pluralize(@divs.length, 'result') %></span>
       </div>
 
-      <%= form_with url: root_path, method: :get, local: true,
+      <%= form_with url: films_path, method: :get, local: true,
                     data: { controller: "order", action: "change->order#change" },
                     class: "flex items-center gap-2" do |f| %>
         <%= f.hidden_field :search_url, value: params[:search_url] %>
@@ -88,7 +88,7 @@
           <%= render "shared/icon", name: "plus", css: "w-4 h-4" %>
           <%= t(:'fav.new') %>
         <% end %>
-        <%= link_to root_path(search_url: params[:search_url]), class: "btn-ghost" do %>
+        <%= link_to films_path(search_url: params[:search_url]), class: "btn-ghost" do %>
           <%= render "shared/icon", name: "arrow-left", css: "w-4 h-4" %>
           <%= t(:back) %>
         <% end %>

@@ -102,6 +102,24 @@
            hover:bg-surface-2 transition-colors duration-150;
   }
 
+  /* ─── bento landing tiles ─── */
+  .bento-tile {
+    @apply panel relative overflow-hidden rounded-lg p-6 h-full flex flex-col
+           justify-between transition-all duration-200
+           hover:-translate-y-1 hover:border-border-2;
+  }
+  .bento-tile::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-200 pointer-events-none;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
+                rgba(199, 243, 106, 0.12), transparent 60%);
+  }
+  .bento-tile:hover::before { @apply opacity-100; }
+  @media (prefers-reduced-motion: reduce) {
+    .bento-tile { @apply transition-none; }
+    .bento-tile:hover { transform: none; }
+  }
+
   /* ─── badges ─── */
   .badge {
     @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm

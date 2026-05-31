@@ -7,8 +7,8 @@
   <% end %>
 
   <nav class="flex items-center gap-6 text-sm flex-wrap" aria-label="Primary">
-    <%= link_to t(:home), root_path,
-        class: "nav-link #{current_class?(root_path)}" %>
+    <%= link_to t(:home), films_path,
+        class: "nav-link #{current_class?(films_path)}" %>
 
     <% if user_signed_in? %>
       <%= link_to t(:'header.favourites'), favs_path,
