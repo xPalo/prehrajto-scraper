@@ -104,9 +104,10 @@
 
   /* ─── bento landing tiles ─── */
   .bento-tile {
-    @apply panel relative overflow-hidden rounded-lg p-6 h-full flex flex-col
-           justify-between transition-all duration-200
-           hover:-translate-y-1 hover:border-border-2;
+    @apply relative overflow-hidden rounded-lg p-6 h-full flex flex-col
+           justify-between border border-border bg-surface/70 backdrop-blur-md
+           transition-all duration-200
+           hover:-translate-y-1 hover:border-border-2 hover:bg-surface/80;
   }
   .bento-tile::before {
     content: '';
@@ -115,9 +116,33 @@
                 rgba(199, 243, 106, 0.12), transparent 60%);
   }
   .bento-tile:hover::before { @apply opacity-100; }
-  @media (prefers-reduced-motion: reduce) {
-    .bento-tile { @apply transition-none; }
-    .bento-tile:hover { transform: none; }
+
+  /* ─── bento animated backdrop (lime aurora + dotted grid) ─── */
+  .bento-bg {
+    @apply absolute -inset-4 z-0 overflow-hidden rounded-2xl pointer-events-none;
+  }
+  .bento-bg::before, .bento-bg::after {
+    content: '';
+    @apply absolute rounded-full;
+    filter: blur(90px);
+  }
+  .bento-bg::before {
+    width: 50%; height: 65%; left: -8%; top: -25%;
+    background: radial-gradient(circle, rgba(199, 243, 106, 0.18), transparent 70%);
+    animation: bento-aurora-a 22s ease-in-out infinite alternate;
+  }
+  .bento-bg::after {
+    width: 55%; height: 60%; right: -10%; bottom: -20%;
+    background: radial-gradient(circle, rgba(199, 243, 106, 0.11), transparent 70%);
+    animation: bento-aurora-b 28s ease-in-out infinite alternate;
+  }
+  .bento-bg-grid {
+    @apply absolute inset-0;
+    background-image: radial-gradient(rgba(199, 243, 106, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 78%);
+    mask-image: radial-gradient(ellipse at center, #000, transparent 78%);
+    animation: bento-grid-pan 36s linear infinite;
   }
 
   /* ─── badges ─── */
@@ -265,4 +290,24 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .text-pretty { text-wrap: pretty; }
+}
+
+/* ─── bento backdrop animations ─── */
+/* Top-level (outside @layer) so the @keyframes survive Tailwind's build. */
+@keyframes bento-aurora-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(28%, 22%) scale(1.25); }
+}
+@keyframes bento-aurora-b {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-24%, -18%) scale(1.2); }
+}
+@keyframes bento-grid-pan {
+  0%   { background-position: 0 0; }
+  100% { background-position: 48px 96px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bento-tile { transition: none; }
+  .bento-tile:hover { transform: none; }
+  .bento-bg::before, .bento-bg::after, .bento-bg-grid { animation: none; }
 }
