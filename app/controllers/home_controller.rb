@@ -1,6 +1,9 @@
 class HomeController < ApplicationController
   SIMILAR_LIMIT = 10
 
+  def index
+  end
+
   def prehrajto
     if params[:search_url] && params[:search_url].length > 0
       params[:search_url] = params[:search_url][8..-1]

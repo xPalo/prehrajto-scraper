@@ -1,0 +1,78 @@
+<div class="relative">
+  <div class="bento-bg" aria-hidden="true">
+    <span class="bento-bg-grid"></span>
+  </div>
+
+  <section class="relative z-10 grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[168px]">
+
+  <%# ─── intro tile ─── %>
+  <div class="bento-tile sm:col-span-2 lg:row-span-2 animate-fade-in-up"
+       data-controller="spotlight"
+       data-action="pointermove->spotlight#move pointerleave->spotlight#leave">
+    <div>
+      <div class="eyebrow eyebrow-left mb-6"><span><%= t("landing.eyebrow") %></span></div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-balance">
+        <%= t(:app_name) %><span class="text-accent">.</span>
+      </h1>
+      <p class="text-text-dim font-mono lowercase tracking-wider mt-3 text-sm">
+        <%= t("landing.tagline") %>
+      </p>
+      <p class="text-text-dim max-w-md mt-5 text-pretty"><%= t("landing.intro") %></p>
+    </div>
+    <div class="mt-8 flex items-center gap-3 flex-wrap">
+      <% if user_signed_in? %>
+        <%= link_to t("landing.cta_browse"), films_path, class: "btn-primary" %>
+        <span class="text-text-mute font-mono text-xs lowercase tracking-wider">
+          <%= t("landing.greeting", name: current_user.email.split("@").first) %>
+        </span>
+      <% else %>
+        <%= link_to t("landing.cta_get_started"), new_user_registration_path, class: "btn-primary" %>
+        <%= link_to t("landing.cta_browse"), films_path, class: "btn-ghost" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%# ─── tool tiles ─── %>
+  <%
+    tiles = [
+      { href: films_path,     icon: "film",  title: "landing.tools.films_title",   desc: "landing.tools.films_desc",   pos: "lg:col-start-3 lg:row-start-1", delay: 60 },
+      { href: watchdogs_path, icon: "plane", title: "landing.tools.flights_title", desc: "landing.tools.flights_desc", pos: "lg:col-start-3 lg:row-start-2", delay: 120 },
+      { href: videos_path,    icon: "play",  title: "landing.tools.videos_title",  desc: "landing.tools.videos_desc",  pos: "lg:col-start-1 lg:row-start-3", delay: 180 },
+      { href: favs_path,      icon: "heart", title: "landing.tools.favs_title",    desc: "landing.tools.favs_desc",    pos: "lg:col-start-2 lg:row-start-3", delay: 240 }
+    ]
+  %>
+  <% tiles.each do |tile| %>
+    <%= link_to tile[:href],
+          class: "bento-tile group animate-fade-in-up #{tile[:pos]}",
+          style: "animation-delay: #{tile[:delay]}ms",
+          data: { controller: "spotlight", action: "pointermove->spotlight#move pointerleave->spotlight#leave" } do %>
+      <span class="inline-flex items-center justify-center w-11 h-11 rounded bg-surface-2 border border-border text-accent transition-colors duration-150 group-hover:border-border-2">
+        <%= render "shared/icon", name: tile[:icon], css: "w-5 h-5" %>
+      </span>
+      <div>
+        <h2 class="text-lg font-medium tracking-tight"><%= t(tile[:title]) %></h2>
+        <p class="text-text-dim text-xs font-mono lowercase tracking-wider mt-1"><%= t(tile[:desc]) %></p>
+        <span class="inline-flex items-center gap-1.5 text-xs font-mono text-text-mute group-hover:text-accent transition-colors duration-150 mt-3 lowercase tracking-wider">
+          <%= t("landing.open") %>
+          <%= render "shared/icon", name: "arrow-right", css: "w-3.5 h-3.5" %>
+        </span>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%# ─── status flourish (decorative) ─── %>
+  <div class="bento-tile lg:col-start-3 lg:row-start-3 animate-fade-in-up"
+       style="animation-delay: 300ms"
+       data-controller="spotlight"
+       data-action="pointermove->spotlight#move pointerleave->spotlight#leave">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-ok inline-block animate-pulse" aria-hidden="true"></span>
+      <span class="text-xs font-mono lowercase tracking-wider text-text-dim"><%= t("landing.status_online") %></span>
+    </div>
+    <div class="font-mono text-sm text-text lowercase tracking-tight">
+      <%= t(:app_name) %><span class="text-accent">.</span>
+    </div>
+  </div>
+
+  </section>
+</div>

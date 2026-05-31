@@ -32,8 +32,9 @@ Rails.application.routes.draw do
   end
   resources :users, only: [:index]
 
-  root "home#prehrajto"
+  root "home#index"
 
+  get "films", to: "home#prehrajto", as: :films
   get "similar", to: "home#similar", as: :similar
   match "lang/:locale", to: "home#change_locale", as: :change_locale, via: [:get]
 end
