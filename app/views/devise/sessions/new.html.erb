@@ -41,6 +41,8 @@
 
       <div class="mt-8 flex flex-col gap-3">
         <%= f.submit t(:'devise.login_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
+        <%= link_to t(:'devise.forgot_password'), new_user_password_path,
+            class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
         <%= link_to t(:'devise.dont_have_account_yet'), new_user_registration_path,
             class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
       </div>

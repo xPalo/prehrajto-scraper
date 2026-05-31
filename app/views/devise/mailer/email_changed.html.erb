@@ -1,7 +1,17 @@
-<p>Hello <%= @email %>!</p>
+<p style="margin:0 0 16px; font-size:16px; color:#0a0a0a;">
+  Ahoj,
+</p>
 
 <% if @resource.try(:unconfirmed_email?) %>
-  <p>We're contacting you to notify you that your email is being changed to <%= @resource.unconfirmed_email %>.</p>
+  <p style="margin:0 0 8px; font-size:15px; color:#3a3a3a;">
+    E-mail tvojho účtu sa mení na <%= @resource.unconfirmed_email %>.
+  </p>
 <% else %>
-  <p>We're contacting you to notify you that your email has been changed to <%= @resource.email %>.</p>
+  <p style="margin:0 0 8px; font-size:15px; color:#3a3a3a;">
+    E-mail tvojho účtu bol zmenený na <%= @resource.email %>.
+  </p>
 <% end %>
+
+<p style="margin:0; font-size:13px; color:#6b6b6b;">
+  Ak si túto zmenu nevykonal/a ty, okamžite nás kontaktuj.
+</p>

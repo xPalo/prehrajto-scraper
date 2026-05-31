@@ -1,25 +1,33 @@
-<h2>Change your password</h2>
+<div class="max-w-sm mx-auto py-8">
+  <h1 class="text-3xl font-medium tracking-tight mb-8 text-center">
+    <%= t(:'devise.new_password_title') %>
+  </h1>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :reset_password_token %>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+    <%= f.hidden_field :reset_password_token %>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
-  </div>
+    <div class="space-y-5">
+      <div>
+        <%= f.label :password, t(:'devise.new_password_title'), class: "label" %>
+        <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: "input" %>
+        <% if @minimum_password_length %>
+          <div class="mt-1.5 text-xs text-text-mute font-mono">
+            <%= "#{@minimum_password_length} #{t(:'devise.minimum_characters')}" %>
+          </div>
+        <% end %>
+      </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
+      <div>
+        <%= f.label :password_confirmation, t(:'devise.new_password_confirmation_label'), class: "label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input" %>
+      </div>
+    </div>
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+    <div class="mt-8 flex flex-col gap-3">
+      <%= f.submit t(:'devise.change_password_btn'), class: "btn-primary justify-center cursor-pointer w-full" %>
+      <%= link_to t(:'devise.back_to_login'), new_user_session_path,
+          class: "text-sm text-text-dim hover:text-text transition-colors text-center" %>
+    </div>
+  <% end %>
+</div>

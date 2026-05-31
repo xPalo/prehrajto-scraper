@@ -66,6 +66,20 @@ sk:
     otp_register_send_btn: "Poslať kód"
     otp_register_sent: "Poslali sme ti na e-mail kód."
     otp_registered: "Účet bol vytvorený — si prihlásený."
+    reset_password_title: "Obnova hesla"
+    reset_password_prompt: "Zadaj e-mail a pošleme ti odkaz na obnovenie hesla."
+    reset_password_send_btn: "Poslať odkaz"
+    new_password_title: "Nové heslo"
+    new_password_confirmation_label: "Potvrď nové heslo"
+    change_password_btn: "Zmeniť heslo"
+    back_to_login: "Späť na prihlásenie"
+    mailer:
+      reset_password_instructions:
+        subject: "Obnovenie hesla"
+      password_change:
+        subject: "Tvoje heslo bolo zmenené"
+      email_changed:
+        subject: "Tvoj e-mail bol zmenený"
   header:
     overview: "Prehľad"
     edit_profile: "Upraviť profil"
