@@ -41,4 +41,13 @@ class User < ApplicationRecord
   def clear_otp!
     update!(otp_code_digest: nil, otp_sent_at: nil)
   end
+
+  # Devise delivers its notifications (password reset, password/email change)
+  # synchronously by default, which blocks the request on the slow Gmail SMTP
+  # handshake — the reset form would hang in the browser until the send
+  # finished. Enqueue through Active Job / Sidekiq instead, matching the rest
+  # of the app (OtpMailer, FetcherAlertMailer all use deliver_later).
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
 end
