@@ -105,9 +105,9 @@
   /* ─── bento landing tiles ─── */
   .bento-tile {
     @apply relative overflow-hidden rounded-lg p-6 h-full flex flex-col
-           justify-between border border-border bg-surface/70 backdrop-blur-md
+           justify-between border border-border bg-surface/55 backdrop-blur-md
            transition-all duration-200
-           hover:-translate-y-1 hover:border-border-2 hover:bg-surface/80;
+           hover:-translate-y-1 hover:border-border-2 hover:bg-surface/70;
   }
   .bento-tile::before {
     content: '';
@@ -119,30 +119,30 @@
 
   /* ─── bento animated backdrop (lime aurora + dotted grid) ─── */
   .bento-bg {
-    @apply absolute -inset-4 z-0 overflow-hidden rounded-2xl pointer-events-none;
+    @apply absolute -inset-x-6 -inset-y-12 z-0 overflow-hidden rounded-2xl pointer-events-none;
   }
   .bento-bg::before, .bento-bg::after {
     content: '';
     @apply absolute rounded-full;
-    filter: blur(90px);
+    filter: blur(70px);
   }
   .bento-bg::before {
-    width: 50%; height: 65%; left: -8%; top: -25%;
-    background: radial-gradient(circle, rgba(199, 243, 106, 0.18), transparent 70%);
-    animation: bento-aurora-a 22s ease-in-out infinite alternate;
+    width: 55%; height: 75%; left: -10%; top: -20%;
+    background: radial-gradient(circle, rgba(199, 243, 106, 0.45), transparent 70%);
+    animation: bento-aurora-a 20s ease-in-out infinite alternate;
   }
   .bento-bg::after {
-    width: 55%; height: 60%; right: -10%; bottom: -20%;
-    background: radial-gradient(circle, rgba(199, 243, 106, 0.11), transparent 70%);
-    animation: bento-aurora-b 28s ease-in-out infinite alternate;
+    width: 60%; height: 70%; right: -12%; bottom: -15%;
+    background: radial-gradient(circle, rgba(199, 243, 106, 0.32), transparent 70%);
+    animation: bento-aurora-b 24s ease-in-out infinite alternate;
   }
   .bento-bg-grid {
     @apply absolute inset-0;
-    background-image: radial-gradient(rgba(199, 243, 106, 0.12) 1px, transparent 1px);
-    background-size: 24px 24px;
-    -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 78%);
-    mask-image: radial-gradient(ellipse at center, #000, transparent 78%);
-    animation: bento-grid-pan 36s linear infinite;
+    background-image: radial-gradient(rgba(199, 243, 106, 0.22) 1.25px, transparent 1.25px);
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 92%);
+    mask-image: radial-gradient(ellipse at center, #000, transparent 92%);
+    animation: bento-grid-pan 30s linear infinite;
   }
 
   /* ─── badges ─── */
