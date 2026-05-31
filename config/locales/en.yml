@@ -66,6 +66,20 @@ en:
     otp_register_send_btn: "Send code"
     otp_register_sent: "We've sent a code to your email."
     otp_registered: "Account created — you're signed in."
+    reset_password_title: "Reset password"
+    reset_password_prompt: "Enter your email and we'll send you a link to reset your password."
+    reset_password_send_btn: "Send reset link"
+    new_password_title: "New password"
+    new_password_confirmation_label: "Confirm new password"
+    change_password_btn: "Change password"
+    back_to_login: "Back to login"
+    mailer:
+      reset_password_instructions:
+        subject: "Reset your password"
+      password_change:
+        subject: "Your password has been changed"
+      email_changed:
+        subject: "Your email has been changed"
   header:
     overview: "Overview"
     edit_profile: "Edit profile"
