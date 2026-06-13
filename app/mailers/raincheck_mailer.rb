@@ -7,6 +7,11 @@ class RaincheckMailer < ApplicationMailer
 
     return unless @user.present?
 
+    watchdog_ids = sorted_flights.filter_map { |f| f['watchdog_id'] }.uniq
+    @deactivate_tokens = Watchdog.where(id: watchdog_ids).each_with_object({}) do |watchdog, hash|
+      hash[watchdog.id] = watchdog.deactivation_token
+    end
+
     mail(to: @user.email, subject: "Lacné lety dostupné!") do |format|
       format.html
     end

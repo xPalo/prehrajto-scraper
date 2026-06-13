@@ -119,4 +119,9 @@
     <%= render "shared/icon", name: "settings", css: "w-4 h-4" %>
     <%= t(:edit) %>
   <% end %>
+  <%= button_to toggle_active_watchdog_path(@watchdog), method: :patch,
+        class: "btn-ghost #{'hover:text-danger' if @watchdog.is_active?}" do %>
+    <%= render "shared/icon", name: "power", css: "w-4 h-4" %>
+    <%= @watchdog.is_active? ? t(:'watchdog.deactivate') : t(:'watchdog.activate') %>
+  <% end %>
 </div>

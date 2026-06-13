@@ -56,12 +56,10 @@
           <%= link_to edit_watchdog_path(watchdog), class: "btn-icon", title: t(:edit) do %>
             <%= render "shared/icon", name: "settings", css: "w-4 h-4" %>
           <% end %>
-          <%= button_to watchdog_path(watchdog), method: :delete,
-                form: { data: { turbo_confirm: t(:delete_confirm) } },
-                data: { confirm: t(:delete_confirm) },
-                class: "btn-icon hover:text-danger hover:border-danger/60",
-                title: t(:delete) do %>
-            <%= render "shared/icon", name: "trash", css: "w-4 h-4" %>
+          <%= button_to toggle_active_watchdog_path(watchdog), method: :patch,
+                class: "btn-icon #{'hover:text-danger hover:border-danger/60' if watchdog.is_active?}",
+                title: watchdog.is_active? ? t(:'watchdog.deactivate') : t(:'watchdog.activate') do %>
+            <%= render "shared/icon", name: "power", css: "w-4 h-4" %>
           <% end %>
         </div>
       </li>

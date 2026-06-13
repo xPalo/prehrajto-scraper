@@ -187,6 +187,15 @@ sk:
     price: "Cena (€)"
     no_data_yet: "Zatiaľ neexistujú žiadne dáta o cenách."
     empty_state: "Zatiaľ nemáš žiadne sledovače letov"
+    activate: "Aktivovať"
+    deactivate: "Deaktivovať"
+    activated: "Watchdog bol aktivovaný"
+    deactivated: "Watchdog bol deaktivovaný"
+    confirm_deactivate_title: "Deaktivovať watchdog?"
+    confirm_deactivate_body: "Tento sledovač letov sa prestane kontrolovať a nebudeš dostávať ďalšie e-maily."
+    deactivated_title: "Watchdog deaktivovaný"
+    token_invalid_title: "Neplatný odkaz"
+    token_invalid_body: "Tento odkaz na deaktiváciu je neplatný alebo jeho platnosť vypršala."
 
   video:
     index: "Stabilizátor videa"

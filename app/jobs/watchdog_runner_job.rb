@@ -35,6 +35,8 @@ class WatchdogRunnerJob < ApplicationJob
 
         fetched_flights.filter! { |flight| flight['price'].to_f <= watchdog.max_price } if watchdog.max_price.present?
 
+        fetched_flights.each { |flight| flight['watchdog_id'] = watchdog.id }
+
         flights += fetched_flights
       end
 
