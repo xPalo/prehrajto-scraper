@@ -56,4 +56,5 @@ yarn-debug.log*
 # Claude Code local state
 /.claude/*
 !/.claude/settings.json
+!/.claude/agents/
 .serena
