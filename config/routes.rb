@@ -19,7 +19,15 @@ Rails.application.routes.draw do
   end
 
   resources :favs
-  resources :watchdogs
+
+  # Public, signed-token deactivation from watchdog emails (no auth required).
+  # Defined before `resources :watchdogs` so the two-segment paths win.
+  get   "watchdogs/deactivate/:token", to: "watchdogs#confirm_deactivate", as: :confirm_deactivate_watchdog
+  patch "watchdogs/deactivate/:token", to: "watchdogs#deactivate_by_token", as: :deactivate_watchdog_by_token
+
+  resources :watchdogs do
+    member { patch :toggle_active }
+  end
   resources :videos do
     collection do
       get  :from_url

@@ -2,9 +2,9 @@ require "uri"
 require "net/http"
 
 class WatchdogsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_watchdog, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_user, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:confirm_deactivate, :deactivate_by_token]
+  before_action :set_watchdog, only: [:show, :edit, :update, :destroy, :toggle_active]
+  before_action :authorize_user, only: [:show, :edit, :update, :destroy, :toggle_active]
   before_action :load_airports, only: [:new, :edit, :create, :update]
 
   def index
@@ -49,6 +49,24 @@ class WatchdogsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to watchdogs_url, notice: t(:'watchdog.deleted') }
     end
+  end
+
+  def toggle_active
+    @watchdog.update(is_active: !@watchdog.is_active?)
+    key = @watchdog.is_active? ? :'watchdog.activated' : :'watchdog.deactivated'
+    redirect_back(fallback_location: watchdogs_url, notice: t(key))
+  end
+
+  # Public confirmation page reached from a signed link in a watchdog email.
+  # GET is side-effect free; the actual deactivation happens via the PATCH below.
+  def confirm_deactivate
+    @watchdog = Watchdog.find_by_deactivation_token(params[:token])
+  end
+
+  # Public PATCH target submitted from the confirmation page.
+  def deactivate_by_token
+    @watchdog = Watchdog.find_by_deactivation_token(params[:token])
+    @watchdog&.update(is_active: false)
   end
 
   private

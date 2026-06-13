@@ -187,6 +187,15 @@ en:
     price: "Price (€)"
     no_data_yet: "No available price data yet."
     empty_state: "No watchdogs yet"
+    activate: "Activate"
+    deactivate: "Deactivate"
+    activated: "Watchdog activated"
+    deactivated: "Watchdog deactivated"
+    confirm_deactivate_title: "Deactivate watchdog?"
+    confirm_deactivate_body: "This flight watchdog will stop being checked and you will no longer receive emails."
+    deactivated_title: "Watchdog deactivated"
+    token_invalid_title: "Invalid link"
+    token_invalid_body: "This deactivation link is invalid or has expired."
 
   video:
     index: "Video Stabilizer"
