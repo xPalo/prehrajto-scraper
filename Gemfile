@@ -29,6 +29,7 @@ end
 group :development do
   gem "web-console"
   gem "letter_opener"
+  gem "ruby-lsp", require: false
 end
 
 group :test do
