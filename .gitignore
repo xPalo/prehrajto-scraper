@@ -60,6 +60,10 @@ yarn-debug.log*
 .serena
 
 # Secrets (org policy)
+.env
 *.env
+.env.*
+!.env.example
+!.env*.erb
 *.pem
 *.key
