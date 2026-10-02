@@ -68,7 +68,7 @@
       </label>
     </div>
 
-    <%= form.hidden_field :user_id, value: current_user.id %>
+    <%= form.hidden_field :user_id, value: form.object.user_id || current_user.id %>
   <% end %>
 
   <div class="mt-8 flex items-center gap-2 flex-wrap">

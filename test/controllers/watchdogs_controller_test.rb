@@ -45,4 +45,24 @@ class WatchdogsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#other-watchdogs", count: 0
     assert_no_match(/KSC|bob@example\.com|admin@example\.com/, response.body)
   end
+
+  test "admin editing another user's watchdog keeps that user as the owner" do
+    sign_in users(:admin)
+
+    RyanairAirportLoader.stub(:airports, []) do
+      get edit_watchdog_url(watchdogs(:alice_trip))
+    end
+
+    assert_select "input[type=hidden][name='watchdog[user_id]'][value=?]", users(:alice).id.to_s
+  end
+
+  test "new watchdog form assigns the current user as the owner" do
+    sign_in users(:alice)
+
+    RyanairAirportLoader.stub(:airports, []) do
+      get new_watchdog_url
+    end
+
+    assert_select "input[type=hidden][name='watchdog[user_id]'][value=?]", users(:alice).id.to_s
+  end
 end
