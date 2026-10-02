@@ -58,3 +58,12 @@ yarn-debug.log*
 !/.claude/settings.json
 !/.claude/agents/
 .serena
+
+# Secrets (org policy)
+.env
+*.env
+.env.*
+!.env.example
+!.env*.erb
+*.pem
+*.key
