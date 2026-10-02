@@ -35,6 +35,10 @@ All three live behind Devise auth (`User.is_admin?` gates `/sidekiq`).
   data-lazy-load-src-value="/path">…</div>` and the controller fetches
   the URL on `connect` and swaps the element's `innerHTML`. The endpoint
   should `render layout: false` and return an HTML fragment.
+- `chart.js` and `chartjs-adapter-date-fns` are **vendored esbuild bundles**
+  in `vendor/javascript/` (rebuild steps in `config/importmap.rb`). Don't
+  re-pin them (or `date-fns`) to `ga.jspm.io` — date-fns fans out into ~258
+  module requests and one failure kills `chart_controller`.
 - Python helper `pyservice/ryanair_fetch.py` (pip package `ryanair-py`)
 - External HTTP: Wizzair `be.wizzair.com` timetable API,
   Frankfurter FX (`api.frankfurter.dev`), Ryanair airports API
