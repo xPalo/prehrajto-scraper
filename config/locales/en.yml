@@ -187,6 +187,8 @@ en:
     price: "Price (€)"
     no_data_yet: "No available price data yet."
     empty_state: "No watchdogs yet"
+    others: "Other watchdogs"
+    owner: "Owner"
     activate: "Activate"
     deactivate: "Deactivate"
     activated: "Watchdog activated"

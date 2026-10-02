@@ -9,6 +9,12 @@ class WatchdogsController < ApplicationController
 
   def index
     @watchdogs = current_user.watchdogs.order(is_active: :desc, id: :asc)
+    @other_watchdogs = if current_user.is_admin?
+                         Watchdog.where.not(user_id: current_user.id).where.associated(:user).includes(:user)
+                                 .order(is_active: :desc, id: :asc)
+                       else
+                         Watchdog.none
+                       end
   end
 
   def show
@@ -22,7 +28,7 @@ class WatchdogsController < ApplicationController
   end
 
   def create
-    @watchdog = Watchdog.new(watchdog_params)
+    @watchdog = current_user.watchdogs.new(watchdog_params)
 
     respond_to do |format|
       if @watchdog.save
@@ -85,6 +91,6 @@ class WatchdogsController < ApplicationController
 
   def watchdog_params
     params.require(:watchdog).permit(:from_airport, :to_airport, :to_country, :max_price, :date_watch_from, :date_watch_to,
-                                     :user_id, :is_active)
+                                     :is_active)
   end
 end

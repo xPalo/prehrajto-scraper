@@ -1,0 +1,43 @@
+<% destination = watchdog.to_airport.presence || watchdog.to_country %>
+<li class="flex items-center gap-4 p-4 hover:bg-surface-2 transition-colors">
+  <span class="dot <%= watchdog.is_active? ? 'bg-accent' : 'bg-text-mute' %> shrink-0"></span>
+
+  <div class="flex-1 min-w-0">
+    <%= link_to watchdog_path(watchdog),
+        class: "block font-mono text-base font-medium text-text hover:text-accent transition-colors" do %>
+      <%= watchdog.from_airport %>
+      <span class="text-text-mute mx-1">→</span>
+      <%= destination %>
+    <% end %>
+    <div class="text-xs text-text-dim mt-1 font-mono flex flex-wrap items-center gap-x-4 gap-y-1">
+      <span class="inline-flex items-center gap-1.5">
+        <%= render "shared/icon", name: "calendar", css: "w-3 h-3 text-text-mute" %>
+        <% if watchdog.date_watch_from == watchdog.date_watch_to %>
+          <%= l(watchdog.date_watch_from) %>
+        <% else %>
+          <%= l(watchdog.date_watch_from) %> — <%= l(watchdog.date_watch_to) %>
+        <% end %>
+      </span>
+      <% if watchdog.max_price.present? %>
+        <span>≤ <%= number_to_currency(watchdog.max_price, unit: "€", precision: 0) %></span>
+      <% end %>
+      <% if local_assigns[:show_owner] %>
+        <span class="inline-flex items-center gap-1.5" title="<%= t(:'watchdog.owner') %>">
+          <%= render "shared/icon", name: "user", css: "w-3 h-3 text-text-mute" %>
+          <%= watchdog.user.email %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-1 shrink-0">
+    <%= link_to edit_watchdog_path(watchdog), class: "btn-icon", title: t(:edit) do %>
+      <%= render "shared/icon", name: "settings", css: "w-4 h-4" %>
+    <% end %>
+    <%= button_to toggle_active_watchdog_path(watchdog), method: :patch,
+          class: "btn-icon #{'hover:text-danger hover:border-danger/60' if watchdog.is_active?}",
+          title: watchdog.is_active? ? t(:'watchdog.deactivate') : t(:'watchdog.activate') do %>
+      <%= render "shared/icon", name: "power", css: "w-4 h-4" %>
+    <% end %>
+  </div>
+</li>

@@ -187,6 +187,8 @@ sk:
     price: "Cena (€)"
     no_data_yet: "Zatiaľ neexistujú žiadne dáta o cenách."
     empty_state: "Zatiaľ nemáš žiadne sledovače letov"
+    others: "Ostatné watchdogy"
+    owner: "Vlastník"
     activate: "Aktivovať"
     deactivate: "Deaktivovať"
     activated: "Watchdog bol aktivovaný"
