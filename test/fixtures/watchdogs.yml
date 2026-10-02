@@ -1,0 +1,22 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+admin_trip:
+  user: admin
+  from_airport: BTS
+  to_airport: STN
+  date_watch_from: 2026-12-01
+  date_watch_to: 2026-12-01
+
+alice_trip:
+  user: alice
+  from_airport: VIE
+  to_airport: BCN
+  date_watch_from: 2026-12-05
+  date_watch_to: 2026-12-10
+
+bob_trip:
+  user: bob
+  from_airport: KSC
+  to_airport: LTN
+  date_watch_from: 2026-12-20
+  date_watch_to: 2026-12-20

@@ -9,6 +9,11 @@ class WatchdogsController < ApplicationController
 
   def index
     @watchdogs = current_user.watchdogs.order(is_active: :desc, id: :asc)
+    @other_watchdogs = if current_user.is_admin?
+                         Watchdog.where.not(user_id: current_user.id).includes(:user).order(is_active: :desc, id: :asc)
+                       else
+                         Watchdog.none
+                       end
   end
 
   def show
