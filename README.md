@@ -61,7 +61,7 @@ GMAIL_PASSWORD=<app-password>
 
 Vygeneruj nový `SECRET_KEY_BASE`:
 ```bash
-docker-compose -f docker-compose.production.yml run --rm backend bin/rails secret
+docker compose -f docker-compose.production.yml run --rm backend bin/rails secret
 ```
 
 ---
@@ -71,7 +71,7 @@ docker-compose -f docker-compose.production.yml run --rm backend bin/rails secre
 ### ✅ Development
 
 ```bash
-docker-compose -f docker-compose.development.yml up --build
+docker compose -f docker-compose.development.yml up --build
 ```
 
 Aplikácia beží na [http://localhost:8080](http://localhost:8080).
@@ -79,7 +79,7 @@ Aplikácia beží na [http://localhost:8080](http://localhost:8080).
 ### ✅ Production
 
 ```bash
-docker-compose -f docker-compose.production.yml up --build -d
+docker compose -f docker-compose.production.yml up --build -d
 ```
 
 Produkčný compose spúšťa päť služieb: `db`, `redis`, `backend`, `sidekiq`
@@ -88,7 +88,7 @@ concurrency 1, aby sa ffmpeg behy neprelínali).
 
 Zastavenie:
 ```bash
-docker-compose -f docker-compose.production.yml down
+docker compose -f docker-compose.production.yml down
 ```
 
 ---
@@ -97,12 +97,12 @@ docker-compose -f docker-compose.production.yml down
 
 ### Rails konzola
 ```bash
-docker-compose -f docker-compose.development.yml exec backend bin/rails console
+docker compose -f docker-compose.development.yml exec backend bin/rails console
 ```
 
 ### Zastaviť kontajnery aj s volume
 ```bash
-docker-compose -f docker-compose.development.yml down -v
+docker compose -f docker-compose.development.yml down -v
 ```
 
 ### Sidekiq web UI
@@ -110,7 +110,7 @@ V produkcii dostupný na `/sidekiq` pre používateľov s `is_admin = true`.
 
 ### Ručné spustenie watchdog behu
 ```bash
-docker-compose -f docker-compose.production.yml exec backend \
+docker compose -f docker-compose.production.yml exec backend \
   bin/rails runner "WatchdogRunnerJob.perform_now"
 ```
 
