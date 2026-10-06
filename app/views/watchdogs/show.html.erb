@@ -69,7 +69,11 @@
        data-chart-data-value="<%= @watchdog.price_history.to_json %>"
        data-chart-label-value="<%= t('watchdog.price_development') %>"
        data-chart-x-label-value="<%= t('watchdog.date') %>"
-       data-chart-y-label-value="<%= t('watchdog.price') %>">
+       data-chart-y-label-value="<%= t('watchdog.price') %>"
+       <% if @watchdog.max_price.present? %>
+       data-chart-limit-value="<%= @watchdog.max_price %>"
+       data-chart-limit-label-value="<%= t('watchdog.max_price') %>"
+       <% end %>>
     <div class="eyebrow eyebrow-left mb-5">
       <span><%= t('watchdog.price_development') %></span>
     </div>

@@ -13,7 +13,9 @@ export default class extends Controller {
     label: String,
     xLabel: String,
     yLabel: String,
-    currency: { type: String, default: "€" }
+    currency: { type: String, default: "€" },
+    limit: Number,
+    limitLabel: String
   }
 
   connect() {
@@ -32,6 +34,39 @@ export default class extends Controller {
       g.addColorStop(0, "rgba(199, 243, 106, 0.25)")
       g.addColorStop(1, "rgba(199, 243, 106, 0)")
       return g
+    }
+
+    // Dashed horizontal line at the user's notification limit (max_price),
+    // drawn under the price line so the series stays on top.
+    const limit = this.hasLimitValue ? this.limitValue : null
+    const limitLabel = `${this.limitLabelValue} ${limit} ${currency}`.trim()
+    const limitLine = {
+      id: "limitLine",
+      beforeDatasetsDraw: (chart) => {
+        if (limit === null) return
+        const { ctx: c, chartArea, scales } = chart
+        const y = scales.y.getPixelForValue(limit)
+        if (y < chartArea.top || y > chartArea.bottom) return
+
+        c.save()
+        c.strokeStyle = text
+        c.lineWidth = 1
+        c.setLineDash([6, 4])
+        c.beginPath()
+        c.moveTo(chartArea.left, y)
+        c.lineTo(chartArea.right, y)
+        c.stroke()
+
+        // Label sits above the line unless that would clip the chart top.
+        const above = y - chartArea.top > 18
+        c.setLineDash([])
+        c.fillStyle = text
+        c.font = `500 ${isNarrow ? 10 : 11}px ui-monospace, "SF Mono", Menlo, monospace`
+        c.textAlign = "right"
+        c.textBaseline = above ? "bottom" : "top"
+        c.fillText(limitLabel, chartArea.right - 4, above ? y - 4 : y + 4)
+        c.restore()
+      }
     }
 
     this.chart = new Chart(this.canvasTarget, {
@@ -53,6 +88,7 @@ export default class extends Controller {
           pointBorderWidth: 1
         }]
       },
+      plugins: [limitLine],
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -91,6 +127,10 @@ export default class extends Controller {
             }
           },
           y: {
+            // Stretch the axis so the limit line is visible even when every
+            // recorded price is above (or below) it.
+            suggestedMin: limit ?? undefined,
+            suggestedMax: limit ?? undefined,
             title: {
               display: !isNarrow,
               text: this.yLabelValue,
